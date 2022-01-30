@@ -17,7 +17,6 @@ const int chipSelect = BUILTIN_SDCARD;
 const int buzzer = 33;
 const int TIMEFRAME = 3; // should detect apogee about TIMEFRAME/3 seconds after apogee
 const int SAMPLERATE = 20; //data points per second
-static bool apogeeReached = false;
 
 // Objects:
 Adafruit_BMP3XX bmp;
@@ -160,7 +159,7 @@ bool detectApogee(double accelX, double accelY, double accelZ, double altitude){
   if(!hasLaunched(accelX, accelY, accelZ))
     return false;
   const int dataPoints = TIMEFRAME * SAMPLERATE;
-  apogeeReached = false;
+  static bool apogeeReached = false;
   static std::list<double> altitudes;
   std::list<double>::iterator it;
 
