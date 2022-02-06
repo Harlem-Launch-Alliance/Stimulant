@@ -24,6 +24,7 @@ int AcXcal,AcYcal,AcZcal,GyXcal,GyYcal,GyZcal,tcal;       // calibration variabl
 double tc,pitch,roll,Ax,Ay,Az,Gx,Gy,Gz;                   // final values
 double Altitude, temperature, pressure, altOffset = 0;    // final values
 float Time;
+bool apogeeReached;
 
 void setupIMU(){
   Serial1.print("Setting up GY521: ");
@@ -216,7 +217,7 @@ void loop()
   Time = float(millis()) / 1000.0;
   getIMU();
   getBMP();
-  detectApogee(Ax, Ay, Az, Altitude);
+  apogeeReached = detectApogee(Ax, Ay, Az, Altitude);
   recordData();
   transmitData();
 }
