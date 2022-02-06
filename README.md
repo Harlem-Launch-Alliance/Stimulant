@@ -15,7 +15,7 @@ Designed for Teensy 4.1
 - https://github.com/jonnieZG/EWMA
 - https://github.com/adafruit/Adafruit_BMP3XX
 
-##Best Practices For Making Changes:
+## Best Practices For Making Changes:
 - make sure your code compiles to verify your changes
 - comment your code
 - if you are including a new library in your code, add the GitHub link to the dependencies list above
