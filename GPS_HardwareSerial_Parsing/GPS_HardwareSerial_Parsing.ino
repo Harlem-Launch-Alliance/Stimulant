@@ -29,7 +29,7 @@ Adafruit_GPS GPS(&GPSSerial);
 uint32_t timer = millis();
 
 
-void setupGPS()
+void setup()
 {
   //while (!Serial);  // uncomment to have the sketch wait until Serial is ready
 

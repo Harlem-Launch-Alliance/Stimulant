@@ -111,8 +111,8 @@ void setup()
   else
     Serial1.println("MicroSD card: successful");
 
-  setupGPS();
-  setupIMU();
+  //setupGPS();
+  //setupIMU();
   
   // calculating the initial altitude on the ground to use as offset
   double total = 0;
