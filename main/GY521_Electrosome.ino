@@ -102,15 +102,15 @@ void printData()
   Serial.print(" Z = "); Serial.println(Gz);
 }
 
-void setup()
+void setupIMU()
 {
   Wire.begin();         //initiate wire library and I2C
   setupIMU();
   Serial.begin(9600);   //serial communication at 9600 bauds
 }
 
-void loop()
-{
-  getIMU();
-  printData();
-}
+//void loop()
+//{
+//  getIMU();
+//  printData();
+//}
