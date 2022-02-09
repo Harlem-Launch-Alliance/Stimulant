@@ -7,5 +7,5 @@
 
 //returns calculated pitchRate or yawRate
 double getRate(double roll, double parallel, double perpendicular){//parallel would be GyY to get pitchRate, with perpendicular being GyX
-  return parallel * cos(roll) + perpendicular * sin(roll)
+  return parallel * cos(roll) + perpendicular * sin(roll);
 }
