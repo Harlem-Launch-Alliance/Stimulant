@@ -53,7 +53,7 @@ void getBMP()
 void transmitData()
 {
   Serial1.print(Time); Serial1.print("\t");
-  Serial1.print(tc); Serial1.print("\t");
+//  Serial1.print(tc); Serial1.print("\t");
   Serial1.print(temperature); Serial1.print("\t");
 //  Serial1.print(pitch); Serial1.print("\t");
 //  Serial1.print(roll); Serial1.print("\t");
@@ -72,7 +72,7 @@ void recordData()
   dataFile = SD.open("datalog.txt", FILE_WRITE);
   if (dataFile) {
     dataFile.print(Time); dataFile.print("\t");
-    dataFile.print(tc); dataFile.print("\t");
+//    dataFile.print(tc); dataFile.print("\t");
     dataFile.print(temperature); dataFile.print("\t");
 //    dataFile.print(pitch); dataFile.print("\t");
 //    dataFile.print(roll); dataFile.print("\t");
@@ -136,7 +136,7 @@ void loop()
 {
   Time = float(millis()) / 1000.0;
   getBMP();
-  apogeeReached = detectApogee(Ax, Ay, Az, Altitude);
+//  apogeeReached = detectApogee(Ax, Ay, Az, Altitude);
   recordData();
   transmitData();
 }
