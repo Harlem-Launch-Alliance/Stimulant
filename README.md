@@ -14,6 +14,7 @@ Designed for Teensy 4.1
 - https://github.com/ivanseidel/LinkedList
 - https://github.com/jonnieZG/EWMA
 - https://github.com/adafruit/Adafruit_BMP3XX
+- https://github.com/adafruit/Adafruit_GPS
 
 ## Best Practices For Making Changes:
 - make sure your code compiles to verify your changes
