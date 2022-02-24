@@ -5,13 +5,13 @@
 const int TIMEFRAME = 3; // should detect apogee about TIMEFRAME/3 seconds after apogee
 const int SAMPLERATE = 20; //data points per second
 
-bool hasLaunched(double accelX,  double accelY, double accelZ){
+bool hasLaunched(Directional accel){
   const int dataPoints = 5;
   static bool hasLaunched = false;
   if(hasLaunched)
     return true;
   static LinkedList<double> totalAccel;
-  double currentTotal = sqrt(pow(accelX, 2) + pow(accelY, 2) + pow(accelZ, 2));
+  double currentTotal = sqrt(pow(accel.x, 2) + pow(accel.y, 2) + pow(accel.z, 2));
   totalAccel.unshift(currentTotal); //maintain a rolling list of past accel data
   //cleanup old data
   if(totalAccel.size() > dataPoints){
@@ -26,13 +26,13 @@ bool hasLaunched(double accelX,  double accelY, double accelZ){
   return hasLaunched;
 }
 
-bool detectApogee(double accelX, double accelY, double accelZ, double altitude){ //accel in Gs
-  if(!hasLaunched(accelX, accelY, accelZ))
+bool detectApogee(Directional accel, double altitude){ //accel in Gs
+  if(!hasLaunched(accel))
     return false;
   const int dataPoints = TIMEFRAME * SAMPLERATE;
   static bool apogeeReached = false; //this is initialized as false, but once it flips to true it should remain true until the arduino is reset
   static LinkedList<double> altitudes;
-
+  
   if(apogeeReached)
     return true;
   
@@ -52,7 +52,7 @@ bool detectApogee(double accelX, double accelY, double accelZ, double altitude){
   }
   first3rd = first3rd/ (dataPoints/3);
   last3rd = last3rd/ (dataPoints/3);
-  if(last3rd > first3rd && sqrt(pow(accelX, 2) + pow(accelY, 2) + pow(accelZ, 2)) < 2){
+  if(last3rd > first3rd && sqrt(pow(accel.x, 2) + pow(accel.y, 2) + pow(accel.z, 2)) < 2){
     apogeeReached = true;
   }
   return apogeeReached;
