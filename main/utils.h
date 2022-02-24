@@ -1,3 +1,9 @@
+/*****************************************************************************
+ * This file is for declaring new datatypes
+ * 
+ ****************************************************************************/
+
+
 struct Directional  //any data that has an x,y and z attribute
 {
   double x,y,z; 

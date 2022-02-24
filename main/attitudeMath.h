@@ -1,3 +1,9 @@
+/*****************************************************************************
+ * This file is for all math used to determine attitude
+ * 
+ ****************************************************************************/
+
+
 //angles are in radians
 //rates are magnitudes of rad/s
 //GyX, GyY, GyZ are readings from gyro

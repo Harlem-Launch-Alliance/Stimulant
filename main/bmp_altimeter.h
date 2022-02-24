@@ -1,3 +1,9 @@
+/*****************************************************************************
+ * This file is for all barometric altimeter queries
+ * 
+ ****************************************************************************/
+
+
 Adafruit_BMP3XX bmp; //initialize sensor
 
 #define SEALEVELPRESSURE_HPA (1013.25)

@@ -1,3 +1,7 @@
+/*****************************************************************************
+ * This file is for saving and transmitting data
+ * currently using an SD card and Xbee respectively
+ ****************************************************************************/
 
 
 void transmitData(double temp, double pressure, double altitude, Directional accel, Directional gyro, bool apogeeReached)

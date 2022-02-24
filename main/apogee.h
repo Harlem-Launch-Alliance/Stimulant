@@ -1,4 +1,8 @@
-//apogee detection and helper functions
+/*****************************************************************************
+ * apogee detection and helper functions
+ * 
+ ****************************************************************************/
+
 #include <LinkedList.h> //https://github.com/ivanseidel/LinkedList
 
 

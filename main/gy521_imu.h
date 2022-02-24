@@ -1,3 +1,9 @@
+/*****************************************************************************
+ * This file is for all imu queries
+ * Calculations such as attitude determination should go in a separate file
+ ****************************************************************************/
+
+
 #include <Wire.h> //library allows communication with I2C / TWI devices
 #include <math.h> //library includes mathematical functions
 
