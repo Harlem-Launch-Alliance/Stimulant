@@ -8,7 +8,8 @@ Designed for Teensy 4.1
 - automated apogee detection and parachute deployment(s)
 
 ## Hardware:
-- Adafruit BMP388
+- Adafruit BMP388 Barometric Altimeter
+- GY521 IMU
 
 ## Dependencies:
 - https://github.com/ivanseidel/LinkedList
