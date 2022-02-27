@@ -54,7 +54,7 @@ bool detectApogee(Directional accel, double altitude){ //accel in Gs
   for(int i = dataPoints - 1; dataPoints - i < dataPoints/3; i++){
     last3rd += altitudes.get(i);
   }
-  first3rd = first3rd/ (dataPoints/3);
+  first3rd = first3rd/ (dataPoints/3); //first3rd and last3rd refer indices of respective dataPoints
   last3rd = last3rd/ (dataPoints/3);
   if(last3rd > first3rd && sqrt(pow(accel.x, 2) + pow(accel.y, 2) + pow(accel.z, 2)) < 2){
     apogeeReached = true;
