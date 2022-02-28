@@ -21,8 +21,6 @@ const int buzzer = 33;
 
 // Variables:
 bool apogeeReached;
-Directional gyro;
-Directional accel;
 
 void setup()
 {
