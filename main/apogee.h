@@ -3,7 +3,6 @@
  * 
  ****************************************************************************/
 
-#include <LinkedList.h> //https://github.com/ivanseidel/LinkedList
 #include <Ewma.h> //https://github.com/jonnieZG/EWMA
 
 //this function should only be called once per loop iteration
