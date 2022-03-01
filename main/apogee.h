@@ -4,10 +4,7 @@
  ****************************************************************************/
 
 #include <LinkedList.h> //https://github.com/ivanseidel/LinkedList
-
-
-const int TIMEFRAME = 3; // should detect apogee about TIMEFRAME/3 seconds after apogee
-const int SAMPLERATE = 20; //data points per second
+#include <Ewma.h> //https://github.com/jonnieZG/EWMA
 
 bool hasLaunched(Directional accel){
   const int dataPoints = 5;
@@ -30,34 +27,29 @@ bool hasLaunched(Directional accel){
   return hasLaunched;
 }
 
+bool isAccelerating(Directional accel){
+  return sqrt(pow(accel.x, 2) + pow(accel.y, 2) + pow(accel.z, 2)) < 2;
+}
+
 bool detectApogee(Directional accel, double altitude){ //accel in Gs
   if(!hasLaunched(accel))
     return false;
-  const int dataPoints = TIMEFRAME * SAMPLERATE;
   static bool apogeeReached = false; //this is initialized as false, but once it flips to true it should remain true until the arduino is reset
-  static LinkedList<double> altitudes;
+  static Ewma altFilter(.05); //this will contain a filtered altitude (less prone to noise)
+  static int counter = 0;
+  static double lastAlt = altitude;
+  counter = (counter + 1) % 10; //this will count from 0 to 9, overflowing back to 0
+  double currentAlt = altFilter.filter(altitude);
   
-  if(apogeeReached)
+  if(apogeeReached)//if apogee was already detected earlier we don't need to do any more math
     return true;
   
-  altitudes.unshift(altitude);
-  if(altitudes.size() > dataPoints){
-    altitudes.pop();
-  }
-  if(altitudes.size() < dataPoints){
-    return false;
-  }
-  double first3rd, last3rd = 0;
-  for(int i = 0; i < dataPoints/3; i++){
-    first3rd += altitudes.get(i);
-  }
-  for(int i = dataPoints - 1; dataPoints - i < dataPoints/3; i++){
-    last3rd += altitudes.get(i);
-  }
-  first3rd = first3rd/ (dataPoints/3); //first3rd and last3rd refer indices of respective dataPoints
-  last3rd = last3rd/ (dataPoints/3);
-  if(last3rd > first3rd && sqrt(pow(accel.x, 2) + pow(accel.y, 2) + pow(accel.z, 2)) < 2){
-    apogeeReached = true;
+  if(counter == 0){
+    //every 10 readings we'll check for apogee
+    if(currentAlt < lastAlt && !isAccelerating(accel)){
+      apogeeReached = true;
+    }
+    lastAlt = currentAlt;
   }
   return apogeeReached;
 }
