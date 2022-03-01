@@ -2,6 +2,7 @@
 Designed for Teensy 4.1
 
 ## Goals:
+- launch detection
 - altitude monitoring
 - attitude, velocity, and position determination
 - live telemetry transmission
