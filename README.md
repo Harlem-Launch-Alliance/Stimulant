@@ -1,6 +1,8 @@
 # Catalyst 2 Flight Computer
 Designed for Teensy 4.1
 
+[Instructions for use](https://github.com/Harlem-Launch-Alliance/Catalyst-2#instructions-for-use)
+
 ## Goals:
 - launch detection
 - altitude monitoring
