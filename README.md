@@ -12,7 +12,6 @@ Designed for Teensy 4.1
 - GY521 IMU
 
 ## Dependencies:
-- https://github.com/ivanseidel/LinkedList
 - https://github.com/jonnieZG/EWMA
 - https://github.com/adafruit/Adafruit_BMP3XX
 - https://github.com/adafruit/Adafruit_GPS
