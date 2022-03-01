@@ -62,7 +62,8 @@ void loop()
   //time = float(millis()) / 1000.0;
   bmpReading bmpSample = getBMP();
   imuReading imuSample = getIMU();
-  apogeeReached = detectApogee(imuSample.accel, bmpSample.altitude);
+  bool hasLaunched = detectLaunch(imuSample.accel); //might need to calibrate accel data before feeding to this function
+  apogeeReached = detectApogee(imuSample.accel, bmpSample.altitude, hasLaunched);
   transmitData(bmpSample.temp, bmpSample.pressure, bmpSample.altitude, imuSample.accel, imuSample.gyro, apogeeReached);
   recordData();
 }

@@ -6,24 +6,22 @@
 #include <LinkedList.h> //https://github.com/ivanseidel/LinkedList
 #include <Ewma.h> //https://github.com/jonnieZG/EWMA
 
-bool hasLaunched(Directional accel){
-  const int dataPoints = 5;
+//this function should only be called once per loop iteration
+bool detectLaunch(Directional accel){//accel in Gs 
+  const double gForceToLaunch = 3; //if acceleration exceeds this number the rocket will assume it has been launched
   static bool hasLaunched = false;
-  if(hasLaunched)
+  static Ewma accelFilter(.05);
+  
+  if(hasLaunched) //no need to do any math once launch has been detected the first time
     return true;
-  static LinkedList<double> totalAccel;
-  double currentTotal = sqrt(pow(accel.x, 2) + pow(accel.y, 2) + pow(accel.z, 2));
-  totalAccel.unshift(currentTotal); //maintain a rolling list of past accel data
-  //cleanup old data
-  if(totalAccel.size() > dataPoints){
-    totalAccel.pop();
-  }
-  hasLaunched = true;
-  for(int i = 0; i < totalAccel.size(); i++){
-    if(totalAccel.get(i) < 3 || totalAccel.size() < dataPoints){
-      hasLaunched = false;
-    }
-  }
+
+  //group all accels into one
+  //accel may need calibration. If that is the case, it should happen externally and only calibrated data should enter this function
+  double totalAccel = sqrt(pow(accel.x, 2) + pow(accel.y, 2) + pow(accel.z, 2)); //this should be 1G when stationary
+  
+  double filteredAccel = accelFilter.filter(totalAccel);
+  if(filteredAccel > gForceToLaunch)
+    hasLaunched = true;
   return hasLaunched;
 }
 
@@ -31,9 +29,7 @@ bool isAccelerating(Directional accel){
   return sqrt(pow(accel.x, 2) + pow(accel.y, 2) + pow(accel.z, 2)) < 2;
 }
 
-bool detectApogee(Directional accel, double altitude){ //accel in Gs
-  if(!hasLaunched(accel))
-    return false;
+bool detectApogee(Directional accel, double altitude, bool hasLaunched){ //accel in Gs
   static bool apogeeReached = false; //this is initialized as false, but once it flips to true it should remain true until the arduino is reset
   static Ewma altFilter(.05); //this will contain a filtered altitude (less prone to noise)
   static int counter = 0;
@@ -46,9 +42,8 @@ bool detectApogee(Directional accel, double altitude){ //accel in Gs
   
   if(counter == 0){
     //every 10 readings we'll check for apogee
-    if(currentAlt < lastAlt && !isAccelerating(accel)){
+    if(hasLaunched && currentAlt < lastAlt && !isAccelerating(accel))
       apogeeReached = true;
-    }
     lastAlt = currentAlt;
   }
   return apogeeReached;
