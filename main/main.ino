@@ -11,6 +11,7 @@
 #include "bmp_altimeter.h"
 #include "data.h"
 #include "gy521_imu.h"
+#include "attitude.h"
 
 
 
@@ -60,10 +61,15 @@ void setup()
 void loop()
 {
   //time = float(millis()) / 1000.0;
+
+  //sample sensors
   bmpReading bmpSample = getBMP();
   imuReading imuSample = getIMU();
+
   bool hasLaunched = detectLaunch(imuSample.accel); //might need to calibrate accel data before feeding to this function
+  Directional gyroOffsets = calibrateGyro(imuSample.gyro, hasLaunched);
   apogeeReached = detectApogee(imuSample.accel, bmpSample.altitude, hasLaunched);
+
   transmitData(bmpSample.temp, bmpSample.pressure, bmpSample.altitude, imuSample.accel, imuSample.gyro, apogeeReached);
   recordData();
 }
