@@ -4,9 +4,20 @@
  ****************************************************************************/
 
 
-struct Directional  //any data that has an x,y and z attribute
+class Directional  //any data that has an x,y and z attribute
 {
+public:
   double x,y,z; 
+  Directional(double a, double b, double c){
+    x = a;
+    y = b;
+    z = c;
+  }
+  Directional(){
+    x = 0;
+    y = 0;
+    z = 0;
+  }
 };
 
 struct bmpReading //all data from an altimeter reading

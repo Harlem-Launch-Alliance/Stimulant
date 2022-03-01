@@ -5,14 +5,12 @@
 
 //angles are in radians
 //rates are magnitudes of rad/s
-//GyX, GyY, GyZ are readings from gyro
-//pitch, yaw, roll, pitchRate, yawRate are calculated based on readings
-//assuming roll == 0, pitchRate will be equivalent to GyY, and yawRate will be equivalent to GyX
+//assuming roll == 0, pitchRate will be equivalent to y, and yawRate will be equivalent to x
 
 #include <Ewma.h> //https://github.com/jonnieZG/EWMA
 
 //returns calculated pitchRate or yawRate
-double getRate(double roll, double parallel, double perpendicular){//parallel would be GyY to get pitchRate, with perpendicular being GyX
+double getRate(double roll, double parallel, double perpendicular){//if getting rateX, parallel should be x
   return parallel * cos(roll) + perpendicular * sin(roll);
 }
 
@@ -42,4 +40,47 @@ Directional calibrateGyro(Directional gyro, bool hasLaunched){//returns gyro off
     lastSave = current;
   }
   return oldSave;
+}
+
+Directional getRealGyro(Directional gyro, Directional offsets){
+  Directional realGyro;
+  realGyro.x = gyro.x - offsets.x;
+  realGyro.y = gyro.y - offsets.y;
+  realGyro.z = gyro.z - offsets.z;
+  return realGyro;
+}
+
+/**************************************************************************************
+In order to minimize error, we should assume that attitude is 0,0,0 at launch. However, 
+we don't actually know exactly when launch occurs. We can assume with almost 100% that 
+launch is detected less than 5 seconds after it has actually occured, so as a 
+substitute, we can start recording attitude changes 5 seconds before detected launch.
+In order to achieve this, we can record changes in 5 second increments (chunks) prior 
+to launch. Once launch is detected we will 'lock in' those chunks and continue 
+recording changes forever.
+**************************************************************************************/
+Directional getAttitude(Directional gyro, bool hasLaunched){//only calibrated gyro data should go in here
+  const int hz = 100; //number of readings per second
+  static Directional oldChanges;
+  static Directional lastChanges;
+  static int counter = 0;
+  Directional currentAttitude;
+
+  counter = (counter + 1) % 500;
+
+  lastChanges.z += gyro.z/hz;
+  currentAttitude.z = oldChanges.z + lastChanges.z; //z must be set first so we can calculate x and y
+  lastChanges.x += getRate(currentAttitude.z/* -gyro.z/2 */, gyro.x, gyro.y)/hz;
+  lastChanges.z += getRate(currentAttitude.z/* -gyro.z/2 */, gyro.y, gyro.x)/hz;
+
+  if(counter == 0 && !hasLaunched){
+    oldChanges = lastChanges;
+    lastChanges.x = 0;
+    lastChanges.y = 0;
+    lastChanges.z = 0;
+  }
+
+  currentAttitude.x = oldChanges.x + lastChanges.x;
+  currentAttitude.y = oldChanges.y + lastChanges.y;
+  return currentAttitude;
 }

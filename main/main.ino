@@ -68,7 +68,9 @@ void loop()
 
   bool hasLaunched = detectLaunch(imuSample.accel); //might need to calibrate accel data before feeding to this function
   Directional gyroOffsets = calibrateGyro(imuSample.gyro, hasLaunched);
+  Directional calibratedGyro = getRealGyro(imuSample.gyro, gyroOffsets);
   apogeeReached = detectApogee(imuSample.accel, bmpSample.altitude, hasLaunched);
+  Directional attitude = getAttitude(calibratedGyro, hasLaunched);
 
   transmitData(bmpSample.temp, bmpSample.pressure, bmpSample.altitude, imuSample.accel, imuSample.gyro, apogeeReached);
   recordData();
