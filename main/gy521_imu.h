@@ -59,7 +59,7 @@ imuReading getIMU()
   imuSample.gyro.x = (GyX /*+ GyXcal*/)/131.0;      // For FS_SEL=0 value is 131
   imuSample.gyro.y = (GyY /*+ GyYcal*/)/131.0;
   imuSample.gyro.z = (GyZ /*+ GyZcal*/)/131.0;
-  imuSample.time = millis();
+  imuSample.time = micros();
 
   return imuSample;
 }

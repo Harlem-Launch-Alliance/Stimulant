@@ -19,6 +19,7 @@
 #define SEALEVELPRESSURE_HPA (1013.25)
 const int chipSelect = BUILTIN_SDCARD;
 const int buzzer = 33;
+unsigned long lastTime = 0;
 
 // Variables:
 bool apogeeReached;
@@ -61,10 +62,15 @@ void setup()
 void loop()
 {
   //time = float(millis()) / 1000.0;
+  while(micros() - lastTime < 10000){
+    //waste time
+    int x = 1 + 1;
+  }
+  lastTime = micros();
 
   //sample sensors
+  imuReading imuSample = getIMU(); //sample IMU first to maximize consistency
   bmpReading bmpSample = getBMP();
-  imuReading imuSample = getIMU();
 
   bool hasLaunched = detectLaunch(imuSample.accel); //might need to calibrate accel data before feeding to this function
   Directional gyroOffsets = calibrateGyro(imuSample.gyro, hasLaunched);
