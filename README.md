@@ -33,3 +33,5 @@ Designed for Teensy 4.1
     * **CAUTION**: Once powered on, any sudden movements may trigger launch detection
 4. Wait at least 30 seconds between powering on and launching to allow for proper sensor calibration
 5. Launch!
+
+Note: Due to the use of the `micros` function, there may be some unintended behavior if the controller is powered on for more than 70 minutes
