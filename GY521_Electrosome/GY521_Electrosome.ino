@@ -58,7 +58,8 @@ void getIMU()
   //read gyroscope data
   GyX=Wire.read()<<8|Wire.read(); // 0x43 (GYRO_XOUT_H) 0x44 (GYRO_XOUT_L)
   GyY=Wire.read()<<8|Wire.read(); // 0x45 (GYRO_YOUT_H) 0x46 (GYRO_YOUT_L)
-  GyZ=Wire.read()<<8|Wire.read(); // 0x47 (GYRO_ZOUT_H) 0x48 (GYRO_ZOUT_L) 
+  GyZ=Wire.read()<<8|Wire.read(); // 0x47 (GYRO_ZOUT_H) 0x48 (GYRO_ZOUT_L)
+  Serial.println(GyZ); 
   Gx = (GyX + GyXcal)/131.0;      // For FS_SEL=0 value is 131
   Gy = (GyY + GyYcal)/131.0;
   Gz = (GyZ + GyZcal)/131.0;
@@ -82,24 +83,24 @@ void getAngle(int Ax,int Ay,int Az)
 
 void printData()
 {
-  Serial.print("Angle: ");
-  Serial.print("Pitch = ");
-  Serial.print(pitch);
-  Serial.print(" Roll = ");
-  Serial.println(roll);
+//  Serial.print("Angle: ");
+//  Serial.print("Pitch = ");
+//  Serial.print(pitch);
+//  Serial.print(" Roll = ");
+//  Serial.println(roll);
+//
+//  Serial.print("Accelerometer: ");
+//  Serial.print("X = "); Serial.print(Ax);
+//  Serial.print(" Y = "); Serial.print(Ay);
+//  Serial.print(" Z = "); Serial.println(Az); 
 
-  Serial.print("Accelerometer: ");
-  Serial.print("X = "); Serial.print(Ax);
-  Serial.print(" Y = "); Serial.print(Ay);
-  Serial.print(" Z = "); Serial.println(Az); 
-
-  Serial.print("Temperature in celsius = "); Serial.print(tc);  
-  Serial.print(" fahrenheit = "); Serial.println(tf);  
+//  Serial.print("Temperature in celsius = "); Serial.print(tc);  
+//  Serial.print(" fahrenheit = "); Serial.println(tf);  
   
-  Serial.print("Gyroscope: ");
-  Serial.print("X = "); Serial.print(Gx);
-  Serial.print(" Y = "); Serial.print(Gy);
-  Serial.print(" Z = "); Serial.println(Gz);
+//  Serial.print("Gyroscope: ");
+//  Serial.print("X = "); Serial.print(Gx);
+//  Serial.print(" Y = "); Serial.print(Gy);
+//  Serial.print(" Z = "); Serial.println(Gz);
 }
 
 void setup()
