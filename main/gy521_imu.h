@@ -29,7 +29,6 @@ void setupIMU(){
 
 imuReading getIMU()
 {
-  unsigned long t1 = millis();
   imuReading imuSample;
   imuSample.time = micros(); //current timestamp
   int16_t AcX, AcY, AcZ, GyX, GyY, GyZ, Tmp;
@@ -58,9 +57,6 @@ imuReading getIMU()
   imuSample.gyro.y = GyY/131.0;
   imuSample.gyro.z = GyZ/131.0;
   imuSample.temp = Tmp/340 + 36.53;
-  
-
-  //Serial.println(GyZ);
   
   return imuSample; //return gyro and accel data
 }

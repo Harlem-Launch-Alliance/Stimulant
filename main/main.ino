@@ -5,8 +5,8 @@
  *************************************************************************************/
 #include <Wire.h>             // to communicate with I2C devices
 #include <SD.h>               // for data storage on the onboard microSD card
-#include "Adafruit_BMP3XX.h"  // BMP388 library
 #include "utils.h"
+#include "Adafruit_BMP3XX.h"  // BMP388 library
 #include "apogee.h"
 #include "bmp_altimeter.h"
 #include "data.h"

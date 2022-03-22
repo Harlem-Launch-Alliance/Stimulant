@@ -9,14 +9,6 @@
 
 #include <Ewma.h> //https://github.com/jonnieZG/EWMA
 
-double toDeg(double angle){
-  return ((angle) *(180/PI));
-}
-
-double toRad(double angle){
-  return ((angle) * (PI/180));
-}
-
 //returns calculated pitchRate or yawRate
 double getRate(double roll, double parallel, double perpendicular){//if getting rateX, parallel should be x
   return parallel * cos(roll) + perpendicular * sin(roll);

@@ -34,6 +34,10 @@ struct imuReading //all data from an IMU reading (accelerometer and gyroscope)
     double temp;
 };
 
-double round2(double data){
-  return round(data * 100)/100;
+double toDeg(double angle){
+  return ((angle) *(180/PI));
+}
+
+double toRad(double angle){
+  return ((angle) * (PI/180));
 }
