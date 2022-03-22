@@ -53,9 +53,9 @@ imuReading getIMU()
   imuSample.accel.x = AcX/16384.0;
   imuSample.accel.y = AcY/16384.0;
   imuSample.accel.z = AcZ/16384.0;
-  imuSample.gyro.x = GyX/131.0;
-  imuSample.gyro.y = GyY/131.0;
-  imuSample.gyro.z = GyZ/131.0;
+  imuSample.gyro.x = toRad(GyX/131.0);
+  imuSample.gyro.y = toRad(GyY/131.0);
+  imuSample.gyro.z = toRad(GyZ/131.0);
   imuSample.temp = Tmp/340 + 36.53;
   
   return imuSample; //return gyro and accel data
