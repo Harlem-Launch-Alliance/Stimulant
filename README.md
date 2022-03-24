@@ -11,8 +11,12 @@ Designed for Teensy 4.1
 - automated apogee detection and parachute deployment(s)
 
 ## Hardware:
+- Teensy 4.1
 - Adafruit BMP388 Barometric Altimeter
-- GY521 IMU
+- GY521 IMU (MPU 6050)
+- Adafruit Ultimate GPS
+- Xbee-PRO S3B
+- 5V buzzer
 
 ## Dependencies:
 - https://github.com/jonnieZG/EWMA
@@ -29,9 +33,10 @@ Designed for Teensy 4.1
 ## Instructions for use:
 1. Connect all sensors and power source
 2. Integrate Teensy with rocket (try to keep IMU aligned with axis of rotation)
-3. Power on Teensy
+3. Put rocket on launch rail
+4. Power on Teensy
     * **CAUTION**: Once powered on, any sudden movements may trigger launch detection
-4. Wait at least 30 seconds between powering on and launching to allow for proper sensor calibration
-5. Launch!
+5. Wait at least 5 minutes between powering on and launching to allow for proper sensor calibration
+6. Launch!
 
-Note: Due to the use of the `micros` function, there may be some unintended behavior if the controller is powered on for more than 70 minutes
+Note: Due to the use of the `micros()` function, there may be some unintended behavior if the controller is powered on for more than 70 minutes
