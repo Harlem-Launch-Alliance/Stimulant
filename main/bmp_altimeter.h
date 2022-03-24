@@ -3,10 +3,10 @@
  * 
  ****************************************************************************/
 
+#define BMP_CS 10
+#define SEALEVELPRESSURE_HPA (1013.25)//To be replaced
 
 Adafruit_BMP3XX bmp; //initialize sensor
-
-#define SEALEVELPRESSURE_HPA (1013.25)
 
 bmpReading getBMP()
 {
@@ -25,16 +25,16 @@ bmpReading getBMP()
 void setupBMP()
 {
   Serial1.print("Setting up BMP388: ");
-  if (!bmp.begin_I2C()) {   // hardware I2C mode, can pass in address & alt Wire
+  if (!bmp.begin_SPI(BMP_CS)) {   // hardware I2C mode, can pass in address & alt Wire
     Serial1.println("could not find a valid BMP388 sensor, check wiring!");
     while (1);
   }
 
   // Set up oversampling and filter initialization
-  bmp.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
-  bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
+  bmp.setTemperatureOversampling(BMP3_NO_OVERSAMPLING);
+  bmp.setPressureOversampling(BMP3_OVERSAMPLING_2X);
   bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
-  bmp.setOutputDataRate(BMP3_ODR_50_HZ);
+  bmp.setOutputDataRate(BMP3_ODR_100_HZ);
   for(int i = 0; i < 100; i++)                             // runs BMP 100 times to flush out data
     getBMP();
   Serial1.println("successful");

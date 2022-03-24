@@ -15,9 +15,9 @@ double getRate(double roll, double parallel, double perpendicular){//if getting 
 }
 
 Directional calibrateGyro(Directional gyro, bool hasLaunched){//returns gyro offsets
-  static Ewma xFilter(.2); //TODO, find a good alpha that can calibrate withing ~30 seconds
-  static Ewma yFilter(.2);
-  static Ewma zFilter(.2);
+  static Ewma xFilter(.002);
+  static Ewma yFilter(.002);
+  static Ewma zFilter(.002);
   static Directional lastSave;//0-5 second old data
   static Directional oldSave;//5-10 second old data
   static int counter = 0;
