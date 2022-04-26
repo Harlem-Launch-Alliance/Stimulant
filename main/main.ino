@@ -12,6 +12,7 @@
 #include "data.h"
 #include "gy521_imu.h"
 #include "attitude.h"
+#include "gps.h"
 
 
 
@@ -68,7 +69,7 @@ void loop()
 {
   static int tick = 0;
   static flightPhase status = ONPAD;
-  int tickTime = getTickTime(status);
+  unsigned int tickTime = getTickTime(status);
   while(micros() - lastTime < tickTime){
     //waste time
     int x = 1 + 1;
@@ -85,7 +86,9 @@ void loop()
   case DESCENDING:
     runDescending();
     break;
-  runPostFlight();
+  case POST_FLIGHT:
+  default:
+    runPostFlight();
   }
   tick++;
 }
@@ -99,7 +102,7 @@ flightPhase runOnPad(int tick){
   bool hasLaunched = detectLaunch(imuSample.accel); //might need to calibrate accel data before feeding to this function
   if(tick % 5 == 0){
     lastBmp = getBMP();
-    apogeeReached = detectApogee(imuSample.accel, bmpSample.altitude, hasLaunched); //need to run this prelaunch to get calibrations
+    apogeeReached = detectApogee(imuSample.accel, lastBmp.altitude, hasLaunched); //need to run this prelaunch to get calibrations
     //TODO push reading onto queue. if we haven't launched pop values off of queue until first value is less than 5 seconds old
   }
 
@@ -108,7 +111,7 @@ flightPhase runOnPad(int tick){
   Directional attitude = getAttitude(calibratedGyro, hasLaunched);
 
   //TODO adjust data transmission to altitude, GPS, and attitude only
-  transmitData(bmpSample.temp, bmpSample.pressure, bmpSample.altitude, imuSample.accel, imuSample.gyro, apogeeReached);
+  transmitData(0, 0, 0, imuSample.accel, imuSample.gyro, apogeeReached);
   if(hasLaunched)
     return ASCENDING;
   return ONPAD;

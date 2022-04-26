@@ -3,6 +3,7 @@
  * 
  ****************************************************************************/
 #include <math.h>
+#include "settings.h"
 
 class Directional  //any data that has an x,y and z attribute
 {

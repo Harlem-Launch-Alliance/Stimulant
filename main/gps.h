@@ -25,7 +25,7 @@ void setupGPS()
   GPSSerial.println(PMTK_Q_RELEASE);
 }
 
-gpsReading getGPS();
+gpsReading getGPS()
 {
   gpsReading sample;
 
