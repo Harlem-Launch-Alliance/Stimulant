@@ -61,7 +61,7 @@ void setup()
 
 void loop()
 {
-  //time = float(millis()) / 1000.0;
+  static int tick = 0;
   while(micros() - lastTime < 10000){
     //waste time
     int x = 1 + 1;
@@ -80,4 +80,5 @@ void loop()
 
   transmitData(bmpSample.temp, bmpSample.pressure, bmpSample.altitude, imuSample.accel, imuSample.gyro, apogeeReached);
   recordData();
+  tick++;
 }
