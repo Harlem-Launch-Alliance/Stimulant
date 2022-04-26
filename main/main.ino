@@ -62,7 +62,9 @@ void setup()
 void loop()
 {
   static int tick = 0;
-  while(micros() - lastTime < 10000){
+  static flightPhase status = ONPAD;
+  int tickTime = getTickTime(status);
+  while(micros() - lastTime < tickTime){
     //waste time
     int x = 1 + 1;
   }

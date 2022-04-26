@@ -1,5 +1,5 @@
 /*****************************************************************************
- * This file is for declaring new datatypes
+ * This file is for declaring utilities to be used in multiple other places
  * 
  ****************************************************************************/
 #include <math.h>
@@ -40,4 +40,20 @@ double toDeg(double angle){
 
 double toRad(double angle){
   return ((angle) * (PI/180));
+}
+
+enum flightPhase {ONPAD, ASCENDING, DESCENDING, POST_FLIGHT};
+
+int getTickTime(flightPhase phase){//map flight phases to tick times
+  switch(phase){
+  case ONPAD:
+    return TICK_TIME_ONPAD;
+  case ASCENDING:
+    return TICK_TIME_ASCENDING;
+  case DESCENDING:
+    return TICK_TIME_DESCENDING;
+  case POST_FLIGHT:
+    return TICK_TIME_POST_FLIGHT;
+  }
+  return TICK_TIME_POST_FLIGHT;
 }
