@@ -59,6 +59,11 @@ void setup()
   }
 }
 
+flightPhase runOnPad(int tick);
+flightPhase runAscending(int tick);
+flightPhase runDescending();
+flightPhase runPostFlight();
+
 void loop()
 {
   static int tick = 0;
@@ -70,17 +75,53 @@ void loop()
   }
   lastTime = micros();
 
+  switch(status){
+  case ONPAD:
+    runOnPad(tick);
+    break;
+  case ASCENDING:
+    runAscending(tick);
+    break;
+  case DESCENDING:
+    runDescending();
+    break;
+  runPostFlight();
+  }
+  tick++;
+}
+
+flightPhase runOnPad(int tick){
   //sample sensors
+  static bmpReading lastBmp;
   imuReading imuSample = getIMU(); //sample IMU first to maximize consistency
-  bmpReading bmpSample = getBMP();
+  //TODO push reading onto queue. if we haven't launched pop values off of queue until first value is less than 5 seconds old
 
   bool hasLaunched = detectLaunch(imuSample.accel); //might need to calibrate accel data before feeding to this function
+  if(tick % 5 == 0){
+    lastBmp = getBMP();
+    apogeeReached = detectApogee(imuSample.accel, bmpSample.altitude, hasLaunched); //need to run this prelaunch to get calibrations
+    //TODO push reading onto queue. if we haven't launched pop values off of queue until first value is less than 5 seconds old
+  }
+
   Directional gyroOffsets = calibrateGyro(imuSample.gyro, hasLaunched);
   Directional calibratedGyro = getRealGyro(imuSample.gyro, gyroOffsets);
-  apogeeReached = detectApogee(imuSample.accel, bmpSample.altitude, hasLaunched);
   Directional attitude = getAttitude(calibratedGyro, hasLaunched);
 
+  //TODO adjust data transmission to altitude, GPS, and attitude only
   transmitData(bmpSample.temp, bmpSample.pressure, bmpSample.altitude, imuSample.accel, imuSample.gyro, apogeeReached);
-  recordData();
-  tick++;
+  if(hasLaunched)
+    return ASCENDING;
+  return ONPAD;
+}
+
+flightPhase runAscending(int tick){ //this will run similarly to ONPAD except hasLaunched will be true
+  return ASCENDING;
+}
+
+flightPhase runDescending(){
+  return DESCENDING;
+}
+
+flightPhase runPostFlight(){
+  return POST_FLIGHT;
 }

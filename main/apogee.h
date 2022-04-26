@@ -33,14 +33,14 @@ bool detectApogee(Directional accel, double altitude, bool hasLaunched){ //accel
   static Ewma altFilter(.05); //this will contain a filtered altitude (less prone to noise)
   static int counter = 0;
   static double lastAlt = altitude;
-  counter = (counter + 1) % 10; //this will count from 0 to 9, overflowing back to 0
+  counter = (counter + 1) % 5; //this will count from 0 to 4, overflowing back to 0
   double currentAlt = altFilter.filter(altitude);
   
   if(apogeeReached)//if apogee was already detected earlier we don't need to do any more math
     return true;
   
   if(counter == 0){
-    //every 10 readings we'll check for apogee
+    //everytime counter overflows we check for apogee (4hz at the moment, this should be a constant or tied to a constant)
     if(hasLaunched && currentAlt < lastAlt && !isAccelerating(accel))
       apogeeReached = true;
     lastAlt = currentAlt;
