@@ -44,7 +44,7 @@ void setup()
   else
     Serial1.println("MicroSD card: successful");
 
-  //setupGPS();
+  setupGPS();
   setupIMU();
   
   File dataFile = SD.open("datalog.txt", FILE_WRITE);

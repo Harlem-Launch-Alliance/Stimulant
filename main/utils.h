@@ -34,6 +34,13 @@ struct imuReading //all data from an IMU reading (accelerometer and gyroscope)
     double temp;
 };
 
+struct gpsReading //only the data we need for now
+{
+    double latitude;
+    double longitude;
+    unsigned long time;
+};
+
 double toDeg(double angle){
   return ((angle) *(180/PI));
 }
