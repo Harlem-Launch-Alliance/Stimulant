@@ -36,7 +36,7 @@ gpsReading getGPS()
     // a tricky thing here is if we print the NMEA sentence, or data
     // we end up not listening and catching other sentences!
     // so be very wary if using OUTPUT_ALLDATA and trying to print out data
-    c = GPS.lastNMEA();
+    c = GPS.lastNMEA(); //the error for this doesn't seem to affect functionality
     if (!GPS.parse(GPS.lastNMEA())) // this also sets the newNMEAreceived() flag to false
       return sample; // we can fail to parse a sentence in which case we should just wait for another
   }
