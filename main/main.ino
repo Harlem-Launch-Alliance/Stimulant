@@ -110,8 +110,14 @@ flightPhase runOnPad(int tick){
   Directional calibratedGyro = getRealGyro(imuSample.gyro, gyroOffsets);
   Directional attitude = getAttitude(calibratedGyro, hasLaunched);
 
-  //TODO adjust data transmission to altitude, GPS, and attitude only
-  transmitData(0, 0, 0, imuSample.accel, imuSample.gyro, apogeeReached);
+  if(tick % 50 == 1){//twice per second with a slight offset to avoid overlapping with bmp
+    //TODO adjust data transmission to altitude, GPS, and attitude only
+    transmitData(0, 0, 0, imuSample.accel, imuSample.gyro, apogeeReached);
+  }
+  if(tick % 100 == 2){//1 time per second with a slight offset to avoid collisions
+    lastGps = getGPS();
+    //TODO push reading onto queue. if we haven't launched pop values off of queue until first value is less than 5 seconds old
+  }
   if(hasLaunched)
     return ASCENDING;
   return ONPAD;
@@ -120,6 +126,7 @@ flightPhase runOnPad(int tick){
 flightPhase runAscending(int tick){ //this will run similarly to ONPAD except hasLaunched will be true
   //sample sensors
   static bmpReading lastBmp;
+  static gpsReading lastGps;
   static unsigned int delay = 0;
   bool apogeeReached = false;
   imuReading imuSample = getIMU(); //sample IMU first to maximize consistency
@@ -130,13 +137,19 @@ flightPhase runAscending(int tick){ //this will run similarly to ONPAD except ha
     apogeeReached = detectApogee(imuSample.accel, lastBmp.altitude, true);
     //TODO push reading onto queue. if we haven't launched pop values off of queue until first value is less than 5 seconds old
   }
+  if(tick % 100 == 2){//1 time per second with a slight offset to avoid collisions
+    lastGps = getGPS();
+    //TODO push reading onto queue. if we haven't launched pop values off of queue until first value is less than 5 seconds old
+  }
 
   Directional gyroOffsets = calibrateGyro(imuSample.gyro, true);
   Directional calibratedGyro = getRealGyro(imuSample.gyro, gyroOffsets);
   Directional attitude = getAttitude(calibratedGyro, true);
 
-  //TODO adjust data transmission to altitude, GPS, and attitude only
-  transmitData(0, 0, 0, imuSample.accel, imuSample.gyro, apogeeReached);
+  if(tick % 5 == 1){//20 times per second with a slight offset to avoid overlapping with bmp
+    //TODO adjust data transmission to altitude, GPS, and attitude only
+    transmitData(0, 0, 0, imuSample.accel, imuSample.gyro, apogeeReached);
+  }
   if(apogeeReached && !delay){
     delay = millis() + 3000;//added 3 second delay incase chute deploy is late
   }
@@ -145,10 +158,36 @@ flightPhase runAscending(int tick){ //this will run similarly to ONPAD except ha
   return ASCENDING;
 }
 
-flightPhase runDescending(){
+flightPhase runDescending(){//this runs at 20hz
+  static gpsReading lastGps;
+  static int lastAlt = 0;
+  //TODO push directly onto SD
+
+  //sample sensors
+  bmpReading bmpSample = getBMP();
+
+  if(tick % 20 == 1){//still one time per second
+    lastGps = getGPS();
+    //TODO push directly onto SD
+  }
+  //TODO adjust data transmission to altitude, GPS, and attitude only
+  transmitData(0, 0, 0, imuSample.accel, imuSample.gyro, true);
+
+  if(tick % 100 == 0){//every 5 seconds check if we are still descending
+    if(bmpSample.altitude - lastAlt < 1){//if altitude hasn't changed more than 1 meter in 5 seconds, we're on the ground
+      return POST_FLIGHT;
+    }
+    lastAlt = bmpSample.altitude;
+  }
   return DESCENDING;
 }
 
 flightPhase runPostFlight(){
+  //once we're on the ground we can stop recording and start just broadcasting GPS somewhat infrequently
+  if(tick % 5 == 0){//broadcast every 5 seconds
+    gpsReading gpsSample = getGPS();
+    //TODO adjust data transmission to altitude, GPS, and attitude only
+    transmitData(0, 0, 0, imuSample.accel, imuSample.gyro, true);
+  }
   return POST_FLIGHT;
 }
