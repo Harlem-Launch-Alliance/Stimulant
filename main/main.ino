@@ -62,8 +62,8 @@ void setup()
 
 flightPhase runOnPad(int tick);
 flightPhase runAscending(int tick);
-flightPhase runDescending();
-flightPhase runPostFlight();
+flightPhase runDescending(int tick);
+flightPhase runPostFlight(int tick);
 
 void loop()
 {
@@ -84,11 +84,11 @@ void loop()
     runAscending(tick);
     break;
   case DESCENDING:
-    runDescending();
+    runDescending(tick);
     break;
   case POST_FLIGHT:
   default:
-    runPostFlight();
+    runPostFlight(tick);
   }
   tick++;
 }
@@ -96,6 +96,8 @@ void loop()
 flightPhase runOnPad(int tick){
   //sample sensors
   static bmpReading lastBmp;
+  static gpsReading lastGps;
+  
   imuReading imuSample = getIMU(); //sample IMU first to maximize consistency
   //TODO push reading onto queue. if we haven't launched pop values off of queue until first value is less than 5 seconds old
 
@@ -158,7 +160,7 @@ flightPhase runAscending(int tick){ //this will run similarly to ONPAD except ha
   return ASCENDING;
 }
 
-flightPhase runDescending(){//this runs at 20hz
+flightPhase runDescending(int tick){//this runs at 20hz
   static gpsReading lastGps;
   static int lastAlt = 0;
   //TODO push directly onto SD
@@ -171,7 +173,7 @@ flightPhase runDescending(){//this runs at 20hz
     //TODO push directly onto SD
   }
   //TODO adjust data transmission to altitude, GPS, and attitude only
-  transmitData(0, 0, 0, imuSample.accel, imuSample.gyro, true);
+  //transmitData(0, 0, 0, imuSample.accel, imuSample.gyro, true);
 
   if(tick % 100 == 0){//every 5 seconds check if we are still descending
     if(bmpSample.altitude - lastAlt < 1){//if altitude hasn't changed more than 1 meter in 5 seconds, we're on the ground
@@ -182,12 +184,12 @@ flightPhase runDescending(){//this runs at 20hz
   return DESCENDING;
 }
 
-flightPhase runPostFlight(){
+flightPhase runPostFlight(int tick){
   //once we're on the ground we can stop recording and start just broadcasting GPS somewhat infrequently
   if(tick % 5 == 0){//broadcast every 5 seconds
     gpsReading gpsSample = getGPS();
     //TODO adjust data transmission to altitude, GPS, and attitude only
-    transmitData(0, 0, 0, imuSample.accel, imuSample.gyro, true);
+    //transmitData(0, 0, 0, imuSample.accel, imuSample.gyro, true);
   }
   return POST_FLIGHT;
 }
