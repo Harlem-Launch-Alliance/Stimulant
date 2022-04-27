@@ -102,7 +102,7 @@ flightPhase runOnPad(int tick){
   bool hasLaunched = detectLaunch(imuSample.accel); //might need to calibrate accel data before feeding to this function
   if(tick % 5 == 0){
     lastBmp = getBMP();
-    apogeeReached = detectApogee(imuSample.accel, lastBmp.altitude, hasLaunched); //need to run this prelaunch to get calibrations
+    detectApogee(imuSample.accel, lastBmp.altitude, hasLaunched); //need to run this prelaunch to get calibrations
     //TODO push reading onto queue. if we haven't launched pop values off of queue until first value is less than 5 seconds old
   }
 
@@ -118,6 +118,30 @@ flightPhase runOnPad(int tick){
 }
 
 flightPhase runAscending(int tick){ //this will run similarly to ONPAD except hasLaunched will be true
+  //sample sensors
+  static bmpReading lastBmp;
+  static unsigned int delay = 0;
+  bool apogeeReached = false;
+  imuReading imuSample = getIMU(); //sample IMU first to maximize consistency
+  //TODO push reading onto queue. if we haven't launched pop values off of queue until first value is less than 5 seconds old
+
+  if(tick % 5 == 0){
+    lastBmp = getBMP();
+    apogeeReached = detectApogee(imuSample.accel, lastBmp.altitude, true);
+    //TODO push reading onto queue. if we haven't launched pop values off of queue until first value is less than 5 seconds old
+  }
+
+  Directional gyroOffsets = calibrateGyro(imuSample.gyro, true);
+  Directional calibratedGyro = getRealGyro(imuSample.gyro, gyroOffsets);
+  Directional attitude = getAttitude(calibratedGyro, true);
+
+  //TODO adjust data transmission to altitude, GPS, and attitude only
+  transmitData(0, 0, 0, imuSample.accel, imuSample.gyro, apogeeReached);
+  if(apogeeReached && !delay){
+    delay = millis() + 3000;//added 3 second delay incase chute deploy is late
+  }
+  if(apogeeReached && delay > millis())
+    return DESCENDING;
   return ASCENDING;
 }
 
