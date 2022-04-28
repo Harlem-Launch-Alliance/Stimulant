@@ -12,7 +12,7 @@ void transmitData(double altitude, gpsReading gps, char phase)
   Serial1.print(" ");
   Serial1.print(gps.longitude, 4);
   Serial1.print(" ");
-  Serial1.print(altitude,1);
+  Serial1.println(altitude,1);
 }
 
 void recordData() //PENDING SD.write timing check
