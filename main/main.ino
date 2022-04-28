@@ -18,7 +18,6 @@
 
 // Constants:
 #define SEALEVELPRESSURE_HPA (1013.25)
-const int chipSelect = BUILTIN_SDCARD;
 const int buzzer = 33;
 unsigned long lastTime = 0;
 
@@ -38,26 +37,9 @@ void setup()
   Wire.begin();               // initiate wire library and I2C
   Serial1.begin(115200);      // xBee 115200, 9600
   setupBMP();
-  
-  // set up sd card
-  if (!SD.begin(chipSelect))
-    Serial1.println("MicroSD card: failed or not present");
-  else
-    Serial1.println("MicroSD card: successful");
 
-  setupGPS();
+  String date = setupGPS();
   setupIMU();
-  
-  File dataFile = SD.open("datalog.txt", FILE_WRITE);
-  if (dataFile) {
-    dataFile.println("Catalyst 2 Flight Computer Test December 14th, 2021"); //TODO we can use GPS to get date
-    //dataFile.println("Single deployment level 1 rocket flight data");
-    dataFile.println("T(s) IMU_T(C) BMP_T(C) Pitch(deg) Roll(deg) Ax(g) Ay Az Gx Gy Gz P(hPa) A(m) Apogee");
-    dataFile.close();
-  }
-  else {
-    Serial1.println("error opening datalog.txt");
-  }
 }
 
 flightPhase runOnPad(int tick);

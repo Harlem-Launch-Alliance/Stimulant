@@ -9,8 +9,9 @@
 // Connect to the GPS on the hardware port
 Adafruit_GPS GPS(&GPSSerial);
 
-void setupGPS()
+String setupGPS()
 {
+  Serial1.println("Setting up GPS...");
   // 9600 NMEA is the default baud rate for Adafruit MTK GPS's- some use 4800
   GPS.begin(9600);
   // uncomment this line to turn on RMC (recommended minimum) and GGA (fix data) including altitude
@@ -21,6 +22,37 @@ void setupGPS()
 
   // Ask for firmware version
   GPSSerial.println(PMTK_Q_RELEASE);
+
+  int timer = 0;
+  
+  while(!GPS.fix){
+    char c = GPS.read();
+    // if you want to debug, this is a good time to do it!
+    if (GPS.newNMEAreceived()) {
+      // a tricky thing here is if we print the NMEA sentence, or data
+      // we end up not listening and catching other sentences!
+      // so be very wary if using OUTPUT_ALLDATA and trying to print out data
+      c = GPS.lastNMEA(); //this gives an error but doesn't seem to be an issue
+      if (!GPS.parse(GPS.lastNMEA())) // this also sets the newNMEAreceived() flag to false
+        return; // we can fail to parse a sentence in which case we should just wait for another
+    }
+    if(timer < millis()){
+      timer = millis() + 10000;
+      Serial1.println("Acquiring GPS signal...");
+    }
+  }
+  Serial1.println("GPS signal acquired");
+  uint8_t hour = GPS.hour;
+  uint8_t minute = GPS.minute;
+  uint8_t year = GPS.year;
+  uint8_t month = GPS.month;
+  uint8_t day = GPS.day;
+  uint8_t yearPrefix = 20;
+  
+  String date = String(yearPrefix).concat(year).concat('-').concat(month).concat('-').concat(day).concat("--").concat(hour).concat('-').concat(minute);
+  Serial1.print("Date: ");
+  Serial1.println(date);
+  return date;
 }
 
 gpsReading getGPS()
