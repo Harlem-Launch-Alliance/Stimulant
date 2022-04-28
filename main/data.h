@@ -4,22 +4,18 @@
  ****************************************************************************/
 
 
-void transmitData(double temp, double pressure, double altitude, Directional accel, Directional gyro, bool apogeeReached)
+void transmitFlightData(double altitude, gpsReading gps, bool apogeeReached)
 {
-  Serial1.print(millis()); Serial1.print("\t");
-  //Serial1.print(tc); Serial1.print("\t");
-  Serial1.print(temp); Serial1.print("\t");
-  //Serial1.print(pitch); Serial1.print("\t");
-  //Serial1.print(roll); Serial1.print("\t");
-  Serial1.print(accel.x); Serial1.print("\t");
-  Serial1.print(accel.y); Serial1.print("\t");
-  Serial1.print(accel.z); Serial1.print("\t");
-  Serial1.print(gyro.x); Serial1.print("\t");
-  Serial1.print(gyro.y); Serial1.print("\t");
-  Serial1.print(gyro.z); Serial1.print("\t");
-  Serial1.print(pressure); Serial1.print("\t"); Serial1.print("\t");    
-  Serial1.print(altitude); Serial1.print("\t");
-  Serial1.println(apogeeReached);
+  if(apogeeReached)
+    Serial1.print("1"); //descending or on ground
+  else
+    Serial1.print("0"); //ascending or on pad
+  Serial1.print(" ");
+  Serial1.print(gps.latitude, 4);
+  Serial1.print(" ");
+  Serial1.print(gps.longitude, 4);
+  Serial1.print(" ");
+  Serial1.print(altitude,1);
 }
 
 void recordData() //PENDING SD.write timing check

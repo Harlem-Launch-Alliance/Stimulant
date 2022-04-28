@@ -114,7 +114,7 @@ flightPhase runOnPad(int tick){
 
   if(tick % 50 == 1){//twice per second with a slight offset to avoid overlapping with bmp
     //TODO adjust data transmission to altitude, GPS, and attitude only
-    transmitData(0, 0, 0, imuSample.accel, imuSample.gyro, apogeeReached);
+    transmitData(lastBmp.altitude, lastGps, false);
   }
   if(tick % 100 == 2){//1 time per second with a slight offset to avoid collisions
     lastGps = getGPS();
@@ -150,7 +150,7 @@ flightPhase runAscending(int tick){ //this will run similarly to ONPAD except ha
 
   if(tick % 5 == 1){//20 times per second with a slight offset to avoid overlapping with bmp
     //TODO adjust data transmission to altitude, GPS, and attitude only
-    transmitData(0, 0, 0, imuSample.accel, imuSample.gyro, apogeeReached);
+    transmitData(lastBmp.altitude, lastGps, apogeeReached);
   }
   if(apogeeReached && !delay){
     delay = millis() + 3000;//added 3 second delay incase chute deploy is late
@@ -172,8 +172,7 @@ flightPhase runDescending(int tick){//this runs at 20hz
     lastGps = getGPS();
     //TODO push directly onto SD
   }
-  //TODO adjust data transmission to altitude, GPS, and attitude only
-  //transmitData(0, 0, 0, imuSample.accel, imuSample.gyro, true);
+  transmitData(bmpSample.altitude, lastGps, true);
 
   if(tick % 100 == 0){//every 5 seconds check if we are still descending
     if(bmpSample.altitude - lastAlt < 1){//if altitude hasn't changed more than 1 meter in 5 seconds, we're on the ground
@@ -186,10 +185,10 @@ flightPhase runDescending(int tick){//this runs at 20hz
 
 flightPhase runPostFlight(int tick){
   //once we're on the ground we can stop recording and start just broadcasting GPS somewhat infrequently
+  static bmpReading bmpSample = getBMP();
   if(tick % 5 == 0){//broadcast every 5 seconds
     gpsReading gpsSample = getGPS();
-    //TODO adjust data transmission to altitude, GPS, and attitude only
-    //transmitData(0, 0, 0, imuSample.accel, imuSample.gyro, true);
+    transmitData(bmpSample.altitude, lastGps, apogeeReached);
   }
   return POST_FLIGHT;
 }
