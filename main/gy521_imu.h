@@ -18,12 +18,12 @@ void setupIMU(){
   
   Wire.beginTransmission(0b1101000); //I2C address of the MPU
   Wire.write(0x1B); //Accessing the register 1B - Gyroscope Configuration (Sec. 4.4) 
-  Wire.write(0x00000000); //Setting the gyro to full scale +/- 250deg./s 
+  Wire.write(0b00010000); //Setting the gyro to full scale +/- 1000deg./s 
   Wire.endTransmission(); 
   
   Wire.beginTransmission(0b1101000); //I2C address of the MPU
   Wire.write(0x1C); //Accessing the register 1C - Acccelerometer Configuration (Sec. 4.5) 
-  Wire.write(0b00000000); //Setting the accel to +/- 2g
+  Wire.write(0b00010000); //Setting the accel to +/- 8g
   Wire.endTransmission();
 }
 
