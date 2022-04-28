@@ -3,7 +3,7 @@
  * currently using an SD card and Xbee respectively
  ****************************************************************************/
 const int chipSelect = BUILTIN_SDCARD;
-String filename = "datalog.csv";
+char filename[50];
 
 void transmitData(double altitude, gpsReading gps, char phase)
 {
@@ -23,7 +23,9 @@ void setupSD(String date){
   }
   else
     Serial1.println("MicroSD card: successful");
-  filename = "datalog-".concat(date).concat(".csv");
+  String filestart = "datalog-";
+  filestart.concat(date).concat(".csv");
+  filestart.toCharArray(filename, 50);
   File dataFile = SD.open(filename, FILE_WRITE);
   if (dataFile) {
     dataFile.println("Time(ms),Altitude(m),Latitude,Longitude,GyroX,GyroY,GyroZ,AccelX,AccelY,AccelZ,AttitudeX,AttitudeY,AttitudeZ,state");

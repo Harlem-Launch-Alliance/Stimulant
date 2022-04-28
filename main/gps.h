@@ -23,7 +23,7 @@ String setupGPS()
   // Ask for firmware version
   GPSSerial.println(PMTK_Q_RELEASE);
 
-  int timer = 0;
+  unsigned int timer = 0;
   
   while(!GPS.fix){
     char c = GPS.read();
@@ -33,8 +33,7 @@ String setupGPS()
       // we end up not listening and catching other sentences!
       // so be very wary if using OUTPUT_ALLDATA and trying to print out data
       c = GPS.lastNMEA(); //this gives an error but doesn't seem to be an issue
-      if (!GPS.parse(GPS.lastNMEA())) // this also sets the newNMEAreceived() flag to false
-        return; // we can fail to parse a sentence in which case we should just wait for another
+      if (!GPS.parse(GPS.lastNMEA())){} // this also sets the newNMEAreceived() flag to false
     }
     if(timer < millis()){
       timer = millis() + 10000;
@@ -58,7 +57,7 @@ String setupGPS()
 gpsReading getGPS()
 {
   int t1 = micros();
-  while(micros - t1 < 5000){
+  while(micros() - t1 < 5000){
     char c = GPS.read();
     // if you want to debug, this is a good time to do it!
     if (GPS.newNMEAreceived()) {
@@ -66,8 +65,7 @@ gpsReading getGPS()
       // we end up not listening and catching other sentences!
       // so be very wary if using OUTPUT_ALLDATA and trying to print out data
       c = GPS.lastNMEA(); //this gives an error but doesn't seem to be an issue
-      if (!GPS.parse(GPS.lastNMEA())) // this also sets the newNMEAreceived() flag to false
-        return; // we can fail to parse a sentence in which case we should just wait for another
+      if (!GPS.parse(GPS.lastNMEA())){} // this also sets the newNMEAreceived() flag to false
     }
   }
 
