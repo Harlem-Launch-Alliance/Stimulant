@@ -188,7 +188,7 @@ flightPhase runPostFlight(int tick){
   static bmpReading bmpSample = getBMP();
   if(tick % 5 == 0){//broadcast every 5 seconds
     gpsReading gpsSample = getGPS();
-    transmitData(bmpSample.altitude, lastGps, apogeeReached);
+    transmitData(bmpSample.altitude, gpsSample, apogeeReached);
   }
   return POST_FLIGHT;
 }

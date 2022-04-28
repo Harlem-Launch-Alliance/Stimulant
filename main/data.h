@@ -4,7 +4,7 @@
  ****************************************************************************/
 
 
-void transmitFlightData(double altitude, gpsReading gps, bool apogeeReached)
+void transmitData(double altitude, gpsReading gps, bool apogeeReached)
 {
   if(apogeeReached)
     Serial1.print("1"); //descending or on ground
