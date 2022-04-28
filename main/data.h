@@ -4,12 +4,9 @@
  ****************************************************************************/
 
 
-void transmitData(double altitude, gpsReading gps, bool apogeeReached)
+void transmitData(double altitude, gpsReading gps, char phase)
 {
-  if(apogeeReached)
-    Serial1.print("1"); //descending or on ground
-  else
-    Serial1.print("0"); //ascending or on pad
+  Serial1.print(phase); //0: ONPAD, 1: ASCENDING, 2: DESCENDING, 3: POST_FLIGHT
   Serial1.print(" ");
   Serial1.print(gps.latitude, 4);
   Serial1.print(" ");

@@ -112,13 +112,13 @@ flightPhase runOnPad(int tick){
   Directional calibratedGyro = getRealGyro(imuSample.gyro, gyroOffsets);
   Directional attitude = getAttitude(calibratedGyro, hasLaunched);
 
-  if(tick % 50 == 1){//twice per second with a slight offset to avoid overlapping with bmp
-    //TODO adjust data transmission to altitude, GPS, and attitude only
-    transmitData(lastBmp.altitude, lastGps, false);
-  }
   if(tick % 100 == 2){//1 time per second with a slight offset to avoid collisions
     lastGps = getGPS();
     //TODO push reading onto queue. if we haven't launched pop values off of queue until first value is less than 5 seconds old
+  }
+  if(tick % 50 == 1){//twice per second with a slight offset to avoid overlapping with bmp
+    //TODO adjust data transmission to altitude, GPS, and attitude only
+    transmitData(lastBmp.altitude, lastGps, "0");
   }
   if(hasLaunched)
     return ASCENDING;
@@ -148,9 +148,8 @@ flightPhase runAscending(int tick){ //this will run similarly to ONPAD except ha
   Directional calibratedGyro = getRealGyro(imuSample.gyro, gyroOffsets);
   Directional attitude = getAttitude(calibratedGyro, true);
 
-  if(tick % 5 == 1){//20 times per second with a slight offset to avoid overlapping with bmp
-    //TODO adjust data transmission to altitude, GPS, and attitude only
-    transmitData(lastBmp.altitude, lastGps, apogeeReached);
+  if(tick % 5 == 1){//20 times per second with a slight offset to avoid overlapping with bmp and gps
+    transmitData(lastBmp.altitude, lastGps, "1");
   }
   if(apogeeReached && !delay){
     delay = millis() + 3000;//added 3 second delay incase chute deploy is late
@@ -172,7 +171,7 @@ flightPhase runDescending(int tick){//this runs at 20hz
     lastGps = getGPS();
     //TODO push directly onto SD
   }
-  transmitData(bmpSample.altitude, lastGps, true);
+  transmitData(bmpSample.altitude, lastGps, "2");
 
   if(tick % 100 == 0){//every 5 seconds check if we are still descending
     if(bmpSample.altitude - lastAlt < 1){//if altitude hasn't changed more than 1 meter in 5 seconds, we're on the ground
@@ -188,7 +187,7 @@ flightPhase runPostFlight(int tick){
   static bmpReading bmpSample = getBMP();
   if(tick % 5 == 0){//broadcast every 5 seconds
     gpsReading gpsSample = getGPS();
-    transmitData(bmpSample.altitude, gpsSample, apogeeReached);
+    transmitData(bmpSample.altitude, gpsSample, "3");
   }
   return POST_FLIGHT;
 }
