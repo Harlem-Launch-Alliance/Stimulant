@@ -35,15 +35,22 @@ void setup()
 void loop() // run over and over again
 {
   // read data from the GPS in the 'main loop'
-  char c = GPS.read();
-  // if you want to debug, this is a good time to do it!
-  if (GPS.newNMEAreceived()) {
-    // a tricky thing here is if we print the NMEA sentence, or data
-    // we end up not listening and catching other sentences!
-    // so be very wary if using OUTPUT_ALLDATA and trying to print out data
-    c = GPS.lastNMEA();
-    if (!GPS.parse(GPS.lastNMEA())) // this also sets the newNMEAreceived() flag to false
-      return; // we can fail to parse a sentence in which case we should just wait for another
+  int t1 = micros();
+  while(micros() - t1 < 5000){
+    int x = 1 + 1;
+  }
+  t1 = micros();
+  while(micros() - t1 < 5000){
+    char c = GPS.read();
+    // if you want to debug, this is a good time to do it!
+    if (GPS.newNMEAreceived()) {
+      // a tricky thing here is if we print the NMEA sentence, or data
+      // we end up not listening and catching other sentences!
+      // so be very wary if using OUTPUT_ALLDATA and trying to print out data
+      c = GPS.lastNMEA();
+      if (!GPS.parse(GPS.lastNMEA())) // this also sets the newNMEAreceived() flag to false
+        return; // we can fail to parse a sentence in which case we should just wait for another
+    }
   }
 
   // approximately every 2 seconds or so, print out the current stats
