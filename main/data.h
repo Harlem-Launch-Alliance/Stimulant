@@ -23,7 +23,7 @@ void setupSD(String date){
   }
   else
     Serial1.println("MicroSD card: successful");
-  String filestart = "datalog-";
+  String filestart = "Catalyst2-";
   filestart.concat(date).concat(".csv");
   filestart.toCharArray(filename, 50);
   File dataFile = SD.open(filename, FILE_WRITE);
@@ -32,7 +32,7 @@ void setupSD(String date){
     dataFile.close();
   }
   else {
-    Serial1.println("error opening datalog.txt");
+    Serial1.println("MicroSD card: error opening file");
   }
 }
 

@@ -37,9 +37,10 @@ void setup()
   Wire.begin();               // initiate wire library and I2C
   Serial1.begin(115200);      // xBee 115200, 9600
   setupBMP();
+  setupIMU();
 
   String date = setupGPS();
-  setupIMU();
+  setupSD(date);
 }
 
 flightPhase runOnPad(int tick);

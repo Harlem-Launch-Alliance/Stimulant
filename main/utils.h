@@ -37,8 +37,7 @@ struct imuReading //all data from an IMU reading (accelerometer and gyroscope)
 
 struct gpsReading //only the data we need for now
 {
-    double latitude;
-    double longitude;
+    double latitude, longitude;
     unsigned long time;
 };
 

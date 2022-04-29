@@ -10,23 +10,6 @@
 const int MPU=0b1101000;                                 //I2C address of the MPU-6050
 const double tcal = -1600;                          //Temperature correction
 
-void setupIMU(){ 
-  Wire.beginTransmission(0b1101000); //This is the I2C address of the MPU (b1101000/b1101001 for AC0 low/high datasheet sec. 9.2)
-  Wire.write(0x6B); //Accessing the register 6B - Power Management (Sec. 4.28)
-  Wire.write(0b00000000); //Setting SLEEP register to 0. (Required; see Note on p. 9)
-  Wire.endTransmission();  
-  
-  Wire.beginTransmission(0b1101000); //I2C address of the MPU
-  Wire.write(0x1B); //Accessing the register 1B - Gyroscope Configuration (Sec. 4.4) 
-  Wire.write(0b00010000); //Setting the gyro to full scale +/- 1000deg./s 
-  Wire.endTransmission(); 
-  
-  Wire.beginTransmission(0b1101000); //I2C address of the MPU
-  Wire.write(0x1C); //Accessing the register 1C - Acccelerometer Configuration (Sec. 4.5) 
-  Wire.write(0b00010000); //Setting the accel to +/- 8g
-  Wire.endTransmission();
-}
-
 imuReading getIMU()
 {
   imuReading imuSample;
@@ -59,4 +42,29 @@ imuReading getIMU()
   imuSample.temp = Tmp/340 + 36.53;
   
   return imuSample; //return gyro and accel data
+}
+
+void setupIMU(){ 
+  Serial1.print("Setting up IMU: ");
+  Wire.beginTransmission(0b1101000); //This is the I2C address of the MPU (b1101000/b1101001 for AC0 low/high datasheet sec. 9.2)
+  Wire.write(0x6B); //Accessing the register 6B - Power Management (Sec. 4.28)
+  Wire.write(0b00000000); //Setting SLEEP register to 0. (Required; see Note on p. 9)
+  Wire.endTransmission();  
+  
+  Wire.beginTransmission(0b1101000); //I2C address of the MPU
+  Wire.write(0x1B); //Accessing the register 1B - Gyroscope Configuration (Sec. 4.4) 
+  Wire.write(0b00010000); //Setting the gyro to full scale +/- 1000deg./s 
+  Wire.endTransmission(); 
+  
+  Wire.beginTransmission(0b1101000); //I2C address of the MPU
+  Wire.write(0x1C); //Accessing the register 1C - Acccelerometer Configuration (Sec. 4.5) 
+  Wire.write(0b00010000); //Setting the accel to +/- 8g
+  Wire.endTransmission();
+
+
+  imuReading sample = getIMU();
+  if(sample.accel.x != 0)
+    Serial1.println("successful");
+  else
+    Serial1.println("failed, check wiring or pin settings");
 }
