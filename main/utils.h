@@ -23,7 +23,7 @@ public:
 
 struct bmpReading //all data from an altimeter reading
 {
-  double temp, pressure, altitude;
+  double altitude;
   unsigned long time;
 };
 
@@ -31,8 +31,8 @@ struct imuReading //all data from an IMU reading (accelerometer and gyroscope)
 {
     Directional accel;
     Directional gyro;
+    Directional attitude;
     unsigned long time;
-    double temp;
 };
 
 struct gpsReading //only the data we need for now

@@ -15,8 +15,8 @@ bmpReading getBMP()
     Serial1.println("Failed to perform BMP388 reading.");
     return sample;
   }
-  sample.temp = bmp.temperature;          // Temperature in Celcius
-  sample.pressure = bmp.pressure / 100.0;        // Pressure in hPa
+  //sample.temp = bmp.temperature;          // Temperature in Celcius
+  //sample.pressure = bmp.pressure / 100.0;        // Pressure in hPa
   sample.altitude = bmp.readAltitude(SEALEVELPRESSURE_HPA)/* - altOffset*/; // Approximate altitude in meters
   sample.time = micros();
   return sample;

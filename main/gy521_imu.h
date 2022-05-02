@@ -39,7 +39,7 @@ imuReading getIMU()
   imuSample.gyro.x = toRad(GyX/131.0);
   imuSample.gyro.y = toRad(GyY/131.0);
   imuSample.gyro.z = toRad(GyZ/131.0);
-  imuSample.temp = Tmp/340 + 36.53;
+  //imuSample.temp = Tmp/340 + 36.53;
   
   return imuSample; //return gyro and accel data
 }
