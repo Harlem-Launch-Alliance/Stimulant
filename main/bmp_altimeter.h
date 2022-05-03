@@ -24,10 +24,11 @@ bmpReading getBMP()
 
 void setupBMP()
 {
-  Serial1.print("Setting up altimeter: ");
+  Serial1.print("Setting up altimeter... ");
+  delay(3000);
   if (!bmp.begin_SPI(BMP_CS)) {   // hardware I2C mode, can pass in address & alt Wire
     Serial1.println("could not find a valid BMP388 sensor, check wiring!");
-    while (1);
+    return;
   }
 
   // Set up oversampling and filter initialization

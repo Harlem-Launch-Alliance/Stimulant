@@ -2,8 +2,13 @@
  * This file is for saving and transmitting data
  * currently using an SD card and Xbee respectively
  ****************************************************************************/
+#include "ringQueue.h"
+
 const int chipSelect = BUILTIN_SDCARD;
 char filename[50];
+RingQueue<imuReading> imuQueue;
+RingQueue<bmpReading> bmpQueue;
+RingQueue<gpsReading> gpsQueue;
 
 void transmitData(double altitude, gpsReading gps, char phase)
 {
@@ -36,27 +41,111 @@ void setupSD(String date){
   }
 }
 
-void recordData() //PENDING SD.write timing check
-//we'll probably have to split this into two functions. One to record data to RAM, the other to dump into the SD at apogee
-{
-  File dataFile = SD.open(filename, FILE_WRITE);
-  if (dataFile) {
-//    dataFile.print(Time); dataFile.print("\t");
-    //dataFile.print(tc); dataFile.print("\t");
-//    dataFile.print(temperature); dataFile.print("\t");
-//    dataFile.print(pitch); dataFile.print("\t");
-//    dataFile.print(roll); dataFile.print("\t");
-//    dataFile.print(Ax); dataFile.print("\t");
-//    dataFile.print(Ay); dataFile.print("\t");
-//    dataFile.print(Az); dataFile.print("\t");
-//    dataFile.print(Gx); dataFile.print("\t");
-//    dataFile.print(Gy); dataFile.print("\t");
-//    dataFile.print(Gz); dataFile.print("\t");
-//    dataFile.print(pressure); dataFile.print("\t"); dataFile.print("\t");
-//    dataFile.print(Altitude); dataFile.print("\t");
-//    dataFile.println(apogeeReached);
-    dataFile.close();                       // closing file is very important
+void recordData(imuReading sample, bool prelaunch){
+  imuQueue.enqueue(sample);
+  if(prelaunch){
+    while(!imuQueue.isEmpty() && imuQueue.peek().time < millis() - 2000){
+      imuQueue.dequeue();
+    }
   }
-  else
-    Serial1.println("error opening datalog.txt");
+}
+
+void recordData(bmpReading sample, bool prelaunch){
+  bmpQueue.enqueue(sample);
+  if(prelaunch){
+    while(!bmpQueue.isEmpty() && bmpQueue.peek().time < millis() - 2000){
+      bmpQueue.dequeue();
+    }
+  }
+}
+
+void recordData(gpsReading sample, bool prelaunch){
+  gpsQueue.enqueue(sample);
+  if(prelaunch){
+    while(!gpsQueue.isEmpty() && gpsQueue.peek().time < millis() - 2000){
+      gpsQueue.dequeue();
+    }
+  }
+}
+
+void backupToSD(){
+  File dataFile = SD.open(filename, FILE_WRITE);
+  if(!dataFile){
+    Serial1.println("error opening datalog");
+    return;
+  }
+  while(!imuQueue.isEmpty()){
+    double altitude = 0;
+    double latitude = 0;
+    double longitude = 0;
+    imuReading imuSample = imuQueue.peek();
+    imuQueue.dequeue();
+    if(!bmpQueue.isEmpty()){
+      bmpReading bmpSample = bmpQueue.peek();
+      if(bmpSample.time < imuSample.time){
+        altitude = bmpSample.altitude;
+        bmpQueue.dequeue();
+      }
+    }
+    if(!gpsQueue.isEmpty()){
+      gpsReading gpsSample = gpsQueue.peek();
+      if(gpsSample.time < imuSample.time){
+        longitude = gpsSample.longitude;
+        latitude = gpsSample.latitude;
+        gpsQueue.dequeue();
+      }
+    }
+    dataFile.print(imuSample.time); dataFile.print(',');
+    if(altitude != 0)
+      dataFile.print(altitude, 1);
+    dataFile.print(',');
+    if(latitude != 0)
+      dataFile.print(latitude, 4);
+    dataFile.print(',');
+    if(longitude != 0)
+      dataFile.print(longitude, 4);
+    dataFile.print(',');
+    dataFile.print(imuSample.gyro.x); dataFile.print(',');
+    dataFile.print(imuSample.gyro.y); dataFile.print(',');
+    dataFile.print(imuSample.gyro.z); dataFile.print(',');
+    dataFile.print(imuSample.accel.x); dataFile.print(',');
+    dataFile.print(imuSample.accel.y); dataFile.print(',');
+    dataFile.print(imuSample.accel.z); dataFile.print(',');
+    dataFile.print(imuSample.attitude.x); dataFile.print(',');
+    dataFile.print(imuSample.attitude.y); dataFile.print(',');
+    dataFile.print(imuSample.attitude.z); dataFile.println(',');
+    //TODO add state
+  }
+  while(!bmpQueue.isEmpty()){
+    double latitude = 0;
+    double longitude = 0;
+    bmpReading bmpSample = bmpQueue.peek();
+    bmpQueue.dequeue();
+    if(!gpsQueue.isEmpty()){
+      gpsReading gpsSample = gpsQueue.peek();
+      if(gpsSample.time < bmpSample.time){
+        longitude = gpsSample.longitude;
+        latitude = gpsSample.latitude;
+        gpsQueue.dequeue();
+      }
+    }
+    dataFile.print(bmpSample.time); dataFile.print(',');
+    dataFile.print(bmpSample.altitude, 1); dataFile.print(',');
+    if(latitude != 0)
+      dataFile.print(latitude, 4);
+    dataFile.print(',');
+    if(longitude != 0)
+      dataFile.print(longitude, 4);
+    dataFile.print(',');
+    dataFile.print(',');
+    dataFile.print(',');
+    dataFile.print(',');
+    dataFile.print(',');
+    dataFile.print(',');
+    dataFile.print(',');
+    dataFile.print(',');
+    dataFile.print(',');
+    dataFile.println(',');
+  }
+  dataFile.close(); 
 }

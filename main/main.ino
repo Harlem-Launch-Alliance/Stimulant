@@ -13,6 +13,7 @@
 #include "gy521_imu.h"
 #include "attitude.h"
 #include "gps.h"
+#include "ringQueue.h"
 
 
 
@@ -82,25 +83,26 @@ flightPhase runOnPad(int tick){
   static gpsReading lastGps;
   
   imuReading imuSample = getIMU(); //sample IMU first to maximize consistency
-  //TODO push reading onto queue. if we haven't launched pop values off of queue until first value is less than 5 seconds old
 
   bool hasLaunched = detectLaunch(imuSample.accel); //might need to calibrate accel data before feeding to this function
   if(tick % 5 == 0){
     lastBmp = getBMP();
     detectApogee(imuSample.accel, lastBmp.altitude, hasLaunched); //need to run this prelaunch to get calibrations
-    //TODO push reading onto queue. if we haven't launched pop values off of queue until first value is less than 5 seconds old
+    recordData(lastBmp, true);
   }
 
   Directional gyroOffsets = calibrateGyro(imuSample.gyro, hasLaunched);
   Directional calibratedGyro = getRealGyro(imuSample.gyro, gyroOffsets);
   Directional attitude = getAttitude(calibratedGyro, hasLaunched);
 
+  imuSample.attitude = attitude;
+  recordData(imuSample, true);
+
   if(tick % 100 == 2){//1 time per second with a slight offset to avoid collisions
     lastGps = getGPS();
-    //TODO push reading onto queue. if we haven't launched pop values off of queue until first value is less than 5 seconds old
+    recordData(lastGps, true);
   }
   if(tick % 50 == 1){//twice per second with a slight offset to avoid overlapping with bmp
-    //TODO adjust data transmission to altitude, GPS, and attitude only
     transmitData(lastBmp.altitude, lastGps, '0');
   }
   if(hasLaunched)
@@ -115,21 +117,23 @@ flightPhase runAscending(int tick){ //this will run similarly to ONPAD except ha
   static unsigned int delay = 0;
   bool apogeeReached = false;
   imuReading imuSample = getIMU(); //sample IMU first to maximize consistency
-  //TODO push reading onto queue. if we haven't launched pop values off of queue until first value is less than 5 seconds old
-
+  
   if(tick % 5 == 0){
     lastBmp = getBMP();
     apogeeReached = detectApogee(imuSample.accel, lastBmp.altitude, true);
-    //TODO push reading onto queue. if we haven't launched pop values off of queue until first value is less than 5 seconds old
+    recordData(lastBmp, false);
   }
   if(tick % 100 == 2){//1 time per second with a slight offset to avoid collisions
     lastGps = getGPS();
-    //TODO push reading onto queue. if we haven't launched pop values off of queue until first value is less than 5 seconds old
+    recordData(lastGps, false);
   }
 
   Directional gyroOffsets = calibrateGyro(imuSample.gyro, true);
   Directional calibratedGyro = getRealGyro(imuSample.gyro, gyroOffsets);
   Directional attitude = getAttitude(calibratedGyro, true);
+
+  imuSample.attitude = attitude;
+  recordData(imuSample, false);
 
   if(tick % 5 == 1){//20 times per second with a slight offset to avoid overlapping with bmp and gps
     transmitData(lastBmp.altitude, lastGps, '1');
@@ -145,14 +149,17 @@ flightPhase runAscending(int tick){ //this will run similarly to ONPAD except ha
 flightPhase runDescending(int tick){//this runs at 20hz
   static gpsReading lastGps;
   static int lastAlt = 0;
-  //TODO push directly onto SD
 
   //sample sensors
   bmpReading bmpSample = getBMP();
+  recordData(bmpSample, false);
 
   if(tick % 20 == 1){//still one time per second
     lastGps = getGPS();
-    //TODO push directly onto SD
+    recordData(lastGps, false);
+  }
+  if(tick % 100 == 2){//backup to SD every 5 seconds
+    backupToSD();
   }
   transmitData(bmpSample.altitude, lastGps, '2');
 
