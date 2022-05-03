@@ -28,7 +28,7 @@ Designed for Teensy 4.1
 - comment your code
 - if you are including a new library in your code, add the GitHub link to the dependencies list above
 - multiple small functions are better than one big one. Remember, each function should only do one thing
-- breakout groups of functions into their own files. Long files are difficult to read. Ideally `main.ino` would only have `void setup()` and `void loop()`
+- break out groups of functions into their own files. Long files are difficult to read. Ideally `main.ino` would only have `void setup()` and `void loop()`
 
 ## Instructions for use:
 1. Connect all sensors and power source
@@ -39,4 +39,4 @@ Designed for Teensy 4.1
 5. Wait at least 5 minutes between powering on and launching to allow for proper sensor calibration
 6. Launch!
 
-Note: Due to the use of the `micros()` function, there may be some unintended behavior if the controller is powered on for more than 70 minutes
+Note: Due to the use of the `micros()` function, the rocket MUST be launched within 60 minutes of powering on. If you do not launch within that period you must restart the flight computer by turning it off and then on again.
