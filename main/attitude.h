@@ -50,6 +50,15 @@ Directional getRealGyro(Directional gyro, Directional offsets){
   return realGyro;
 }
 
+double setGroundLevel() { //Reads bmp data and sets pre-launch altitude
+  double groundLvl;
+  double pressurePreFlight;
+  bmp.performReading();
+  pressurePreFlight = bmp.pressure / 100.0
+  groundLvl = bmp.readAltitude(pressurePreFlight);
+  return groundLvl;
+  }
+
 /**************************************************************************************
 In order to minimize error, we should assume that attitude is 0,0,0 at launch. However, 
 we don't actually know exactly when launch occurs. We can assume with almost 100% 
