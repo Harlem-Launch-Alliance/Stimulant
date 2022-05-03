@@ -54,7 +54,7 @@ double setGroundLevel() { //Reads bmp data and sets pre-launch altitude
   double groundLvl;
   double pressurePreFlight;
   bmp.performReading();
-  pressurePreFlight = bmp.pressure / 100.0
+  pressurePreFlight = bmp.pressure / 100.0;
   groundLvl = bmp.readAltitude(pressurePreFlight);
   return groundLvl;
   }
