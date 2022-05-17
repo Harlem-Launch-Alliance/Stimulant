@@ -58,7 +58,7 @@ void setGroundLevel() { //Reads bmp data and sets ground lvl pressure
     pressurePreFlight = bmp.pressure / 100.0; //sample pressure in hPa
     pressureSum += pressurePreFlight;
   }
-  SEALEVELPRESSURE_HPA = pressureSum / 100.0; //sets average ground lvl pressure
+  GNDLEVELPRESSURE_HPA = pressureSum / 100.0; //sets average ground lvl pressure
 }
 
 /**************************************************************************************
