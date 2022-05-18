@@ -64,7 +64,7 @@ void setupIMU(){
 
 
   imuReading sample = getIMU();
-  if(sample.accel.x != 0)
+  if(sample.accel.x != 0 || sample.accel.y != 0 || sample.accel.z != 0)
     Serial1.println("successful");
   else
     Serial1.println("failed, check wiring or pin settings");
