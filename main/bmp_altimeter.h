@@ -17,9 +17,20 @@ bmpReading getBMP()
   }
   //sample.temp = bmp.temperature;          // Temperature in Celcius
   //sample.pressure = bmp.pressure / 100.0;        // Pressure in hPa
-  sample.altitude = bmp.readAltitude(SEALEVELPRESSURE_HPA)/* - altOffset*/; // Approximate altitude in meters
+  sample.altitude = bmp.readAltitude(GNDLEVELPRESSURE_HPA)/* - altOffset*/; // Approximate altitude in meters
   sample.time = micros();
   return sample;
+}
+
+void setGroundLevel() { //Reads bmp data and sets ground lvl pressure
+  double pressurePreFlight;
+  double pressureSum = 0;  //Sum of 100 pressure readings
+  for(int i = 0; i<100; i++){
+    bmp.performReading();
+    pressurePreFlight = bmp.pressure / 100.0; //sample pressure in hPa
+    pressureSum += pressurePreFlight;
+  }
+  GNDLEVELPRESSURE_HPA = pressureSum / 100.0; //sets average ground lvl pressure
 }
 
 void setupBMP()
@@ -43,4 +54,5 @@ void setupBMP()
     Serial1.println("successful");
   else
     Serial1.println("failed, check wiring or pin settings");
+  setGroundLevel();
 }
