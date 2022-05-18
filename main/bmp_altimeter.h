@@ -4,7 +4,7 @@
  ****************************************************************************/
 
 #define BMP_CS 10
-#define SEALEVELPRESSURE_HPA (1013.25)//To be replaced
+double GNDLEVELPRESSURE_HPA;
 
 Adafruit_BMP3XX bmp; //initialize sensor
 
