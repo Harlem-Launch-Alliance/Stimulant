@@ -37,6 +37,7 @@ void setup()
   }
   Wire.begin();               // initiate wire library and I2C
   Serial1.begin(115200);      // xBee 115200, 9600
+  Serial1.print("\n\n\n");
   setupBMP();
   setupIMU();
 
