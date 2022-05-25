@@ -54,5 +54,6 @@ void setupBMP()
     Serial1.println("successful");
   else
     Serial1.println("failed, check wiring or pin settings");
+    delay(3000);
   setGroundLevel();
 }
