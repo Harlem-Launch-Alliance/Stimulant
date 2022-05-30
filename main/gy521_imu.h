@@ -45,7 +45,7 @@ imuReading getIMU()
 }
 
 void setupIMU(){ 
-  Serial1.print("Setting up IMU... ");
+  Serial1.println("Setting up IMU... ");
   delay(3000);
   Wire.beginTransmission(0b1101000); //This is the I2C address of the MPU (b1101000/b1101001 for AC0 low/high datasheet sec. 9.2)
   Wire.write(0x6B); //Accessing the register 6B - Power Management (Sec. 4.28)
@@ -65,8 +65,17 @@ void setupIMU(){
 
   imuReading sample = getIMU();
   if(sample.accel.x != 0 || sample.accel.y != 0 || sample.accel.z != 0)
-    Serial1.println("successful");
+    Serial1.print("X Acceleration: ");
+    Serial1.println(sample.accel.x);
+    delay(1000);
+    Serial1.print("Y Acceleration: ");
+    Serial1.println(sample.accel.y);
+    delay(1000);
+    Serial1.print("Z Acceleration: ");
+    Serial1.println(sample.accel.z);
+    delay(1000);
+    Serial1.println("IMU setup successful");
   else
-    Serial1.println("failed, check wiring or pin settings");
+    Serial1.println("IMU setup failed, check wiring or pin settings");
   delay(3000);
 }
