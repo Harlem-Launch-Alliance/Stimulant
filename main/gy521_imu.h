@@ -64,7 +64,7 @@ void setupIMU(){
 
 
   imuReading sample = getIMU();
-  if(sample.accel.x != 0 || sample.accel.y != 0 || sample.accel.z != 0)
+  if(sample.accel.x != 0 || sample.accel.y != 0 || sample.accel.z != 0){
     Serial1.print("X Acceleration: ");
     Serial1.println(sample.accel.x);
     delay(1000);
@@ -75,7 +75,7 @@ void setupIMU(){
     Serial1.println(sample.accel.z);
     delay(1000);
     Serial1.println("IMU setup successful");
-  else
+  } else
     Serial1.println("IMU setup failed, check wiring or pin settings");
   delay(3000);
 }
