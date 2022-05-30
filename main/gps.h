@@ -12,8 +12,14 @@ Adafruit_GPS GPS(&GPSSerial);
 String setupGPS()
 {
   Serial1.println("Setting up GPS...");
+  unsigned int startTime = millis();
   // 9600 NMEA is the default baud rate for Adafruit MTK GPS's- some use 4800
-  GPS.begin(9600);
+  GPS.begin(9600);                   // 9600 is the default baud rate
+  GPS.sendCommand("$PMTK251,38400*27");             //set baud rate to 38400
+  GPSSerial.end();
+  delay(1000);
+  GPS.begin(38400);            // set serial to 38400
+  delay(1000);
   // uncomment this line to turn on RMC (recommended minimum) and GGA (fix data) including altitude
   GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
   GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ); // 1 Hz update rate
@@ -25,7 +31,7 @@ String setupGPS()
 
   unsigned int timer = 0;
   
-  while(!GPS.fix){
+  while(!GPS.fix || GPS.year == 0){
     char c = GPS.read();
     // if you want to debug, this is a good time to do it!
     if (GPS.newNMEAreceived()) {
@@ -37,7 +43,14 @@ String setupGPS()
     }
     if(timer < millis()){
       timer = millis() + 10000;
-      Serial1.println("Acquiring GPS signal...");
+      int minutes = (timer - startTime)/60000;
+      int secs = ((timer - startTime) / 1000) % 60;
+      Serial1.print("Acquiring GPS signal... Time elapsed: ");
+      Serial1.print(minutes);//minutes
+      Serial1.print(":");
+      if(secs < 10)
+        Serial1.print("0");
+      Serial1.println(secs);//seconds
     }
   }
   Serial1.println("GPS signal acquired");
@@ -56,8 +69,8 @@ String setupGPS()
 
 gpsReading getGPS()
 {
-  int t1 = micros();
-  while(micros() - t1 < 5000){
+  unsigned long t1 = micros();
+  while(micros() - t1 < 100000){//give GPS 100 ms to deliver a sentence
     char c = GPS.read();
     // if you want to debug, this is a good time to do it!
     if (GPS.newNMEAreceived()) {
@@ -70,7 +83,7 @@ gpsReading getGPS()
   }
 
   gpsReading sample;
-
+  
   if(GPS.fix){
     sample.latitude = GPS.latitudeDegrees;
     sample.longitude = GPS.longitudeDegrees;

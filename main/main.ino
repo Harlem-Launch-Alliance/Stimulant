@@ -107,7 +107,7 @@ flightPhase runOnPad(int tick){
   imuSample.attitude = attitude;
   recordData(imuSample, true);
 
-  if(tick % 100 == 2){//1 time per second with a slight offset to avoid collisions
+  if(tick % 100 == 2 && lastGps.longitude == 0){//1 reading then use cached value
     lastGps = getGPS();
     recordData(lastGps, true);
   }
@@ -132,11 +132,6 @@ flightPhase runAscending(int tick){ //this will run similarly to ONPAD except ha
     apogeeReached = detectApogee(imuSample.accel, lastBmp.altitude, true);
     recordData(lastBmp, false);
   }
-  if(tick % 100 == 2){//1 time per second with a slight offset to avoid collisions
-    lastGps = getGPS();
-    recordData(lastGps, false);
-  }
-
   Directional gyroOffsets = calibrateGyro(imuSample.gyro, true);
   Directional calibratedGyro = getRealGyro(imuSample.gyro, gyroOffsets);
   Directional attitude = getAttitude(calibratedGyro, true);
