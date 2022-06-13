@@ -15,8 +15,6 @@
 #include "gps.h"
 #include "ringQueue.h"
 
-
-
 // Constants:
 #define SEALEVELPRESSURE_HPA (1013.25)
 const int buzzer = 33;
@@ -27,16 +25,16 @@ bool apogeeReached;
 
 void setup()
 {
-  pinMode(buzzer, OUTPUT);    // Set buzzer pin as an output
-  for(int i = 0; i < 5; i++)  // Play 5 beeps
-  {
-    tone(buzzer, 1000);       // Send 1KHz sound signal...
-    delay(1000);              // ...for 1 sec
-    noTone(buzzer);           // Stop sound...
-    delay(1000);              // ...for 1sec
-  }
+//  pinMode(buzzer, OUTPUT);    // Set buzzer pin as an output
+//  for(int i = 0; i < 5; i++)  // Play 5 beeps
+//  {
+//    tone(buzzer, 1000);       // Send 1KHz sound signal...
+//    delay(1000);              // ...for 1 sec
+//    noTone(buzzer);           // Stop sound...
+//    delay(1000);              // ...for 1sec
+//  }
   Wire.begin();               // initiate wire library and I2C
-  Serial1.begin(115200);      // xBee 115200, 9600
+  Serial1.begin(115200);      // xBee baudrate: 115200, 9600
   Serial1.print("\n\n\n");
   setupBMP();
   setupIMU();
