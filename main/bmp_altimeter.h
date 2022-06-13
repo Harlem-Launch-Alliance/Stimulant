@@ -22,7 +22,7 @@ bmpReading getBMP()
   return sample;
 }
 
-void setGroundLevel() { //Reads bmp data and sets ground lvl pressure
+void setGroundLevelPressure() { //Reads bmp data and sets ground lvl pressure
   double pressurePreFlight;
   double pressureSum = 0;  //Sum of 100 pressure readings
   for(int i = 0; i<100; i++){
@@ -35,7 +35,7 @@ void setGroundLevel() { //Reads bmp data and sets ground lvl pressure
 
 void setupBMP()
 {
-  Serial1.println("Setting up altimeter... ");
+  Serial1.print("Setting up BMP388... ");
   delay(3000);
   if (!bmp.begin_SPI(BMP_CS)) {   // hardware I2C mode, can pass in address & alt Wire
     Serial1.println("could not find a valid BMP388 sensor, check wiring!");
@@ -51,10 +51,9 @@ void setupBMP()
     getBMP();
   bmpReading sample = getBMP();
   if(sample.altitude != 0)
-    Serial1.println("IMU setup successful");
+    Serial1.println("BMP setup successful.");
   else
-    Serial1.println("failed, check wiring or pin settings");
-    delay(2000);
-  setGroundLevel();
-Serial1.println("Ground level set");
+    Serial1.println("BMP setup failed, check wiring or pin settings.");
+  delay(2000);
+  setGroundLevelPressure();
 }

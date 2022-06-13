@@ -7,7 +7,7 @@
 #include <Wire.h> //library allows communication with I2C / TWI devices
 #include <math.h> //library includes mathematical functions
 
-const int MPU=0b1101000;                                 //I2C address of the MPU-6050
+const int MPU=0x68;                  //I2C address of the MPU-6050
 const double tcal = -1600;                          //Temperature correction
 
 imuReading getIMU()
@@ -47,17 +47,17 @@ imuReading getIMU()
 void setupIMU(){ 
   Serial1.println("Setting up IMU... ");
   delay(3000);
-  Wire.beginTransmission(0b1101000); //This is the I2C address of the MPU (b1101000/b1101001 for AC0 low/high datasheet sec. 9.2)
+  Wire.beginTransmission(MPU); //This is the I2C address of the MPU (b1101000/b1101001 for AC0 low/high datasheet sec. 9.2)
   Wire.write(0x6B); //Accessing the register 6B - Power Management (Sec. 4.28)
   Wire.write(0b00000000); //Setting SLEEP register to 0. (Required; see Note on p. 9)
   Wire.endTransmission();  
   
-  Wire.beginTransmission(0b1101000); //I2C address of the MPU
+  Wire.beginTransmission(MPU); //I2C address of the MPU
   Wire.write(0x1B); //Accessing the register 1B - Gyroscope Configuration (Sec. 4.4) 
   Wire.write(0b00010000); //Setting the gyro to full scale +/- 1000deg./s 
   Wire.endTransmission(); 
   
-  Wire.beginTransmission(0b1101000); //I2C address of the MPU
+  Wire.beginTransmission(MPU); //I2C address of the MPU
   Wire.write(0x1C); //Accessing the register 1C - Acccelerometer Configuration (Sec. 4.5) 
   Wire.write(0b00010000); //Setting the accel to +/- 8g
   Wire.endTransmission();
@@ -76,6 +76,6 @@ void setupIMU(){
     delay(1000);
     Serial1.println("IMU setup successful");
   } else
-    Serial1.println("IMU setup failed, check wiring or pin settings");
+    Serial1.println("IMU setup failed, check wiring or pin settings.");
   delay(3000);
 }
