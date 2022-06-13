@@ -23,12 +23,12 @@ void setupIMU(){
   Wire.write(0b00000000);               //Setting SLEEP register to 0. (Required; see Note on p. 9)
   Wire.endTransmission();  
   
-  Wire.beginTransmission(0b1101000);    //I2C address of the MPU
+  Wire.beginTransmission(MPU);          //I2C address of the MPU
   Wire.write(0x1B);                     //Accessing the register 1B - Gyroscope Configuration (Sec. 4.4) 
-  Wire.write(0x00000000);               //Setting the gyro to FS_SEL=0 (+/- 250 deg/s) 
+  Wire.write(0b00010000);               //Setting the gyro to FS_SEL=0 (+/- 250 deg/s) 
   Wire.endTransmission(); 
   
-  Wire.beginTransmission(0b1101000);    //I2C address of the MPU
+  Wire.beginTransmission(MPU);          //I2C address of the MPU
   Wire.write(0x1C);                     //Accessing the register 1C - Acccelerometer Configuration (Sec. 4.5) 
   Wire.write(0b00010000);               //Setting the accel to AFS_SEL=2 (to +/- 8g)
   Wire.endTransmission();
@@ -45,6 +45,11 @@ void getIMU()
   AcX=Wire.read()<<8|Wire.read(); // 0x3B (ACCEL_XOUT_H) 0x3C (ACCEL_XOUT_L)  
   AcY=Wire.read()<<8|Wire.read(); // 0x3D (ACCEL_YOUT_H) 0x3E (ACCEL_YOUT_L) 
   AcZ=Wire.read()<<8|Wire.read(); // 0x3F (ACCEL_ZOUT_H) 0x40 (ACCEL_ZOUT_L)
+
+  Serial.println(AcX);
+  Serial.println(AcY);
+  Serial.println(AcZ);
+  
   Ax = (AcX + AcXcal)/4096.0;     // For AFS_SEL=2 value is 4096
   Ay = (AcY + AcYcal)/4096.0;
   Az = (AcZ + AcZcal)/4096.0;
@@ -107,11 +112,13 @@ void setup()
 {
   Wire.begin();         //initiate wire library and I2C
   setupIMU();
-  Serial.begin(9600);   //serial communication at 9600 bauds
+  Serial.begin(115200);   //serial communication at specified rate
+  Serial.println("Starting GY521 Component Test");
 }
 
 void loop()
 {
   getIMU();
-  printData();
+  // printData();
+  delay(500);
 }
