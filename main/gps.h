@@ -5,6 +5,7 @@
 
 // what's the name of the hardware serial port?
 #define GPSSerial Serial2
+#define ERR_NO_GPS "flightData-noDate"
 
 // Connect to the GPS on the hardware port
 Adafruit_GPS GPS(&GPSSerial);
@@ -29,6 +30,7 @@ String setupGPS()
   // Ask for firmware version
   GPSSerial.println(PMTK_Q_RELEASE);
 
+  unsigned int startTime = millis();
   unsigned int timer = 0;
   
   while(!GPS.fix || GPS.year == 0){
@@ -51,6 +53,10 @@ String setupGPS()
       if(secs < 10)
         Serial1.print("0");
       Serial1.println(secs);//seconds
+    }
+    if(millis() - startTime > 300000){
+      Serial1("CAUTION!!! GPS timeout: Progressing with no GPS signal");
+      return ERR_NO_GPS;
     }
   }
   Serial1.println("GPS signal acquired");
