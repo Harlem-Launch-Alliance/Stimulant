@@ -30,7 +30,6 @@ String setupGPS()
   // Ask for firmware version
   GPSSerial.println(PMTK_Q_RELEASE);
 
-  unsigned int startTime = millis();
   unsigned int timer = 0;
   
   while(!GPS.fix || GPS.year == 0){
@@ -54,8 +53,8 @@ String setupGPS()
         Serial1.print("0");
       Serial1.println(secs);//seconds
     }
-    if(millis() - startTime > 300000){
-      Serial1("CAUTION!!! GPS timeout: Progressing with no GPS signal");
+    if(millis() - startTime > 20000){
+      Serial1.println("CAUTION!!! GPS timeout: Progressing with no GPS signal");
       return ERR_NO_GPS;
     }
   }

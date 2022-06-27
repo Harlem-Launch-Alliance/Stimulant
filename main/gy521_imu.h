@@ -35,8 +35,8 @@ imuReading getIMU()
   imuSample.accel.y = AcY/16384.0;
   imuSample.accel.z = AcZ/16384.0;
   imuSample.gyro.x = toRad(GyX/131.0);
-  imuSample.gyro.y = toRad(GyY/131.0);
-  imuSample.gyro.z = toRad(GyZ/131.0);
+  imuSample.gyro.y = toRad(GyZ/131.0);
+  imuSample.gyro.z = toRad(GyY/131.0); //IMU's Y corresponds to rocket's Z axis due to orientation on PCB
   //imuSample.temp = Tmp/340 + 36.53;     // Not using IMU's temp sensor since BMP388 has one
 
   return imuSample; //return gyro and accel data
