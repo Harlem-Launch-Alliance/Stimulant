@@ -6,7 +6,7 @@
 #include <Wire.h> //library allows communication with I2C / TWI devices
 #include <math.h> //library includes mathematical functions
 
-const int MPU=0x68;                  //I2C address of the MPU-6050
+const uint8_t MPU=0x68;                  //I2C address of the MPU-6050
 const double tcal = -1600;           //Temperature correction
 
 imuReading getIMU()
@@ -18,7 +18,7 @@ imuReading getIMU()
   Wire.beginTransmission(MPU);
   Wire.write(0x3B);
   Wire.endTransmission(false);
-  Wire.requestFrom(MPU,14,true);
+  Wire.requestFrom(MPU,14,1);
 
   //read accelerometer data
   AcX=Wire.read()<<8|Wire.read();

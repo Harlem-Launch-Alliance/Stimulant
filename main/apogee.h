@@ -4,7 +4,10 @@
  ****************************************************************************/
 
 #include <Ewma.h> //https://github.com/jonnieZG/EWMA
-#define GFORCETOLAUNCH = 1.2 //if acceleration exceeds this number the rocket will assume it has been launched
+#include "settings.h"
+#define G_FORCE_TO_LAUNCH 1.2 //if acceleration exceeds this number the rocket will assume it has been launched
+#define MAX_APOGEE_ACCEL 2 //we can rule out apogee if acceleration is about this amount (Gs)
+//#define CHECK_FOR_APOGEE_HZ 4 //frequency that we check for apogee within the detect apogee function
 
 //this function should only be called once per loop iteration
 bool detectLaunch(Directional accel){//accel in Gs 
@@ -19,13 +22,13 @@ bool detectLaunch(Directional accel){//accel in Gs
   double totalAccel = sqrt(pow(accel.x, 2) + pow(accel.y, 2) + pow(accel.z, 2)); //this should be 1G when stationary
   
   double filteredAccel = accelFilter.filter(totalAccel);
-  if(filteredAccel > GFORCETOLAUNCH)
+  if(filteredAccel > G_FORCE_TO_LAUNCH)
     hasLaunched = true;
   return hasLaunched;
 }
 
-bool isAccelerating(Directional accel){
-  return sqrt(pow(accel.x, 2) + pow(accel.y, 2) + pow(accel.z, 2)) < 2;
+bool isAccelerating(Directional accel){//determine if we are accelerating at more than 2 Gs
+  return sqrt(pow(accel.x, 2) + pow(accel.y, 2) + pow(accel.z, 2)) > MAX_APOGEE_ACCEL;
 }
 
 bool detectApogee(Directional accel, double altitude, bool hasLaunched){ //accel in Gs
