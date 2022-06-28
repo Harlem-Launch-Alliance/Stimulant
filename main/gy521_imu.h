@@ -18,7 +18,7 @@ imuReading getIMU()
   Wire.beginTransmission(MPU);
   Wire.write(0x3B);
   Wire.endTransmission(false);
-  Wire.requestFrom(MPU,14,1);
+  Wire.requestFrom(MPU,(uint8_t) 14,true);
 
   //read accelerometer data
   AcX=Wire.read()<<8|Wire.read();
