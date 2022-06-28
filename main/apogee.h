@@ -4,10 +4,10 @@
  ****************************************************************************/
 
 #include <Ewma.h> //https://github.com/jonnieZG/EWMA
+#define GFORCETOLAUNCH = 1.2 //if acceleration exceeds this number the rocket will assume it has been launched
 
 //this function should only be called once per loop iteration
 bool detectLaunch(Directional accel){//accel in Gs 
-  const double gForceToLaunch = 3; //if acceleration exceeds this number the rocket will assume it has been launched
   static bool hasLaunched = false;
   static Ewma accelFilter(.05);
   
@@ -19,7 +19,7 @@ bool detectLaunch(Directional accel){//accel in Gs
   double totalAccel = sqrt(pow(accel.x, 2) + pow(accel.y, 2) + pow(accel.z, 2)); //this should be 1G when stationary
   
   double filteredAccel = accelFilter.filter(totalAccel);
-  if(filteredAccel > gForceToLaunch)
+  if(filteredAccel > GFORCETOLAUNCH)
     hasLaunched = true;
   return hasLaunched;
 }
