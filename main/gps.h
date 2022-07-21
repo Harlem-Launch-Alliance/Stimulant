@@ -53,7 +53,7 @@ String setupGPS()
         Serial1.print("0");
       Serial1.println(secs);//seconds
     }
-    if(millis() - startTime > 20000){
+    if(millis() - startTime > 300000){
       Serial1.println("CAUTION!!! GPS timeout: Progressing with no GPS signal");
       return ERR_NO_GPS;
     }
