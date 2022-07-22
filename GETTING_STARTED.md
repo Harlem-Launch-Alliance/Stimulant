@@ -52,4 +52,8 @@ Now you are ready to write some code. This is the workflow you will follow every
 1. Make your changes! (Please test your changes before submitting them for review)
 1. After saving your changes. Use `git commit -m "message relevant to your changes" -a` to commit your changes to your branch
 1. Repeat the previous 2 steps as needed until you are satisfied with your changes.
-1. 
+1. Use `git push` to push the code from your local machine onto the GitHub website. You should now be able to see your most recent changes on the site.
+1. On the Github website, you can change the branch to whichever branch you would like merged with the production code. Then you can select the `Compare & pull request` button to request that your new code be adopted.
+1. Please give your pull request a descriptive title and a proper description of your changes along with the testing that you did for your changes (if relevant).
+
+That's it! Please direct any feedback you have for this document to the avionics team lead. Happy coding!
