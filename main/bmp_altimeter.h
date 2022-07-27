@@ -17,7 +17,7 @@ bmpReading getBMP()
   }
   //sample.temp = bmp.temperature;          // Temperature in Celcius
   //sample.pressure = bmp.pressure / 100.0;        // Pressure in hPa
-  sample.altitude = bmp.readAltitude(GNDLEVELPRESSURE_HPA)/* - altOffset*/; // Approximate altitude in meters
+  sample.altitude = bmp.readAltitude(GNDLEVELPRESSURE_HPA); // Approximate altitude in meters
   sample.time = micros();
   return sample;
 }
