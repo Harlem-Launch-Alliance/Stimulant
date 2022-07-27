@@ -6,7 +6,7 @@
 #include <Wire.h> //library allows communication with I2C / TWI devices
 #include <math.h> //library includes mathematical functions
 
-const int MPU=0x68;                  //I2C address of the MPU-6050
+const uint8_t MPU=0x68;                  //I2C address of the MPU-6050
 const double tcal = -1600;           //Temperature correction
 
 imuReading getIMU()
@@ -18,7 +18,7 @@ imuReading getIMU()
   Wire.beginTransmission(MPU);
   Wire.write(0x3B);
   Wire.endTransmission(false);
-  Wire.requestFrom(MPU,14,true);
+  Wire.requestFrom(MPU,(uint8_t) 14,true);
 
   //read accelerometer data
   AcX=Wire.read()<<8|Wire.read();
@@ -35,8 +35,8 @@ imuReading getIMU()
   imuSample.accel.y = AcY/16384.0;
   imuSample.accel.z = AcZ/16384.0;
   imuSample.gyro.x = toRad(GyX/131.0);
-  imuSample.gyro.y = toRad(GyY/131.0);
-  imuSample.gyro.z = toRad(GyZ/131.0);
+  imuSample.gyro.y = toRad(GyZ/131.0);
+  imuSample.gyro.z = toRad(GyY/131.0); //IMU's Y corresponds to rocket's Z axis due to orientation on PCB
   //imuSample.temp = Tmp/340 + 36.53;     // Not using IMU's temp sensor since BMP388 has one
 
   return imuSample; //return gyro and accel data
