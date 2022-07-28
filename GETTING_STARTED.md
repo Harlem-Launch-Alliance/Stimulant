@@ -25,6 +25,10 @@ To check, open VSCode and open `view -> terminal`. Type `git` and hit enter. If 
 
 If you receive an error along the lines of `command not found`, you will need to [download/install](https://git-scm.com/downloads) git.
 
+If you aren't sure of what version to download, version all the way at the top will most likely be compatible with your device.
+
+***You must restart VSCode after installing git for it to work***
+
 That's it for downloads! The rest of the steps should be relatively smooth.
 
 ## GitHub
