@@ -25,15 +25,15 @@ Once you have VSCode installed, install Python3 and the `PlatformIO` extension. 
 ### Git
 Not to be confused with `GitHub`, `Git` is the protocol that we use to collaborate on our software. Your computer may already come with Git. 
 
-To check, open VSCode and open `view -> terminal`. Type `git` and hit enter. If you're not using VSCode, you can open the terminal application or powershell for this instead.
+To check, open VSCode and open `view -> terminal`. Type `git` and hit enter.
 
 If you receive an error along the lines of `command not found`, you will need to [download/install](https://git-scm.com/downloads) git.
 
-If you aren't sure of what version to download, version all the way at the top will most likely be compatible with your device.
+If you aren't sure of what version to download, the version all the way at the top will most likely be compatible with your device.
 
 ***You must restart VSCode after installing git for it to work***
 
-That's it for downloads! The rest of the steps should be relatively smooth.
+That's it for downloads! Time for some configuration.
 
 ## GitHub
 In order to contribute, you will need to have a GitHub account. Your account does not have to be linked to an HLA email.
