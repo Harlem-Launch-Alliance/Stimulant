@@ -1,7 +1,7 @@
 # Catalyst 2 Flight Computer
 Designed for Teensy 4.1
 
-Want to contribute? Start [here](https://github.com/Harlem-Launch-Alliance/blob/main/GETTING_STARTED.md).
+Want to contribute? Start [here](https://github.com/Harlem-Launch-Alliance/Catalyst-2/blob/main/GETTING_STARTED.md).
 
 [Instructions for use](https://github.com/Harlem-Launch-Alliance/Catalyst-2#instructions-for-use)
 
