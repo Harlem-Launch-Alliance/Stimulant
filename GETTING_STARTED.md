@@ -56,6 +56,7 @@ Now you are ready to write some code. This is the workflow you will follow every
 1. Navigate to your local repository *in terminal* `cd ~/Documents/git/Catalyst-2`
 1. Make a new branch with a relevant name `git checkout -b name_of_branch main`
 1. Publish your branch `git push -u origin name_of_branch`
+    - You may need to verify your Github credentials here
 1. Open the `Catalyst-2` folder in your IDE
 1. Make your changes! (Please test your changes before submitting them for review)
 1. After saving your changes. Use `git commit -m "message relevant to your changes" -a` to commit your changes to your branch
