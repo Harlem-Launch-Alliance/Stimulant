@@ -39,7 +39,8 @@ String setupGPS()
       // a tricky thing here is if we print the NMEA sentence, or data
       // we end up not listening and catching other sentences!
       // so be very wary if using OUTPUT_ALLDATA and trying to print out data
-      c = GPS.lastNMEA(); //this gives an error but doesn't seem to be an issue
+      c = *GPS.lastNMEA(); //unclear what this statement does. Variable is unused atm
+      (void) c;
       if (!GPS.parse(GPS.lastNMEA())){} // this also sets the newNMEAreceived() flag to false
     }
     if(timer < millis()){
@@ -82,7 +83,8 @@ gpsReading getGPS()
       // a tricky thing here is if we print the NMEA sentence, or data
       // we end up not listening and catching other sentences!
       // so be very wary if using OUTPUT_ALLDATA and trying to print out data
-      c = GPS.lastNMEA(); //this gives an error but doesn't seem to be an issue
+      c = *GPS.lastNMEA(); //unclear what this statement does. Variable is unused atm
+      (void) c;
       if (!GPS.parse(GPS.lastNMEA())){} // this also sets the newNMEAreceived() flag to false
     }
   }

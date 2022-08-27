@@ -53,16 +53,18 @@ void loop()
   static int tick = 0;
   static flightPhase status = ONPAD;
   unsigned int tickTime = getTickTime(status);
+  int x = 1;
+  (void) x;
   if(status == POST_FLIGHT){
     while(millis() - lastTime < tickTime/1000){
       //waste time
-      int x = 1 + 1;
+      x = x;
     }
     lastTime = millis();
   } else {
     while(micros() - lastTime < tickTime){
       //waste time
-      int x = 1 + 1;
+      x = x;
     }
     lastTime = micros();
   }
