@@ -183,7 +183,7 @@ flightPhase runDescending(int tick){//this runs at 20hz
   return DESCENDING;
 }
 
-flightPhase runPostFlight(int tick){//this runs at 1hz
+flightPhase runPostFlight(int tick){//this runs at 1hz 
   //once we're on the ground we can stop recording and start just broadcasting GPS somewhat infrequently
   static bmpReading bmpSample = getBMP();
   if(tick % 5 == 0){//broadcast every 5 seconds
