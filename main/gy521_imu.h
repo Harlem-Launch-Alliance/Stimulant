@@ -15,6 +15,8 @@ imuReading getIMU()
   imuSample.time = micros(); //current timestamp
   int16_t AcX, AcY, AcZ, GyX, GyY, GyZ, Tmp;
 
+  (void) Tmp; //we can remove this if we decide to record temperature from the IMU
+
   Wire.beginTransmission(MPU);
   Wire.write(0x3B);
   Wire.endTransmission(false);
