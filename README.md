@@ -3,6 +3,8 @@ Designed for Teensy 4.1
 
 Want to contribute? Start [here](https://github.com/Harlem-Launch-Alliance/Catalyst-2/blob/main/GETTING_STARTED.md).
 
+NOTE: At this time we are only accepting contributions from [HLA](hla.nyc) members.
+
 [Instructions for use](https://github.com/Harlem-Launch-Alliance/Catalyst-2#instructions-for-use)
 
 ## Goals:
