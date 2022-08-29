@@ -17,7 +17,7 @@
 
 // Constants:
 #define SEALEVELPRESSURE_HPA (1013.25)
-const int buzzer = 33;
+const int buzzerPin = 33;
 unsigned long lastTime = 0;
 
 // Variables:
@@ -25,12 +25,12 @@ bool apogeeReached;
 
 void setup()
 {
-  pinMode(buzzer, OUTPUT);    // Set buzzer pin as an output
+  pinMode(buzzerPin, OUTPUT);    // Set buzzer pin as an output
   for(int i = 0; i < 5; i++)  // Play 5 beeps
   {
-    tone(buzzer, 1000);       // Send 1KHz sound signal...
+    tone(buzzerPin, 1000);       // Send 1KHz sound signal...
     delay(1000);              // ...for 1 sec
-    noTone(buzzer);           // Stop sound...
+    noTone(buzzerPin);           // Stop sound...
     delay(1000);              // ...for 1sec
   }
   Wire.begin();               // initiate wire library and I2C
