@@ -71,17 +71,17 @@ void loop()
 
   switch(status){
   case ONPAD:
-    runOnPad(tick);
+    status = runOnPad(tick);
     break;
   case ASCENDING:
-    runAscending(tick);
+    status = runAscending(tick);
     break;
   case DESCENDING:
-    runDescending(tick);
+    status = runDescending(tick);
     break;
   case POST_FLIGHT:
   default:
-    runPostFlight(tick);
+    status = runPostFlight(tick);
   }
   tick++;
 }
