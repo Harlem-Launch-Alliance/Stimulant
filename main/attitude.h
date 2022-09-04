@@ -60,7 +60,7 @@ prior to launch. Once launch is detected we will 'lock in' those chunks and cont
 recording changes forever.
 **************************************************************************************/
 Directional getAttitude(Directional gyro, bool hasLaunched){//only calibrated gyro data should go in here
-  const int hz = 100; //number of readings per second
+  static constexpr int hz = 100; //number of readings per second
   static Directional oldChanges; //5-10 seconds ago
   static Directional lastChanges; //0-5 seconds ago
   static int counter = 0;
