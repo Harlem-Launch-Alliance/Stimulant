@@ -132,7 +132,7 @@ flightPhase runAscending(int tick){ //this will run similarly to ONPAD except ha
   //sample sensors
   static bmpReading lastBmp;
   static gpsReading lastGps;
-  static unsigned int delay = 0;
+  static unsigned int transitionDelay = 0;
   bool apogeeReached = false;
   imuReading imuSample = getIMU(); //sample IMU first to maximize consistency
   
@@ -151,10 +151,10 @@ flightPhase runAscending(int tick){ //this will run similarly to ONPAD except ha
   if(tick % 5 == 1){//20 times per second with a slight offset to avoid overlapping with bmp and gps
     transmitData(lastBmp.altitude, lastGps, '1');
   }
-  if(apogeeReached && !delay){
-    delay = millis() + 3000;//added 3 second delay incase chute deploy is late
+  if(apogeeReached && !transitionDelay){
+    transitionDelay = millis() + 3000;//added 3 second delay incase chute deploy is late
   }
-  if(apogeeReached && delay > millis())
+  if(apogeeReached && transitionDelay > millis())
     return DESCENDING;
   return ASCENDING;
 }
