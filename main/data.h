@@ -33,7 +33,7 @@ void setupSD(String date){
   filestart.toCharArray(filename, 50);
   File dataFile = SD.open(filename, FILE_WRITE);
   if (dataFile) {
-    dataFile.println("Time(ms),Altitude(m),Latitude,Longitude,GyroX,GyroY,GyroZ,AccelX,AccelY,AccelZ,AttitudeX,AttitudeY,AttitudeZ,state");
+    dataFile.println("Time(us),Altitude(m),Latitude,Longitude,GyroX,GyroY,GyroZ,AccelX,AccelY,AccelZ,AttitudeX,AttitudeY,AttitudeZ,state");
     dataFile.close();
   }
   else {
