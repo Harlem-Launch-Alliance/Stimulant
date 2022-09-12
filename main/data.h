@@ -78,12 +78,14 @@ void backupToSD(){
     double altitude = 0;
     double latitude = 0;
     double longitude = 0;
+    int state = -1; //use invalid state when declared so that it's clear if something isn't working right
     imuReading imuSample = imuQueue.peek();
     imuQueue.dequeue();
     if(!bmpQueue.isEmpty()){
       bmpReading bmpSample = bmpQueue.peek();
       if(bmpSample.time < imuSample.time){
         altitude = bmpSample.altitude;
+        state = bmpSample.state;
         bmpQueue.dequeue();
       }
     }
@@ -113,8 +115,10 @@ void backupToSD(){
     dataFile.print(imuSample.accel.z); dataFile.print(',');
     dataFile.print(imuSample.attitude.x); dataFile.print(',');
     dataFile.print(imuSample.attitude.y); dataFile.print(',');
-    dataFile.print(imuSample.attitude.z); dataFile.println(',');
-    //TODO add state
+    dataFile.print(imuSample.attitude.z); dataFile.print(',');
+    if(altitude != 0)
+      dataFile.print(state);
+    dataFile.println(',');
   }
   while(!bmpQueue.isEmpty()){
     double latitude = 0;
@@ -145,6 +149,8 @@ void backupToSD(){
     dataFile.print(',');
     dataFile.print(',');
     dataFile.print(',');
+    dataFile.print(',');
+    dataFile.print(bmpSample.state);
     dataFile.println(',');
   }
   dataFile.close(); 
