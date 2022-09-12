@@ -176,7 +176,7 @@ flightPhase runDescending(int tick){//this runs at 20hz
   }
   transmitData(bmpSample.altitude, lastGps, '2');
 
-  if(tick % 100 == 0){//every 5 seconds check if we are still descending
+  if(tick % 100 == 3){//every 5 seconds check if we are still descending
     if(bmpSample.altitude - lastAlt < 1){//if altitude hasn't changed more than 1 meter in 5 seconds, we're on the ground
       return POST_FLIGHT;
     }
