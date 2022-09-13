@@ -25,6 +25,7 @@ struct bmpReading //all data from an altimeter reading
 {
   double altitude;
   unsigned long time;
+  unsigned short state; //used for tracking flightPhase (0-3 representing ONPAD - POST_FLIGHT)
 };
 
 struct imuReading //all data from an IMU reading (accelerometer and gyroscope)

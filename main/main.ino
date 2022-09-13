@@ -96,6 +96,7 @@ flightPhase runOnPad(int tick){
   bool hasLaunched = detectLaunch(imuSample.accel); //might need to calibrate accel data before feeding to this function
   if(tick % 5 == 0){
     lastBmp = getBMP();
+    lastBmp.state = 0; //this corresponds to ONPAD
     detectApogee(imuSample.accel, lastBmp.altitude, hasLaunched); //need to run this prelaunch to get calibrations
     recordData(lastBmp, true);
   }
@@ -138,6 +139,7 @@ flightPhase runAscending(int tick){ //this will run similarly to ONPAD except ha
   
   if(tick % 5 == 0){
     lastBmp = getBMP();
+    lastBmp.state = 1; //this corresponds to ASCENDING
     apogeeReached = detectApogee(imuSample.accel, lastBmp.altitude, true);
     recordData(lastBmp, false);
   }
@@ -165,6 +167,7 @@ flightPhase runDescending(int tick){//this runs at 20hz
 
   //sample sensors
   bmpReading bmpSample = getBMP();
+  bmpSample.state = 2; //this corresponds to DESCENDING
   recordData(bmpSample, false);
 
   if(tick % 20 == 1){//still one time per second
@@ -187,7 +190,7 @@ flightPhase runDescending(int tick){//this runs at 20hz
 
 flightPhase runPostFlight(int tick){//this runs at 1hz 
   //once we're on the ground we can stop recording and start just broadcasting GPS somewhat infrequently
-  static bmpReading bmpSample = getBMP();
+  static bmpReading bmpSample = getBMP(); //no need to add a state to this sample since it won't be recorded
   if(tick % 5 == 0){//broadcast every 5 seconds
     gpsReading gpsSample = getGPS();
     transmitData(bmpSample.altitude, gpsSample, '3');
