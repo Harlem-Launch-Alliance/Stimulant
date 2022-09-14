@@ -33,20 +33,19 @@ bool isAccelerating(Directional accel){//determine if we are accelerating at mor
 
 bool detectApogee(Directional accel, double altitude, bool hasLaunched){ //accel in Gs
   static bool apogeeReached = false; //this is initialized as false, but once it flips to true it should remain true until the arduino is reset
-  static Ewma altFilter(.05); //this will contain a filtered altitude (less prone to noise)
   static int counter = 0;
-  static double lastAlt = altitude;
   counter = (counter + 1) % 5; //this will count from 0 to 4, overflowing back to 0
-  double currentAlt = altFilter.filter(altitude);
+  static double lastAlt = altitude;
   
   if(apogeeReached)//if apogee was already detected earlier we don't need to do any more math
     return true;
-  
+
   if(counter == 0){
     //everytime counter overflows we check for apogee (4hz at the moment, this should be a constant or tied to a constant)
-    if(hasLaunched && currentAlt < lastAlt && !isAccelerating(accel))
+    if(hasLaunched && altitude < lastAlt  && !isAccelerating(accel)){
       apogeeReached = true;
-    lastAlt = currentAlt;
+    }
+    lastAlt = altitude;
   }
   return apogeeReached;
 }
