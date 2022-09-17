@@ -3,17 +3,13 @@
                             Recovery Systems Group 2021 - 2022
                               Catalyst 2.1 Flight Computer
  *************************************************************************************/
-#include <Wire.h>             // to communicate with I2C devices
-#include <SD.h>               // for data storage on the onboard microSD card
-#include "utils.h"
-#include "Adafruit_BMP3XX.h"  // BMP388 library
+
 #include "apogee.h"
 #include "bmp_altimeter.h"
 #include "data.h"
 #include "gy521_imu.h"
 #include "attitude.h"
 #include "gps.h"
-#include "ringQueue.h"
 
 // Constants:
 #define SEALEVELPRESSURE_HPA (1013.25)
