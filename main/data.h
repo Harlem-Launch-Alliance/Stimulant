@@ -3,6 +3,8 @@
  * currently using an SD card and Xbee respectively
  ****************************************************************************/
 #include "ringQueue.h"
+#include "utils.h"
+#include <SD.h>
 
 const int chipSelect = BUILTIN_SDCARD;
 char filename[50];

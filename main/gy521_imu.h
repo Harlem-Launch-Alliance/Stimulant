@@ -5,6 +5,7 @@
 
 #include <Wire.h> //library allows communication with I2C / TWI devices
 #include <math.h> //library includes mathematical functions
+#include "utils.h"
 
 const uint8_t MPU=0x68;                  //I2C address of the MPU-6050
 const double tcal = -1600;           //Temperature correction
