@@ -12,7 +12,7 @@
 #include "gps.h"
 
 // Constants:
-#define SEALEVELPRESSURE_HPA (1013.25)
+
 const int buzzerPin = 33;
 unsigned long lastTime = 0;
 
