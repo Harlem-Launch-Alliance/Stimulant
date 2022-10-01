@@ -3,6 +3,8 @@
  * currently using an SD card and Xbee respectively
  ****************************************************************************/
 #include "ringQueue.h"
+#include "utils.h"
+#include <SD.h>
 
 const int chipSelect = BUILTIN_SDCARD;
 char filename[50];
@@ -33,7 +35,7 @@ void setupSD(String date){
   filestart.toCharArray(filename, 50);
   File dataFile = SD.open(filename, FILE_WRITE);
   if (dataFile) {
-    dataFile.println("Time(ms),Altitude(m),Latitude,Longitude,GyroX,GyroY,GyroZ,AccelX,AccelY,AccelZ,AttitudeX,AttitudeY,AttitudeZ,state");
+    dataFile.println("Time(us),Altitude(m),Latitude,Longitude,GyroX,GyroY,GyroZ,AccelX,AccelY,AccelZ,AttitudeX,AttitudeY,AttitudeZ,state");
     dataFile.close();
   }
   else {
@@ -78,12 +80,14 @@ void backupToSD(){
     double altitude = 0;
     double latitude = 0;
     double longitude = 0;
+    int state = -1; //use invalid state when declared so that it's clear if something isn't working right
     imuReading imuSample = imuQueue.peek();
     imuQueue.dequeue();
     if(!bmpQueue.isEmpty()){
       bmpReading bmpSample = bmpQueue.peek();
       if(bmpSample.time < imuSample.time){
         altitude = bmpSample.altitude;
+        state = bmpSample.state;
         bmpQueue.dequeue();
       }
     }
@@ -113,8 +117,10 @@ void backupToSD(){
     dataFile.print(imuSample.accel.z); dataFile.print(',');
     dataFile.print(imuSample.attitude.x); dataFile.print(',');
     dataFile.print(imuSample.attitude.y); dataFile.print(',');
-    dataFile.print(imuSample.attitude.z); dataFile.println(',');
-    //TODO add state
+    dataFile.print(imuSample.attitude.z); dataFile.print(',');
+    if(altitude != 0)
+      dataFile.print(state);
+    dataFile.println(',');
   }
   while(!bmpQueue.isEmpty()){
     double latitude = 0;
@@ -145,6 +151,8 @@ void backupToSD(){
     dataFile.print(',');
     dataFile.print(',');
     dataFile.print(',');
+    dataFile.print(',');
+    dataFile.print(bmpSample.state);
     dataFile.println(',');
   }
   dataFile.close(); 

@@ -2,6 +2,7 @@
 // Need to remove the GPS.lastNMEA() and see if it still works, still get compilation error
 
 #include <Adafruit_GPS.h>
+#include "utils.h"
 
 // what's the name of the hardware serial port?
 #define GPSSerial Serial2

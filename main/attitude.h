@@ -8,6 +8,7 @@
 //assuming roll == 0, pitchRate will be equivalent to y, and yawRate will be equivalent to x
 
 #include <Ewma.h> //https://github.com/jonnieZG/EWMA
+#include "utils.h"
 
 //returns calculated pitchRate or yawRate
 double getRate(double roll, double parallel, double perpendicular){//if getting rateX, parallel should be x
@@ -20,7 +21,7 @@ Directional calibrateGyro(Directional gyro, bool hasLaunched){//returns gyro off
   static Ewma zFilter(.002);
   static Directional lastSave;//0-5 second old data
   static Directional oldSave;//5-10 second old data
-  static int counter = 0;
+  static uint8_t counter = 0;
 
   if(hasLaunched){//once launch occurs we lock in the offsets (and return early to skip the math)
     //in order to offset the delay between launch and launch detection, we use the data from 5-10 seconds prior
