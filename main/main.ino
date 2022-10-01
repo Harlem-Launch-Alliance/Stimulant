@@ -15,9 +15,6 @@
 const int buzzerPin = 33;
 unsigned long lastTime = 0;
 
-// Variables:
-bool apogeeReached;
-
 void setup()
 {
   pinMode(buzzerPin, OUTPUT);    // Set buzzer pin as an output
