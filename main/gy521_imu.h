@@ -79,17 +79,15 @@ void setupIMU(){
     Serial1.print("Z Acceleration: ");
     Serial1.println(sample.accel.z);
     delay(1000);
-    imuReading imuSample = getIMU();
-    Serial1.print("X Gyro");
-    Serial1.println(imuSample.gyro.x);
+    Serial1.print("X Gyro: ");
+    Serial1.println(sample.gyro.x);
     delay(1000);
-    Serial1.print("Y Gyro");
-    Serial1.println(imuSample.gyro.y);
+    Serial1.print("Y Gyro: ");
+    Serial1.println(sample.gyro.y);
     delay(1000);
-    Serial1.print("Z Gyro");
-    Serial1.println(imuSample.gyro.z);
+    Serial1.print("Z Gyro: ");
+    Serial1.println(sample.gyro.z);
     delay(1000);
     
-    Serial1.print("The log worked"); //this is just here for testing purposes
   } 
 }
