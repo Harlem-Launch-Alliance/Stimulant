@@ -70,24 +70,23 @@ void setupIMU(){
     Serial1.println("IMU setup successful.");
   else{
     Serial1.println("Setup failed, did not read acceleration values from IMU.");
-    Serial1.print("X Acceleration: ");
-    Serial1.println(sample.accel.x);
-    delay(1000);
-    Serial1.print("Y Acceleration: ");
-    Serial1.println(sample.accel.y);
-    delay(1000);
-    Serial1.print("Z Acceleration: ");
-    Serial1.println(sample.accel.z);
-    delay(1000);
-    Serial1.print("X Gyro: ");
-    Serial1.println(sample.gyro.x);
-    delay(1000);
-    Serial1.print("Y Gyro: ");
-    Serial1.println(sample.gyro.y);
-    delay(1000);
-    Serial1.print("Z Gyro: ");
-    Serial1.println(sample.gyro.z);
-    delay(1000);
-    
-  } 
-}
+    } 
+  Serial1.print("X Acceleration: ");
+  Serial1.println(sample.accel.x);
+  delay(1000);
+  Serial1.print("Y Acceleration: ");
+  Serial1.println(sample.accel.y);
+  delay(1000);
+  Serial1.print("Z Acceleration: ");
+  Serial1.println(sample.accel.z);
+  delay(1000);
+  Serial1.print("X Gyro: ");
+  Serial1.println(sample.gyro.x);
+  delay(1000);
+  Serial1.print("Y Gyro: ");
+  Serial1.println(sample.gyro.y);
+  delay(1000);
+  Serial1.print("Z Gyro: ");
+  Serial1.println(sample.gyro.z);
+  delay(1000);
+  }
