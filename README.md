@@ -8,11 +8,22 @@ NOTE: At this time we are only accepting contributions from [HLA](hla.nyc) membe
 [Instructions for use](https://github.com/Harlem-Launch-Alliance/Catalyst-2#instructions-for-use)
 
 ## Goals:
-- launch detection
-- altitude monitoring
-- attitude, velocity, and position determination
-- live telemetry transmission
-- automated apogee detection and parachute deployment(s)
+| Feature | Status |
+|---------|--------|
+| launch detection | :heavy_check_mark: |
+| altitude monitoring | :heavy_check_mark: |
+| location monitoring | :heavy_check_mark: |
+| attitude determination |  |
+| velocity determination |  |
+| postition determination (non-GPS) |  |
+| live telemetry transmission | :heavy_check_mark: |
+| apogee detection | :heavy_check_mark: |
+| drogue chute deployment |  |
+| main chute deployment |  |
+| data acquisition (SD card) | :heavy_check_mark: |
+
+## Software Architecture:
+[Flow Chart](https://miro.com/app/board/uXjVPYUZ7mY=/?share_link_id=493963314311)
 
 ## Hardware:
 - Teensy 4.1

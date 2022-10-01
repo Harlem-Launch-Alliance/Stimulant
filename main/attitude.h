@@ -8,6 +8,7 @@
 //assuming roll == 0, pitchRate will be equivalent to y, and yawRate will be equivalent to x
 
 #include <Ewma.h> //https://github.com/jonnieZG/EWMA
+#include "utils.h"
 
 //returns calculated pitchRate or yawRate
 double getRate(double roll, double parallel, double perpendicular){//if getting rateX, parallel should be x

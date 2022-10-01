@@ -2,8 +2,11 @@
  * This file is for declaring utilities to be used in multiple other places
  * 
  ****************************************************************************/
-#include <math.h>
 #include "settings.h"
+#include <Arduino.h>
+
+#ifndef UTILS_H
+#define UTILS_H
 
 class Directional  //any data that has an x,y and z attribute
 {
@@ -25,6 +28,7 @@ struct bmpReading //all data from an altimeter reading
 {
   double altitude;
   unsigned long time;
+  unsigned short state; //used for tracking flightPhase (0-3 representing ONPAD - POST_FLIGHT)
 };
 
 struct imuReading //all data from an IMU reading (accelerometer and gyroscope)
@@ -64,3 +68,5 @@ int getTickTime(flightPhase phase){//map flight phases to tick times
   }
   return TICK_TIME_POST_FLIGHT;
 }
+
+#endif
