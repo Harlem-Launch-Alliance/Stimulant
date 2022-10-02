@@ -35,14 +35,14 @@ void setup()
   setupSD(date);
 }
 
-flightPhase runOnPad(int tick);
-flightPhase runAscending(int tick);
-flightPhase runDescending(int tick);
-flightPhase runPostFlight(int tick);
+flightPhase runOnPad(uint32_t tick);
+flightPhase runAscending(uint32_t tick);
+flightPhase runDescending(uint32_t tick);
+flightPhase runPostFlight(uint32_t tick);
 
 void loop()
 {
-  static int tick = 0;
+  static uint32_t tick = 0;
   static flightPhase status = ONPAD;
   uint32_t tickTime = getTickTime(status);
   bool x = 1;
@@ -78,7 +78,7 @@ void loop()
   tick++;
 }
 
-flightPhase runOnPad(int tick){
+flightPhase runOnPad(uint32_t tick){
   //sample sensors
   static bmpReading lastBmp;
   static gpsReading lastGps;
@@ -121,7 +121,7 @@ flightPhase runOnPad(int tick){
   return ONPAD;
 }
 
-flightPhase runAscending(int tick){ //this will run similarly to ONPAD except hasLaunched will be true
+flightPhase runAscending(uint32_t tick){ //this will run similarly to ONPAD except hasLaunched will be true
   //sample sensors
   static bmpReading lastBmp;
   static gpsReading lastGps;
@@ -149,7 +149,7 @@ flightPhase runAscending(int tick){ //this will run similarly to ONPAD except ha
   return ASCENDING;
 }
 
-flightPhase runDescending(int tick){//this runs at 20hz
+flightPhase runDescending(uint32_t tick){//this runs at 20hz
   static gpsReading lastGps;
   static int lastAlt = 0;
 
@@ -176,7 +176,7 @@ flightPhase runDescending(int tick){//this runs at 20hz
   return DESCENDING;
 }
 
-flightPhase runPostFlight(int tick){//this runs at 1hz 
+flightPhase runPostFlight(uint32_t tick){//this runs at 1hz 
   //once we're on the ground we can stop recording and start just broadcasting GPS somewhat infrequently
   static bmpReading bmpSample = getBMP(); //no need to add a state to this sample since it won't be recorded
   if(tick % 5 == 0){//broadcast every 5 seconds
