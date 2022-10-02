@@ -16,8 +16,8 @@ public:
   void dequeue();
   bool isEmpty();
 private:
-  unsigned int head;
-  unsigned int length;
+  uint32_t head;
+  uint32_t length;
   T dataArray[RING_QUEUE_LENGTH];
 };
 
