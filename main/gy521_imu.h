@@ -70,7 +70,7 @@ void setupIMU(){
     Serial1.println("IMU setup successful.");
   else{
     Serial1.println("Setup failed, did not read acceleration values from IMU.");
-    } 
+      } 
 
 Serial1.print("X Acceleration: ");
 Serial1.println(sample.accel.x);
