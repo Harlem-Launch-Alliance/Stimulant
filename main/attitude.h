@@ -64,7 +64,7 @@ Directional getAttitude(Directional gyro, bool hasLaunched){//only calibrated gy
   const int hz = 100; //number of readings per second
   static Directional oldChanges; //5-10 seconds ago
   static Directional lastChanges; //0-5 seconds ago
-  static int counter = 0;
+  static uint8_t counter = 0;
   Directional currentAttitude;
 
   counter = (counter + 1) % 500;
