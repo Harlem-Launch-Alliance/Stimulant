@@ -27,7 +27,7 @@ public:
 struct bmpReading //all data from an altimeter reading
 {
   double altitude;
-  unsigned long time;
+  uint32_t time;
   unsigned short state; //used for tracking flightPhase (0-3 representing ONPAD - POST_FLIGHT)
 };
 
@@ -36,13 +36,13 @@ struct imuReading //all data from an IMU reading (accelerometer and gyroscope)
     Directional accel;
     Directional gyro;
     Directional attitude;
-    unsigned long time;
+    uint32_t time;
 };
 
 struct gpsReading //only the data we need for now
 {
     double latitude, longitude;
-    unsigned long time;
+    uint32_t time;
 };
 
 double toDeg(double angle){
