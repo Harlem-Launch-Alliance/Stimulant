@@ -1,6 +1,6 @@
 name: PlatformIO Build
 run-name: ${{ github.ref }}
-on: [push, pull_request]
+on: [pull_request]
 jobs:
   Build-Executable:
     runs-on: ubuntu-latest
