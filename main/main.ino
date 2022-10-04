@@ -3,25 +3,17 @@
                             Recovery Systems Group 2021 - 2022
                               Catalyst 2.1 Flight Computer
  *************************************************************************************/
-#include <Wire.h>             // to communicate with I2C devices
-#include <SD.h>               // for data storage on the onboard microSD card
-#include "utils.h"
-#include "Adafruit_BMP3XX.h"  // BMP388 library
+
 #include "apogee.h"
 #include "bmp_altimeter.h"
 #include "data.h"
 #include "gy521_imu.h"
 #include "attitude.h"
 #include "gps.h"
-#include "ringQueue.h"
 
 // Constants:
-#define SEALEVELPRESSURE_HPA (1013.25)
 const int buzzerPin = 33;
 unsigned long lastTime = 0;
-
-// Variables:
-bool apogeeReached;
 
 void setup()
 {
@@ -43,17 +35,17 @@ void setup()
   setupSD(date);
 }
 
-flightPhase runOnPad(int tick);
-flightPhase runAscending(int tick);
-flightPhase runDescending(int tick);
-flightPhase runPostFlight(int tick);
+flightPhase runOnPad(uint32_t tick);
+flightPhase runAscending(uint32_t tick);
+flightPhase runDescending(uint32_t tick);
+flightPhase runPostFlight(uint32_t tick);
 
 void loop()
 {
-  static int tick = 0;
+  static uint32_t tick = 0;
   static flightPhase status = ONPAD;
-  unsigned int tickTime = getTickTime(status);
-  int x = 1;
+  uint32_t tickTime = getTickTime(status);
+  bool x = true;
   (void) x;
   if(status == POST_FLIGHT){
     while(millis() - lastTime < tickTime/1000){
@@ -86,7 +78,7 @@ void loop()
   tick++;
 }
 
-flightPhase runOnPad(int tick){
+flightPhase runOnPad(uint32_t tick){
   //sample sensors
   static bmpReading lastBmp;
   static gpsReading lastGps;
@@ -96,6 +88,7 @@ flightPhase runOnPad(int tick){
   bool hasLaunched = detectLaunch(imuSample.accel); //might need to calibrate accel data before feeding to this function
   if(tick % 5 == 0){
     lastBmp = getBMP();
+    lastBmp.state = 0; //this corresponds to ONPAD
     detectApogee(imuSample.accel, lastBmp.altitude, hasLaunched); //need to run this prelaunch to get calibrations
     recordData(lastBmp, true);
   }
@@ -128,16 +121,16 @@ flightPhase runOnPad(int tick){
   return ONPAD;
 }
 
-flightPhase runAscending(int tick){ //this will run similarly to ONPAD except hasLaunched will be true
+flightPhase runAscending(uint32_t tick){ //this will run similarly to ONPAD except hasLaunched will be true
   //sample sensors
   static bmpReading lastBmp;
   static gpsReading lastGps;
-  static unsigned int delay = 0;
   bool apogeeReached = false;
   imuReading imuSample = getIMU(); //sample IMU first to maximize consistency
   
   if(tick % 5 == 0){
     lastBmp = getBMP();
+    lastBmp.state = 1; //this corresponds to ASCENDING
     apogeeReached = detectApogee(imuSample.accel, lastBmp.altitude, true);
     recordData(lastBmp, false);
   }
@@ -151,20 +144,18 @@ flightPhase runAscending(int tick){ //this will run similarly to ONPAD except ha
   if(tick % 5 == 1){//20 times per second with a slight offset to avoid overlapping with bmp and gps
     transmitData(lastBmp.altitude, lastGps, '1');
   }
-  if(apogeeReached && !delay){
-    delay = millis() + 3000;//added 3 second delay incase chute deploy is late
-  }
-  if(apogeeReached && delay > millis())
+  if(apogeeReached)
     return DESCENDING;
   return ASCENDING;
 }
 
-flightPhase runDescending(int tick){//this runs at 20hz
+flightPhase runDescending(uint32_t tick){//this runs at 20hz
   static gpsReading lastGps;
   static int lastAlt = 0;
 
   //sample sensors
   bmpReading bmpSample = getBMP();
+  bmpSample.state = 2; //this corresponds to DESCENDING
   recordData(bmpSample, false);
 
   if(tick % 20 == 1){//still one time per second
@@ -176,7 +167,7 @@ flightPhase runDescending(int tick){//this runs at 20hz
   }
   transmitData(bmpSample.altitude, lastGps, '2');
 
-  if(tick % 100 == 0){//every 5 seconds check if we are still descending
+  if(tick % 100 == 3){//every 5 seconds check if we are still descending
     if(bmpSample.altitude - lastAlt < 1){//if altitude hasn't changed more than 1 meter in 5 seconds, we're on the ground
       return POST_FLIGHT;
     }
@@ -185,9 +176,9 @@ flightPhase runDescending(int tick){//this runs at 20hz
   return DESCENDING;
 }
 
-flightPhase runPostFlight(int tick){//this runs at 1hz 
+flightPhase runPostFlight(uint32_t tick){//this runs at 1hz 
   //once we're on the ground we can stop recording and start just broadcasting GPS somewhat infrequently
-  static bmpReading bmpSample = getBMP();
+  static bmpReading bmpSample = getBMP(); //no need to add a state to this sample since it won't be recorded
   if(tick % 5 == 0){//broadcast every 5 seconds
     gpsReading gpsSample = getGPS();
     transmitData(bmpSample.altitude, gpsSample, '3');

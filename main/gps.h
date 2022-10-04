@@ -2,6 +2,7 @@
 // Need to remove the GPS.lastNMEA() and see if it still works, still get compilation error
 
 #include <Adafruit_GPS.h>
+#include "utils.h"
 
 // what's the name of the hardware serial port?
 #define GPSSerial Serial2
@@ -54,7 +55,7 @@ String setupGPS()
         Serial1.print("0");
       Serial1.println(secs);//seconds
     }
-    if(millis() - startTime > 300000){
+    if(millis() - startTime > GPS_WAIT_TIME * 1000){
       Serial1.println("CAUTION!!! GPS timeout: Progressing with no GPS signal");
       return ERR_NO_GPS;
     }

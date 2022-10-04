@@ -3,6 +3,9 @@
  * 
  ****************************************************************************/
 
+#include "Adafruit_BMP3XX.h"  // BMP388 library
+#include "utils.h"
+
 #define BMP_CS 10
 double GNDLEVELPRESSURE_HPA;
 
