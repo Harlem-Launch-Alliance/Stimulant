@@ -1,5 +1,5 @@
 name: PlatformIO Build
-run-name: ${{ github.ref }}
+run-name: PlatformIO Build & Test
 on: [pull_request]
 jobs:
   Build-Executable:
