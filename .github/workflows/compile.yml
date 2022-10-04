@@ -16,6 +16,5 @@ jobs:
         run: |
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
-  PlatformIO-run:
-    runs-on: ubuntu-latest
-    uses: karniv00l/platformio-run-action@v1.0.0
+- name: PlatformIO Run
+  uses: karniv00l/platformio-run-action@v1.0.0
