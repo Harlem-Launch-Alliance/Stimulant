@@ -1,0 +1,11 @@
+name: PlatformIO Build
+run-name: PlatformIO Build & Test
+on: [pull_request]
+jobs:
+  Build-Executable:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: PlatformIO Run
+        uses: karniv00l/platformio-run-action@v1.0.0
