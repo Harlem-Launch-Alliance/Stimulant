@@ -24,7 +24,7 @@ void setup()
   for(int i = 0; i < 5; i++)  // Play 5 beeps
   {
     tone(buzzerPin, 1000);       // Send 1KHz sound signal...
-    Serial1.print("beep!");
+    Serial1.println("beep!");
     delay(1000);              // ...for 1 sec
     noTone(buzzerPin);           // Stop sound...
     delay(1000);              // ...for 1sec
