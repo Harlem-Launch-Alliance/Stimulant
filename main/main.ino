@@ -17,17 +17,19 @@ unsigned long lastTime = 0;
 
 void setup()
 {
+  Serial1.begin(115200);      // xBee baudrate: 115200, 9600
+  Serial1.print("\n\n\n");
+
   pinMode(buzzerPin, OUTPUT);    // Set buzzer pin as an output
   for(int i = 0; i < 5; i++)  // Play 5 beeps
   {
     tone(buzzerPin, 1000);       // Send 1KHz sound signal...
+    Serial1.print("beep!");
     delay(1000);              // ...for 1 sec
     noTone(buzzerPin);           // Stop sound...
     delay(1000);              // ...for 1sec
   }
   Wire.begin();               // initiate wire library and I2C
-  Serial1.begin(115200);      // xBee baudrate: 115200, 9600
-  Serial1.print("\n\n\n");
   setupBMP();
   setupIMU();
 
