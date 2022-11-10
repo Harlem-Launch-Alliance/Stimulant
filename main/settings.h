@@ -13,6 +13,6 @@ constexpr uint32_t TICK_TIME_POST_FLIGHT = 1000000;
 
 constexpr uint32_t RING_QUEUE_LENGTH = 3000;//each 100 elements is 1 seconds of data at 100hz
 
-constexpr uint32_t GPS_WAIT_TIME = 300; //number of seconds to wait for GPS to acquire signal before moving on
-
+constexpr uint32_t GPS_WAIT_TIME = 5; //number of seconds to wait for GPS to acquire signal before moving on
+//number was 300
 #endif
