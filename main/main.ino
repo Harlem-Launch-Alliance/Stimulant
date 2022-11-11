@@ -13,7 +13,6 @@
 
 // Constants:
 const int buzzerPin = 33;
-unsigned long lastTime = 0;
 
 void setup()
 {
@@ -44,6 +43,7 @@ flightPhase runPostFlight(uint32_t tick);
 
 void loop()
 {
+  static long lastTime = 0;
   static uint32_t tick = 0;
   static flightPhase status = ONPAD;
   uint32_t tickTime = getTickTime(status);
