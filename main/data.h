@@ -46,7 +46,7 @@ void setupSD(String date){
 void recordData(imuReading sample, bool prelaunch){
   imuQueue.enqueue(sample);
   if(prelaunch){
-    while(!imuQueue.isEmpty() && imuQueue.peek().time < millis() - 2000){
+    while(!imuQueue.isEmpty() && imuQueue.peek().time < micros() - 2000000){
       imuQueue.dequeue();
     }
   }
@@ -55,7 +55,7 @@ void recordData(imuReading sample, bool prelaunch){
 void recordData(bmpReading sample, bool prelaunch){
   bmpQueue.enqueue(sample);
   if(prelaunch){
-    while(!bmpQueue.isEmpty() && bmpQueue.peek().time < millis() - 2000){
+    while(!bmpQueue.isEmpty() && bmpQueue.peek().time < micros() - 2000000){
       bmpQueue.dequeue();
     }
   }
@@ -64,7 +64,7 @@ void recordData(bmpReading sample, bool prelaunch){
 void recordData(gpsReading sample, bool prelaunch){
   gpsQueue.enqueue(sample);
   if(prelaunch){
-    while(!gpsQueue.isEmpty() && gpsQueue.peek().time < millis() - 2000){
+    while(!gpsQueue.isEmpty() && gpsQueue.peek().time < micros() - 2000000){
       gpsQueue.dequeue();
     }
   }
