@@ -153,7 +153,7 @@ flightPhase runAscending(uint32_t tick){ //this will run similarly to ONPAD exce
 
 flightPhase runDescending(uint32_t tick){//this runs at 20hz
   static gpsReading lastGps;
-  static int lastAlt = getBMP().altitude + 5;//initialize so that landing detection isn't triggered accidentally
+  static double lastAlt = getBMP().altitude + 5;//initialize so that landing detection isn't triggered accidentally
 
   //sample sensors
   bmpReading bmpSample = getBMP();
