@@ -7,6 +7,15 @@
 #ifndef RINGQUEUE_H
 #define RINGQUEUE_H
 
+/**
+ * @brief A ring queue of constant size
+ * 
+ * Intended use for caching data while the SD card is not available
+ * 
+ * This structure operates like a standard queue. Data is added to the back and removed from the front.
+ * 
+ * @tparam T datatype to be stored
+ */
 template<typename T>
 class RingQueue{
 public:
@@ -21,17 +30,35 @@ private:
   T dataArray[RING_QUEUE_LENGTH];
 };
 
+/**
+ * @brief Construct a new Ring Queue< T>:: Ring Queue object
+ * 
+ * @tparam T datatype to be stored
+ */
 template<typename T>
 RingQueue<T>::RingQueue(){//each new queue is initialized with 0 data
   head = 0;
   length = 0;
 }
 
+/**
+ * @brief Check if RingQueue is empty
+ * 
+ * @tparam T type of data stored
+ * @return true RingQueue is empty
+ * @return false RingQueue is NOT empty
+ */
 template<typename T>
 bool RingQueue<T>::isEmpty(){
   return length == 0;//if length is 0 it's empty otherwise it isn't
 }
 
+/**
+ * @brief add one element to the data queue
+ * 
+ * @tparam T type of data stored
+ * @param data value of data to be queued
+ */
 template<typename T>
 void RingQueue<T>::enqueue(T data){
   if(length >= RING_QUEUE_LENGTH) //if the array is full just ignore
@@ -43,12 +70,24 @@ void RingQueue<T>::enqueue(T data){
   dataArray[nextLocation] = data;
   length++;
 }
-
+/**
+ * @brief Peek at next data at the front of the queue
+ * 
+ * This function should not be called on an empty queue
+ * 
+ * @tparam T type of data
+ * @return T data at front of queue
+ */
 template<typename T>
 T RingQueue<T>::peek(){//unintended behaviour if called when queue is empty
   return dataArray[head];
 }
 
+/**
+ * @brief delete element from front of queue
+ * 
+ * @tparam T type of data
+ */
 template<typename T>
 void RingQueue<T>::dequeue(){
   if(length == 0)
