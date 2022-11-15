@@ -73,7 +73,7 @@ void RingQueue<T>::enqueue(T data){
 /**
  * @brief Peek at next data at the front of the queue
  * 
- * This function should not be called on an empty queue
+ * @warning this function should not be called while the queue is empty
  * 
  * @tparam T type of data
  * @return T data at front of queue

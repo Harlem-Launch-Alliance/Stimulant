@@ -58,7 +58,7 @@ void setupSD(String date){
 }
 
 /**
- * @defgroup cacheData Cache data
+ * @defgroup cacheData Cache Data
  * 
  * @note If the rocket has not yet launched, all data that is more than 2 seconds old will be trimmed to ensure that there is space in the cache for flight data.
  * 
