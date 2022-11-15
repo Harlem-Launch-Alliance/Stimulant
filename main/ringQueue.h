@@ -10,11 +10,11 @@
 /**
  * @brief A ring queue of constant size
  * 
- * Intended use for caching data while the SD card is not available
+ * @note Intended use is for caching data while the SD card is not available
  * 
- * This structure operates like a standard queue. Data is added to the back and removed from the front.
+ * @note This structure operates like a standard queue. Data is added to the back and removed from the front.
  * 
- * @tparam T datatype to be stored
+ * @tparam T Datatype to be stored
  */
 template<typename T>
 class RingQueue{
@@ -33,7 +33,7 @@ private:
 /**
  * @brief Construct a new Ring Queue< T>:: Ring Queue object
  * 
- * @tparam T datatype to be stored
+ * @tparam T Datatype to be stored
  */
 template<typename T>
 RingQueue<T>::RingQueue(){//each new queue is initialized with 0 data
@@ -44,7 +44,7 @@ RingQueue<T>::RingQueue(){//each new queue is initialized with 0 data
 /**
  * @brief Check if RingQueue is empty
  * 
- * @tparam T type of data stored
+ * @tparam T Type of data stored
  * @return true RingQueue is empty
  * @return false RingQueue is NOT empty
  */
@@ -54,10 +54,10 @@ bool RingQueue<T>::isEmpty(){
 }
 
 /**
- * @brief add one element to the data queue
+ * @brief Add one element to the data queue
  * 
- * @tparam T type of data stored
- * @param data value of data to be queued
+ * @tparam T Type of data stored
+ * @param data Value of data to be queued
  */
 template<typename T>
 void RingQueue<T>::enqueue(T data){
@@ -73,10 +73,10 @@ void RingQueue<T>::enqueue(T data){
 /**
  * @brief Peek at next data at the front of the queue
  * 
- * @warning this function should not be called while the queue is empty
+ * @warning This function should not be called while the queue is empty
  * 
- * @tparam T type of data
- * @return T data at front of queue
+ * @tparam T Type of data
+ * @return T Data at front of queue
  */
 template<typename T>
 T RingQueue<T>::peek(){//unintended behaviour if called when queue is empty
@@ -84,9 +84,9 @@ T RingQueue<T>::peek(){//unintended behaviour if called when queue is empty
 }
 
 /**
- * @brief delete element from front of queue
+ * @brief Delete element from front of queue
  * 
- * @tparam T type of data
+ * @tparam T Type of data stored
  */
 template<typename T>
 void RingQueue<T>::dequeue(){
