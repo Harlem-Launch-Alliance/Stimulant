@@ -34,7 +34,6 @@ Want to contribute? Start [here](https://github.com/Harlem-Launch-Alliance/Catal
 - 5V buzzer
 
 ## Dependencies:
-- https://github.com/jonnieZG/EWMA
 - https://github.com/adafruit/Adafruit_BMP3XX
 - https://github.com/adafruit/Adafruit_GPS
 
