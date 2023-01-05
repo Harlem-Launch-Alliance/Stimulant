@@ -21,13 +21,20 @@ RingQueue<gpsReading> gpsQueue;
  */
 void transmitData(double altitude, gpsReading gps, char phase)
 {
-  Serial1.print(phase); //0: ONPAD, 1: ASCENDING, 2: DESCENDING, 3: POST_FLIGHT
+  //phase packet
+  Serial1.print("0 ");
+  Serial1.println(phase); //0: ONPAD, 1: ASCENDING, 2: DESCENDING, 3: POST_FLIGHT
+
+  //altitude packet
+  Serial1.print("1 ");
+  Serial1.println(altitude,1);
+
+  //gps packet
+  Serial1.print("2 ");
   Serial1.print(" ");
   Serial1.print(gps.latitude, 4);
   Serial1.print(" ");
-  Serial1.print(gps.longitude, 4);
-  Serial1.print(" ");
-  Serial1.println(altitude,1);
+  Serial1.println(gps.longitude, 4);
 }
 
 /**

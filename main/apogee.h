@@ -3,7 +3,7 @@
  * 
  ****************************************************************************/
 
-#include <Ewma.h> //https://github.com/jonnieZG/EWMA
+#include "Ewma.h"
 #include "utils.h"
 
 #define G_FORCE_TO_LAUNCH 3 //if acceleration exceeds this number the rocket will assume it has been launched

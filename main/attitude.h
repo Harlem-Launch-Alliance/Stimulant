@@ -7,7 +7,7 @@
 //rates are magnitudes of rad/s
 //assuming roll == 0, pitchRate will be equivalent to y, and yawRate will be equivalent to x
 
-#include <Ewma.h> //https://github.com/jonnieZG/EWMA
+#include "Ewma.h" 
 #include "utils.h"
 
 //returns calculated pitchRate or yawRate
