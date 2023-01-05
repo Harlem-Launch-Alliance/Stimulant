@@ -10,6 +10,11 @@
 const uint8_t MPU=0x68;                  //I2C address of the MPU-6050
 const double tcal = -1600;           //Temperature correction
 
+/**
+ * @brief Sample the IMU (Gyroscope and Accelerometer)
+ * 
+ * @return imuReading 
+ */
 imuReading getIMU()
 {
   imuReading imuSample;
@@ -45,6 +50,11 @@ imuReading getIMU()
   return imuSample; //return gyro and accel data
 }
 
+/**
+ * @brief Establish I2C connection to the IMU.
+ * 
+ * Verify that the connection is operating properly by taking a sample.
+ */
 void setupIMU(){ 
   Serial1.print("Setting up IMU... ");
   

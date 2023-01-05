@@ -11,6 +11,13 @@ double GNDLEVELPRESSURE_HPA;
 
 Adafruit_BMP3XX bmp; //initialize sensor
 
+/**
+ * @brief Sample Altimeter One Time
+ * 
+ * @note Using SPI because it is faster than I2C
+ * 
+ * @return bmpReading 
+ */
 bmpReading getBMP()
 {
   bmpReading sample;
@@ -36,6 +43,10 @@ void setGroundLevelPressure() { //Reads bmp data and sets ground lvl pressure
   GNDLEVELPRESSURE_HPA = pressureSum / 100.0; //sets average ground lvl pressure
 }
 
+/**
+ * @brief Establish Connection with Altimeter via SPI
+ * 
+ */
 void setupBMP()
 {
   Serial1.print("Setting up BMP388... ");

@@ -11,10 +11,28 @@
 #include "utils.h"
 
 //returns calculated pitchRate or yawRate
+/**
+ * @brief Calculate Pitch or Yaw rate given raw inputs and current roll orientation
+ * 
+ * @note Imagine your rocket has a sensor on it that detects X and Y pitch. If the Vehicle rolls 90 degrees, these sensors will become swapped. 
+ *    If the vehicle rolls 180 degrees, the sensors will be reading the exact opposite of reality. This function normalizes the input using simple trig.
+ * 
+ * @param roll current roll orientation
+ * @param parallel raw rate in one direction (X)
+ * @param perpendicular raw rate in perpendicular direction (Y)
+ * @return double actual rate in cardinal X direction
+ */
 double getRate(double roll, double parallel, double perpendicular){//if getting rateX, parallel should be x
   return parallel * cos(roll) + perpendicular * sin(roll);
 }
 
+/**
+ * @brief Filter raw data through an EWMA to compute "Zero Rate Offset" for each axis
+ * 
+ * @param gyro One sample of the gyroscope
+ * @param hasLaunched has the rocket launched yet
+ * @return Directional current calculated zero rate offsets
+ */
 Directional calibrateGyro(Directional gyro, bool hasLaunched){//returns gyro offsets
   static Ewma xFilter(.002);
   static Ewma yFilter(.002);
@@ -43,6 +61,13 @@ Directional calibrateGyro(Directional gyro, bool hasLaunched){//returns gyro off
   return oldSave;
 }
 
+/**
+ * @brief Given raw gyro data and zero rate offsets, determine actual rotation rates
+ * 
+ * @param gyro raw gyro sample
+ * @param offsets vector of zero rate offsets
+ * @return Directional actual rotation rates
+ */
 Directional getRealGyro(Directional gyro, Directional offsets){
   Directional realGyro;
   realGyro.x = gyro.x - offsets.x;
@@ -51,15 +76,21 @@ Directional getRealGyro(Directional gyro, Directional offsets){
   return realGyro;
 }
 
-/**************************************************************************************
-In order to minimize error, we should assume that attitude is 0,0,0 at launch. However, 
-we don't actually know exactly when launch occurs. We can assume with almost 100% 
-certianty that launch is detected less than 5 seconds after it has actually occured, so 
-as a substitute, we can start recording attitude changes 5 seconds before detected 
-launch. In order to achieve this, we can record changes in 5 second increments (chunks) 
-prior to launch. Once launch is detected we will 'lock in' those chunks and continue 
-recording changes forever.
-**************************************************************************************/
+/**
+ * @brief Calculate current attitude (orientation)
+ * 
+ * @note In order to minimize error, we should assume that attitude is 0,0,0 at launch. However, 
+ *  we don't actually know exactly when launch occurs. We can assume with almost 100% 
+ *  certianty that launch is detected less than 5 seconds after it has actually occured, so 
+ *  as a substitute, we can start recording attitude changes 5 seconds before detected 
+ *  launch. In order to achieve this, we can record changes in 5 second increments (chunks) 
+ *  prior to launch. Once launch is detected we will 'lock in' those chunks and continue 
+ *  recording changes forever.
+ * 
+ * @param gyro Calibrated gyro sample
+ * @param hasLaunched has the rocket launched
+ * @return Directional current attitude vector (Euler angles)
+ */
 Directional getAttitude(Directional gyro, bool hasLaunched){//only calibrated gyro data should go in here
   const int hz = 100; //number of readings per second
   static Directional oldChanges; //5-10 seconds ago

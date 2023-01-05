@@ -8,7 +8,13 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-class Directional  //any data that has an x,y and z attribute
+/**
+ * @brief A 3 dimensional vector
+ * 
+ * @note Any data that has an x,y and z attribute
+ * 
+ */
+class Directional
 {
 public:
   double x,y,z; 
@@ -24,37 +30,74 @@ public:
   }
 };
 
-struct bmpReading //all data from an altimeter reading
+/**
+ * @brief Data from one altimeter sample
+ * 
+ */
+struct bmpReading
 {
-  double altitude;
-  uint32_t time;
-  uint8_t state; //used for tracking flightPhase (0-3 representing ONPAD - POST_FLIGHT)
+  double altitude; /**< Altitude in meters*/
+  uint32_t time; /**< Time of sampling in microseconds*/
+  uint8_t state; /**< Phase of flight (0-3 representing ONPAD - POST_FLIGHT) */
 };
 
-struct imuReading //all data from an IMU reading (accelerometer and gyroscope)
+/**
+ * @brief All data from an IMU sample
+ * 
+ */
+struct imuReading
 {
-    Directional accel;
-    Directional gyro;
-    Directional attitude;
-    uint32_t time;
+    Directional accel; /**< Acceleration (measured in Gs)*/
+    Directional gyro; /**< Rotational velocity (measured in degrees/s)*/
+    Directional attitude; /**< Rotational position (measured in degrees)*/
+    uint32_t time; /**< Time of sampling in microseconds*/
 };
 
-struct gpsReading //only the data we need for now
+/**
+ * @brief All data from a GPS sample
+ * 
+ */
+struct gpsReading
 {
-    double latitude, longitude;
-    uint32_t time;
+    double latitude; /**< GPS coordinate*/
+    double longitude; /**< GPS coordinate*/
+    uint32_t time; /**< Time of sampling in microseconds*/
 };
 
+/**
+ * @brief Convert radians to degrees
+ * 
+ * @param angle Angle in radians
+ * @return double Angle in degrees
+ */
 double toDeg(double angle){
   return ((angle) *(180/PI));
 }
 
+/**
+ * @brief Convert degrees to radians
+ * 
+ * @param angle Angle in degrees
+ * @return double Angle in radians
+ */
 double toRad(double angle){
   return ((angle) * (PI/180));
 }
 
+/**
+ * @brief Phases of Flight
+ * 
+ * @note These phases are used to seperate the computers priorities into states
+ * 
+ */
 enum flightPhase {ONPAD, ASCENDING, DESCENDING, POST_FLIGHT};
 
+/**
+ * @brief Get the tick time based on the current flight phase
+ * 
+ * @param phase Flight phase
+ * @return int Tick length in microseconds
+ */
 int getTickTime(flightPhase phase){//map flight phases to tick times
   switch(phase){
   case ONPAD:

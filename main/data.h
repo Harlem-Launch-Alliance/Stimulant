@@ -12,6 +12,13 @@ RingQueue<imuReading> imuQueue;
 RingQueue<bmpReading> bmpQueue;
 RingQueue<gpsReading> gpsQueue;
 
+/**
+ * @brief Transmit telemtry to ground station via radio
+ * 
+ * @param altitude Current altitude
+ * @param gps Current GPS location
+ * @param phase Current phase of flight (On pad, ascending, etc.)
+ */
 void transmitData(double altitude, gpsReading gps, char phase)
 {
   //phase packet
@@ -30,6 +37,13 @@ void transmitData(double altitude, gpsReading gps, char phase)
   Serial1.println(gps.longitude, 4);
 }
 
+/**
+ * @brief Establish connection to SD card
+ * 
+ * Attempt to write data to SD card to verify connection
+ * 
+ * @param date Current date/time
+ */
 void setupSD(String date){
   if (!SD.begin(chipSelect)){
     Serial1.println("MicroSD card: failed or not present");
@@ -50,6 +64,15 @@ void setupSD(String date){
   }
 }
 
+/**
+ * @defgroup cacheData Cache Data
+ * 
+ * @note If the rocket has not yet launched, all data that is more than 2 seconds old will be trimmed to ensure that there is space in the cache for flight data.
+ * 
+ * @param sample Data sample to be cached
+ * @param prelaunch Current status of rocket (launched or not)
+ * @{
+ */
 void recordData(imuReading sample, bool prelaunch){
   imuQueue.enqueue(sample);
   if(prelaunch){
@@ -76,7 +99,12 @@ void recordData(gpsReading sample, bool prelaunch){
     }
   }
 }
+/**@}*/
 
+/**
+ * @brief write all data from cache to SD card
+ * 
+ */
 void backupToSD(){
   File dataFile = SD.open(filename, FILE_WRITE);
   if(!dataFile){
@@ -87,7 +115,7 @@ void backupToSD(){
     double altitude = 0;
     double latitude = 0;
     double longitude = 0;
-    int state = -1; //use invalid state when declared so that it's clear if something isn't working right
+    int state = -1; //initialize with invalid state so that it's clear if something isn't working right
     imuReading imuSample = imuQueue.peek();
     imuQueue.dequeue();
     if(!bmpQueue.isEmpty()){

@@ -11,6 +11,13 @@
 // Connect to the GPS on the hardware port
 Adafruit_GPS GPS(&GPSSerial);
 
+/**
+ * @brief Connect to GPS and wait until lock is acquired
+ * 
+ * @note if a lock is not acquired within GPS_WAIT_TIME (5 minutes), proceed without the GPS
+ * 
+ * @return String Current Date
+ */
 String setupGPS()
 {
   Serial1.println("Setting up GPS...");
@@ -74,6 +81,13 @@ String setupGPS()
   return date;
 }
 
+/**
+ * @brief Sample GPS one time
+ * 
+ * @note Because this GPS uses Serial communication, it can take up to 100ms to get a sample
+ * 
+ * @return gpsReading 
+ */
 gpsReading getGPS()
 {
   unsigned long t1 = micros();

@@ -10,7 +10,15 @@
 #define MAX_APOGEE_ACCEL 2 //we can rule out apogee if acceleration is about this amount (Gs)
 //#define CHECK_FOR_APOGEE_HZ 4 //frequency that we check for apogee within the detect apogee function
 
-//this function should only be called once per loop iteration
+/**
+ * @brief Detect if rocket has been launched using acceleration data
+ * 
+ * @note this function should only be called once per loop iteration
+ * 
+ * @param accel acceleration vector
+ * @return true rocket has been launched (ascending, descending, or landed)
+ * @return false rocket has not been launched (still on launch pad)
+ */
 bool detectLaunch(Directional accel){//accel in Gs 
   static bool hasLaunched = false;
   static Ewma accelFilter(.05);
@@ -28,10 +36,28 @@ bool detectLaunch(Directional accel){//accel in Gs
   return hasLaunched;
 }
 
+/**
+ * @brief Determine if the rocket is under substantial acceleration
+ * 
+ * @note used to filter out bad data in other sensors
+ * 
+ * @param accel acceleration vector
+ * @return true rocket is under significant acceleration in any direction
+ * @return false rocket is not accelerating substantially
+ */
 bool isAccelerating(Directional accel){//determine if we are accelerating at more than 2 Gs
   return sqrt(pow(accel.x, 2) + pow(accel.y, 2) + pow(accel.z, 2)) > MAX_APOGEE_ACCEL;
 }
 
+/**
+ * @brief detect if apogee has been reached
+ * 
+ * @param accel acceleration vector
+ * @param altitude current altitide
+ * @param hasLaunched is the rocket still on the pad?
+ * @return true apogee has been reached
+ * @return false apogee has not been reached (rocket is either on pad or ascending)
+ */
 bool detectApogee(Directional accel, double altitude, bool hasLaunched){ //accel in Gs
   static bool apogeeReached = false; //this is initialized as false, but once it flips to true it should remain true until the arduino is reset
   static int counter = 0;
