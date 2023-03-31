@@ -3,7 +3,11 @@
  * 
  ****************************************************************************/
 #include "settings.h"
+#ifndef UNIT_TEST
 #include <Arduino.h>
+#else
+#include "../test/lib/mock_arduino.h"
+#endif // UNIT_TEST
 
 #ifndef UTILS_H
 #define UTILS_H
@@ -112,4 +116,4 @@ int getTickTime(flightPhase phase){//map flight phases to tick times
   return TICK_TIME_POST_FLIGHT;
 }
 
-#endif
+#endif // UTILS_H
