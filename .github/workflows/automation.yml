@@ -9,8 +9,5 @@ jobs:
         uses: actions/checkout@v3
       - name: PlatformIO Run
         uses: karniv00l/platformio-run-action@v1.0.0
-  Run-Units:
-    runs-on: ubuntu-latest
-    steps:
       - name: Run Tests
         run: platformio test -e native -vvv
