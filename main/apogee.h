@@ -6,6 +6,10 @@
 #include "Ewma.h"
 #include "utils.h"
 
+#include "Adafruit_BMP3XX.h" 
+#define BMP_CS 10
+
+
 #define G_FORCE_TO_LAUNCH 3 //if acceleration exceeds this number the rocket will assume it has been launched
 #define MAX_APOGEE_ACCEL 2 //we can rule out apogee if acceleration is about this amount (Gs)
 //#define CHECK_FOR_APOGEE_HZ 4 //frequency that we check for apogee within the detect apogee function
@@ -71,7 +75,15 @@ bool detectApogee(Directional accel, double altitude, bool hasLaunched){ //accel
     //everytime counter overflows we check for apogee (4hz at the moment, this should be a constant or tied to a constant)
     if(hasLaunched && altitude < lastAlt  && !isAccelerating(accel)){
       apogeeReached = true;
-    }
+     
+     Adafruit_BMP3XX bmp;
+     bmpReading getBMP();
+     bmpReading sample;
+     sample.altitude = bmp.readAltitude(); //DONT KNOW WHAT TO DO HERE AAAAAAA
+     sample.time = micros();
+     Serial1.print(sample.altitude);
+    };
+
     lastAlt = altitude;
   }
   return apogeeReached;
