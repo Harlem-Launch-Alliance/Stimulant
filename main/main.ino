@@ -147,6 +147,11 @@ flightPhase runAscending(uint32_t tick){ //this will run similarly to ONPAD exce
     transmitData(lastBmp.altitude, lastGps, '1');
   }
   if(apogeeReached)
+  
+      Serial1.print("Apogee was reached at:");
+      Serial1.print(altitude);
+      Serial1.println(" Meters");
+
     return DESCENDING;
   return ASCENDING;
 }
