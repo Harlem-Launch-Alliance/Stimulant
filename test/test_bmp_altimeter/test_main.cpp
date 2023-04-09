@@ -17,7 +17,7 @@ void tearDown(void)
 void test_set_ground_level_pressure(void)
 {
     setGroundLevelPressure();
-    TEST_ASSERT_EQUAL(1, GNDLEVELPRESSURE_HPA);
+    TEST_ASSERT_DOUBLE_WITHIN(0.0000001, 1, GNDLEVELPRESSURE_HPA);
 }
 
 /// @brief ensure this function runs without errors
@@ -25,7 +25,7 @@ void test_set_ground_level_pressure(void)
 void test_setup_bmp(void)
 {
     setupBMP();
-    TEST_ASSERT_EQUAL(1, GNDLEVELPRESSURE_HPA);
+    TEST_ASSERT_DOUBLE_WITHIN(0.0000001, 1, GNDLEVELPRESSURE_HPA);
 }
 
 /// @brief verify info from getBMP
@@ -33,7 +33,7 @@ void test_setup_bmp(void)
 void test_get_bmp(void)
 {
     bmpReading sample = getBMP();
-    TEST_ASSERT_EQUAL(1, sample.altitude);
+    TEST_ASSERT_DOUBLE_WITHIN(0.0000001, 1, sample.altitude);
     TEST_ASSERT_TRUE(sample.time > 0);
 }
 

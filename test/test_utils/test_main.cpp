@@ -17,7 +17,7 @@ void test_deg_to_rad(void)
 {
     double degrees = 60;
     double radians = toRad(degrees);
-    TEST_ASSERT_EQUAL(1.0472, radians);
+    TEST_ASSERT_DOUBLE_WITHIN(0.0000001, 1.04719755, radians);
 }
 
 int main()
