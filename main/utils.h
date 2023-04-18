@@ -2,15 +2,10 @@
  * This file is for declaring utilities to be used in multiple other places
  * 
  ****************************************************************************/
-#include "settings.h"
-#ifndef UNIT_TEST
-#include <Arduino.h>
-#else
-#include "../test/lib/mock_arduino.h"
-#endif // UNIT_TEST
-
 #ifndef UTILS_H
 #define UTILS_H
+
+#include "settings.h"
 
 /**
  * @brief A 3 dimensional vector

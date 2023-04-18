@@ -1,49 +1,39 @@
-#include <unity.h>
+#include <gtest/gtest.h>
 #include "../main/bmp_altimeter.h"
 
-void setUp(void)
-{
-    // set stuff up here
-    GNDLEVELPRESSURE_HPA = 0;
-}
-
-void tearDown(void)
-{
-    // clean stuff up here
-}
-
+class BmpAltimeterTest : public ::testing::Test {
+ protected:
+  void SetUp() override {
+     GNDLEVELPRESSURE_HPA = 0;
+  }
+};
 /// @brief test pressure calibration
-/// @param void
-void test_set_ground_level_pressure(void)
+TEST_F(BmpAltimeterTest, PressureCalibration)
 {
     setGroundLevelPressure();
-    TEST_ASSERT_DOUBLE_WITHIN(0.0000001, 1, GNDLEVELPRESSURE_HPA);
+    EXPECT_NEAR(0.0000001, 1, GNDLEVELPRESSURE_HPA);
 }
 
 /// @brief ensure this function runs without errors
-/// @param void
-void test_setup_bmp(void)
+TEST_F(BmpAltimeterTest, SetupBmp)
 {
     setupBMP();
-    TEST_ASSERT_DOUBLE_WITHIN(0.0000001, 1, GNDLEVELPRESSURE_HPA);
+    EXPECT_NEAR(0.0000001, 1, GNDLEVELPRESSURE_HPA);
 }
 
 /// @brief verify info from getBMP
-/// @param void
-void test_get_bmp(void)
+TEST_F(BmpAltimeterTest, QueryBmp)
 {
     bmpReading sample = getBMP();
-    TEST_ASSERT_DOUBLE_WITHIN(0.0000001, 1, sample.altitude);
-    TEST_ASSERT_TRUE(sample.time > 0);
+    EXPECT_NEAR(0.0000001, 1, sample.altitude);
+    EXPECT_TRUE(sample.time > 0);
 }
 
-int main()
+int main(int argc, char **argv)
 {
-    UNITY_BEGIN(); // IMPORTANT LINE!
-
-    RUN_TEST(test_set_ground_level_pressure);
-    RUN_TEST(test_setup_bmp);
-    RUN_TEST(test_get_bmp);
-
-    UNITY_END(); // stop unit testing
+    ::testing::InitGoogleTest(&argc, argv);
+	if (RUN_ALL_TESTS())
+	;
+	// Always return zero-code and allow PlatformIO to parse results
+	return 0;
 }

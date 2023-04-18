@@ -1,45 +1,32 @@
-#include <unity.h>
+#include <gtest/gtest.h>
 #include "../main/gy521_imu.h"
-
-void setUp(void)
-{
-    // set stuff up here
-}
-
-void tearDown(void)
-{
-    // clean stuff up here
-}
 
 /// @brief test setupIMU
 /// TODO: set up system to verify logs
-/// @param void
-void test_setup_imu(void)
+TEST(IMUTest, SetupTest)
 {
     setupIMU();
 }
 
 /// @brief test getIMU
-/// @param void
-void test_get_imu(void)
+TEST(IMUTest, SampleIMUTest)
 {
     imuReading sample = getIMU();
 
-    TEST_ASSERT_DOUBLE_WITHIN(0.0000001, 0.501953125, sample.accel.x);
-    TEST_ASSERT_DOUBLE_WITHIN(0.0000001, 0.501953125, sample.accel.y);
-    TEST_ASSERT_DOUBLE_WITHIN(0.0000001, 0.501953125, sample.accel.z);
-    TEST_ASSERT_DOUBLE_WITHIN(0.0000001, 0.273923431, sample.gyro.x);
-    TEST_ASSERT_DOUBLE_WITHIN(0.0000001, 0.273923431, sample.gyro.y);
-    TEST_ASSERT_DOUBLE_WITHIN(0.0000001, 0.273923431, sample.gyro.z);
-    TEST_ASSERT_EQUAL(21, sample.time);
+    EXPECT_NEAR(0.0000001, 0.501953125, sample.accel.x);
+    EXPECT_NEAR(0.0000001, 0.501953125, sample.accel.y);
+    EXPECT_NEAR(0.0000001, 0.501953125, sample.accel.z);
+    EXPECT_NEAR(0.0000001, 0.273923431, sample.gyro.x);
+    EXPECT_NEAR(0.0000001, 0.273923431, sample.gyro.y);
+    EXPECT_NEAR(0.0000001, 0.273923431, sample.gyro.z);
+    EXPECT_EQ(21, sample.time);
 }
 
-int main()
+int main(int argc, char **argv)
 {
-    UNITY_BEGIN(); // IMPORTANT LINE!
-
-    RUN_TEST(test_setup_imu);
-    RUN_TEST(test_get_imu);
-
-    UNITY_END(); // stop unit testing
+    ::testing::InitGoogleTest(&argc, argv);
+	if (RUN_ALL_TESTS())
+	;
+	// Always return zero-code and allow PlatformIO to parse results
+	return 0;
 }
