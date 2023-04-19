@@ -1,30 +1,19 @@
-#include <unity.h>
+#include <gtest/gtest.h>
 #include "../main/utils.h"
 
-void setUp(void)
-{
-    // set stuff up here
-}
-
-void tearDown(void)
-{
-    // clean stuff up here
-}
-
 /// @brief test conversion of degrees to radians
-/// @param void
-void test_deg_to_rad(void)
+TEST(utils, degToRad)
 {
     double degrees = 60;
     double radians = toRad(degrees);
-    TEST_ASSERT_EQUAL(radians, 1.0472);
+    EXPECT_NEAR(0.0000001, 1.04719755, radians);
 }
 
-int main()
+int main(int argc, char **argv)
 {
-    UNITY_BEGIN(); // IMPORTANT LINE!
-
-    RUN_TEST(test_deg_to_rad);
-
-    UNITY_END(); // stop unit testing
+    ::testing::InitGoogleTest(&argc, argv);
+	if (RUN_ALL_TESTS())
+	;
+	// Always return zero-code and allow PlatformIO to parse results
+	return 0;
 }

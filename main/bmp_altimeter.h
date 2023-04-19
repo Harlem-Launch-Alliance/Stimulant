@@ -2,8 +2,9 @@
  * This file is for all barometric altimeter queries
  * 
  ****************************************************************************/
-
+#ifndef UNIT_TEST
 #include "Adafruit_BMP3XX.h"  // BMP388 library
+#endif // UNIT_TEST
 #include "utils.h"
 
 #define BMP_CS 10
