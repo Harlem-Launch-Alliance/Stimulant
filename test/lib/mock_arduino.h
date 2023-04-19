@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <cstdint>
 
 #define PI 3.1415926535897932384626433832795
 #define BMP3_NO_OVERSAMPLING 1
@@ -48,6 +49,34 @@ public:
 
 };
 
+class TwoWire 
+{
+public:
+    uint8_t read() {
+        return 0b1000; // 8
+    }
+
+    void write(int message) {
+        (void)message;
+    }
+
+    void beginTransmission(int address) {
+        (void)address;
+    }
+
+    void endTransmission(bool torf = false) {
+        (void)torf;
+    }
+
+    void requestFrom(int address, int style, bool idk) {
+        (void)address;
+        (void)style;
+        (void)idk;
+    }
+};
+
+TwoWire Wire;
+
 unsigned long micros() {
     static unsigned long micros = 1;
     micros += 10;
@@ -62,6 +91,10 @@ public:
     }
 
     void println(std::string s) {
+        (void)s;
+    }
+
+    void println(double s) {
         (void)s;
     }
 };
