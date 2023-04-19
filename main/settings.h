@@ -5,6 +5,12 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#ifndef UNIT_TEST
+#include <Arduino.h>
+#else
+#include "../test/lib/mock_arduino.h"
+#endif // UNIT_TEST
+
 //tick times (microseconds)
 constexpr uint32_t TICK_TIME_ONPAD = 10000;
 constexpr uint32_t TICK_TIME_ASCENDING = 10000;
