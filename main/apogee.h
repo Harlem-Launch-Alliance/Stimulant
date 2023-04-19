@@ -71,7 +71,8 @@ bool detectApogee(Directional accel, double altitude, bool hasLaunched){ //accel
     //everytime counter overflows we check for apogee (4hz at the moment, this should be a constant or tied to a constant)
     if(hasLaunched && altitude < lastAlt  && !isAccelerating(accel)){
       apogeeReached = true;
-    }
+    };
+
     lastAlt = altitude;
   }
   return apogeeReached;
