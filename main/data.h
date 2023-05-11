@@ -30,8 +30,7 @@ void transmitData(double altitude, gpsReading gps, char phase)
   Serial1.println(altitude,1);
 
   //gps packet
-  Serial1.print("2 ");
-  Serial1.print(" ");
+  Serial1.print("3 ");
   Serial1.print(gps.latitude, 4);
   Serial1.print(" ");
   Serial1.println(gps.longitude, 4);
