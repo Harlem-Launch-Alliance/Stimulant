@@ -6,7 +6,7 @@
 
 // what's the name of the hardware serial port?
 #define GPSSerial Serial2
-#define ERR_NO_GPS "flightData-noDate"
+static constexpr char[] ERR_NO_GPS "flightData-noDate"
 
 // Connect to the GPS on the hardware port
 Adafruit_GPS GPS(&GPSSerial);
