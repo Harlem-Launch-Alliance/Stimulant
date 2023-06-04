@@ -154,6 +154,12 @@ flightPhase runAscending(uint32_t tick){ //this will run similarly to ONPAD exce
 flightPhase runDescending(uint32_t tick){//this runs at 20hz
   static gpsReading lastGps;
   static double lastAlt = getBMP().altitude + 5;//initialize so that landing detection isn't triggered accidentally
+  static bool initialDump = false;
+
+  if(!initialDump) {
+    initialDump = true;
+    backupToSD();
+  }
 
   //sample sensors
   bmpReading bmpSample = getBMP();
@@ -178,7 +184,13 @@ flightPhase runDescending(uint32_t tick){//this runs at 20hz
   return DESCENDING;
 }
 
-flightPhase runPostFlight(uint32_t tick){//this runs at 1hz 
+flightPhase runPostFlight(uint32_t tick){//this runs at 1hz
+  static bool initialDump = false;
+
+  if(!initialDump) {
+    initialDump = true;
+    backupToSD();
+  }
   //once we're on the ground we can stop recording and start just broadcasting GPS somewhat infrequently
   static bmpReading bmpSample = getBMP(); //no need to add a state to this sample since it won't be recorded
   if(tick % 5 == 0){//broadcast every 5 seconds
