@@ -3,13 +3,13 @@ This is the definitive guide to contributing any software to this repository. It
 
 ### Please read all steps even if you intend to skip them
 
-This document is a work in progress. Please contact the current avionics team lead if you have any feedback.
+This document is a work in progress. Please contact the current [avionics team lead](https://www.hla.nyc/club-leadership.html) if you have any feedback.
 
 ## Development Environment
 Some 3rd party software is required to make and validate changes. You will need to download all of the following software:
 
 ### Arduino IDE
-This IDE is required even if you plan on using a different one, since it also comes with all of the necessary libraries. [download](https://www.arduino.cc/en/software)
+This IDE is required even if you plan on using a different one, since it also comes with the Arduino compiler. [download](https://www.arduino.cc/en/software)
 
 ### Teensyduino
 This add-on allows the Arduino IDE and tooling to be compatible with our Teensy microcontroller. [download](https://www.pjrc.com/teensy/td_download.html)
@@ -17,10 +17,10 @@ This add-on allows the Arduino IDE and tooling to be compatible with our Teensy 
 ### VSCode
 VSCode is an IDE (integrated development environment) that provides tools to ease your development experience. [download](https://code.visualstudio.com/download)
 
-There are many other IDEs to choose from, but this documentation will be specific to VSCode.
+There are other IDEs to choose from, but this documentation will be specific to VSCode.
 
 ### PlatformIO and Python3
-Once you have VSCode installed, install Python3 and the `PlatformIO` extension. [This youtube tutorial](https://www.youtube.com/watch?v=JmvMvIphMnY) is very useful for getting familiarized with PlatformIO.
+Once you have VSCode installed, install [Python3](https://www.python.org/downloads/) and the `PlatformIO` extension. [This youtube tutorial](https://www.youtube.com/watch?v=JmvMvIphMnY) is very useful for getting familiarized with PlatformIO.
 
 ### Git
 Not to be confused with `GitHub`, `Git` is the protocol that we use to collaborate on our software. Your computer may already come with Git. 
