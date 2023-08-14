@@ -3,10 +3,11 @@
  * currently using an SD card and Xbee respectively
  ****************************************************************************/
 #include "ringQueue.h"
+#include "settings.h"
 #include "utils.h"
 #include <SD.h>
 
-const int chipSelect = BUILTIN_SDCARD;
+const int CS_SD = BUILTIN_SDCARD;
 char filename[50];
 RingQueue<imuReading> imuQueue;
 RingQueue<bmpReading> bmpQueue;
@@ -44,7 +45,7 @@ void transmitData(double altitude, gpsReading gps, char phase)
  * @param date Current date/time
  */
 void setupSD(String date){
-  if (!SD.begin(chipSelect)){
+  if (!SD.begin(CS_SD)){
     Serial1.println("MicroSD card: failed or not present");
     return;
   }

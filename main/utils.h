@@ -2,8 +2,7 @@
  * This file is for declaring utilities to be used in multiple other places
  * 
  ****************************************************************************/
-#ifndef UTILS_H
-#define UTILS_H
+#pragma once
 
 #include "settings.h"
 
@@ -110,5 +109,3 @@ int getTickTime(flightPhase phase){//map flight phases to tick times
   }
   return TICK_TIME_POST_FLIGHT;
 }
-
-#endif // UTILS_H

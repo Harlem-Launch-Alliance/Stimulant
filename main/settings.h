@@ -2,8 +2,7 @@
  * This file is for any settings or constants that may be manually adjusted
  * 
  ****************************************************************************/
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#pragma once
 
 #ifndef UNIT_TEST
 #include <Arduino.h>
@@ -21,4 +20,6 @@ constexpr uint32_t RING_QUEUE_LENGTH = 3000;//each 100 elements is 1 seconds of 
 
 constexpr uint32_t GPS_WAIT_TIME = 300; //number of seconds to wait for GPS to acquire signal before moving on
 
-#endif
+constexpr int BMP_CS = 10; //SPI chipSelect of bmp altimeter
+#define GPSSerial Serial2 //Hardware Serial Location of GPS
+constexpr int BUZZER_PIN = 33;
