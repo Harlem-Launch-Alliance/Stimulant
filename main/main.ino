@@ -13,6 +13,8 @@
 
 Attitude attitude;
 
+Attitude attitude;
+
 void setup()
 {
   Serial1.begin(115200);      // xBee baudrate: 115200, 9600
