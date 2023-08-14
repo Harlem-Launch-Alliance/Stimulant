@@ -14,6 +14,8 @@
 // Constants:
 const int buzzerPin = 33;
 
+Attitude attitude;
+
 void setup()
 {
   Serial1.begin(115200);      // xBee baudrate: 115200, 9600
@@ -43,7 +45,7 @@ flightPhase runPostFlight(uint32_t tick);
 
 void loop()
 {
-  static long lastTime = 0;
+  static uint32_t lastTime = 0;
   static uint32_t tick = 0;
   static flightPhase status = ONPAD;
   uint32_t tickTime = getTickTime(status);
@@ -95,11 +97,10 @@ flightPhase runOnPad(uint32_t tick){
     recordData(lastBmp, true);
   }
 
-  Directional gyroOffsets = calibrateGyro(imuSample.gyro, hasLaunched);
-  Directional calibratedGyro = getRealGyro(imuSample.gyro, gyroOffsets);
-  Directional attitude = getAttitude(calibratedGyro, hasLaunched);
+  attitude.calibrateGyro(imuSample.gyro);
+  attitude.updateAttitude(imuSample.gyro, false, imuSample.time);
 
-  imuSample.attitude = attitude;
+  imuSample.attitude = attitude.getCurrentAttitude();
   recordData(imuSample, true);
 
   if(tick % 100 == 2 && lastGps.longitude == 0){//1 reading then use cached value
@@ -136,11 +137,8 @@ flightPhase runAscending(uint32_t tick){ //this will run similarly to ONPAD exce
     apogeeReached = detectApogee(imuSample.accel, lastBmp.altitude, true);
     recordData(lastBmp, false);
   }
-  Directional gyroOffsets = calibrateGyro(imuSample.gyro, true);
-  Directional calibratedGyro = getRealGyro(imuSample.gyro, gyroOffsets);
-  Directional attitude = getAttitude(calibratedGyro, true);
-
-  imuSample.attitude = attitude;
+  attitude.updateAttitude(imuSample.gyro, true, imuSample.time);
+  imuSample.attitude = attitude.getCurrentAttitude();
   recordData(imuSample, false);
 
   if(tick % 5 == 1){//20 times per second with a slight offset to avoid overlapping with bmp and gps
