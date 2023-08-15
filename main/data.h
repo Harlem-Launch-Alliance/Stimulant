@@ -7,7 +7,12 @@
 #include "utils.h"
 #include <SD.h>
 
+#ifndef PICO
 const int CS_SD = BUILTIN_SDCARD;
+#else
+const int CS_SD = 15;
+#endif // PICO
+
 char filename[50];
 RingQueue<imuReading> imuQueue;
 RingQueue<bmpReading> bmpQueue;
@@ -23,18 +28,18 @@ RingQueue<gpsReading> gpsQueue;
 void transmitData(double altitude, gpsReading gps, char phase)
 {
   //phase packet
-  Serial1.print("0 ");
-  Serial1.println(phase); //0: ONPAD, 1: ASCENDING, 2: DESCENDING, 3: POST_FLIGHT
+  XBeeSerial.print("0 ");
+  XBeeSerial.println(phase); //0: ONPAD, 1: ASCENDING, 2: DESCENDING, 3: POST_FLIGHT
 
   //altitude packet
-  Serial1.print("1 ");
-  Serial1.println(altitude,1);
+  XBeeSerial.print("1 ");
+  XBeeSerial.println(altitude,1);
 
   //gps packet
-  Serial1.print("3 ");
-  Serial1.print(gps.latitude, 4);
-  Serial1.print(" ");
-  Serial1.println(gps.longitude, 4);
+  XBeeSerial.print("3 ");
+  XBeeSerial.print(gps.latitude, 4);
+  XBeeSerial.print(" ");
+  XBeeSerial.println(gps.longitude, 4);
 }
 
 /**
@@ -46,13 +51,14 @@ void transmitData(double altitude, gpsReading gps, char phase)
  */
 void setupSD(String date){
   if (!SD.begin(CS_SD)){
-    Serial1.println("MicroSD card: failed or not present");
+    XBeeSerial.println("MicroSD card: failed or not present");
     return;
   }
   else
-    Serial1.println("MicroSD card: successful");
+    XBeeSerial.println("MicroSD card: successful");
   String filestart = "Catalyst2-";
-  filestart.concat(date).concat(".csv");
+  filestart.concat(date);
+  filestart.concat(".csv");
   filestart.toCharArray(filename, 50);
   File dataFile = SD.open(filename, FILE_WRITE);
   if (dataFile) {
@@ -60,7 +66,7 @@ void setupSD(String date){
     dataFile.close();
   }
   else {
-    Serial1.println("MicroSD card: error opening file");
+    XBeeSerial.println("MicroSD card: error opening file");
   }
 }
 
@@ -108,7 +114,7 @@ void recordData(gpsReading sample, bool prelaunch){
 void backupToSD(){
   File dataFile = SD.open(filename, FILE_WRITE);
   if(!dataFile){
-    Serial1.println("error opening datalog");
+    XBeeSerial.println("error opening datalog");
     return;
   }
   while(!imuQueue.isEmpty()){
