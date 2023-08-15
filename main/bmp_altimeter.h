@@ -7,7 +7,6 @@
 #endif // UNIT_TEST
 #include "utils.h"
 
-#define BMP_CS 10
 double GNDLEVELPRESSURE_HPA;
 
 Adafruit_BMP3XX bmp; //initialize sensor
