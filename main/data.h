@@ -2,16 +2,15 @@
  * This file is for saving and transmitting data
  * currently using an SD card and Xbee respectively
  ****************************************************************************/
+#pragma once
+
+#include "config/config.h"
 #include "ringQueue.h"
-#include "settings.h"
-#include "utils.h"
+#include "utils/datatypes.h"
+
 #include <SD.h>
 
-#ifndef PICO
 const int CS_SD = BUILTIN_SDCARD;
-#else
-const int CS_SD = 15;
-#endif // PICO
 
 char filename[50];
 RingQueue<imuReading> imuQueue;

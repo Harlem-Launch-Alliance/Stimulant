@@ -1,8 +1,11 @@
 // Test code for Ultimate GPS Using Hardware Serial.
 // Need to remove the GPS.lastNMEA() and see if it still works, still get compilation error
 
+#pragma once
+
+#include "utils/datatypes.h"
+
 #include <Adafruit_GPS.h>
-#include "utils.h"
 
 // what's the name of the hardware serial port?
 #define ERR_NO_GPS "flightData-noDate"

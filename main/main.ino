@@ -1,16 +1,18 @@
 /*************************************************************************************
                                  Harlem Launch Alliance
-                            Recovery Systems Group 2021 - 2022
-                              Catalyst 2.1 Flight Computer
+                            Avionics Group 2021 - 2023
+                              Stimulant Flight Software
  *************************************************************************************/
 
 #include "apogee.h"
+#include "attitude.h"
 #include "bmp_altimeter.h"
 #include "data.h"
-#include "gy521_imu.h"
-#include "attitude.h"
 #include "gps.h"
+#include "sensors/imu/imu.h"
+#include "utils/utils.h"
 
+imu imu;
 Attitude attitude;
 
 void setup()
@@ -29,7 +31,7 @@ void setup()
   }
   Wire.begin();               // initiate wire library and I2C
   setupBMP();
-  setupIMU();
+  imu.setup();
 
   String date = setupGPS();
   setupSD(date);
@@ -84,7 +86,7 @@ flightPhase runOnPad(uint32_t tick){
   static bmpReading lastBmp;
   static gpsReading lastGps;
   
-  imuReading imuSample = getIMU(); //sample IMU first to maximize consistency
+  imuReading imuSample = imu.sample(); //sample IMU first to maximize consistency
 
   bool hasLaunched = detectLaunch(imuSample.accel); //might need to calibrate accel data before feeding to this function
   if(tick % 5 == 0){
@@ -126,7 +128,7 @@ flightPhase runAscending(uint32_t tick){ //this will run similarly to ONPAD exce
   static bmpReading lastBmp;
   static gpsReading lastGps;
   bool apogeeReached = false;
-  imuReading imuSample = getIMU(); //sample IMU first to maximize consistency
+  imuReading imuSample = imu.sample(); //sample IMU first to maximize consistency
   
   if(tick % 5 == 0){
     lastBmp = getBMP();

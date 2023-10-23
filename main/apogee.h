@@ -2,9 +2,10 @@
  * apogee detection and helper functions
  * 
  ****************************************************************************/
+#pragma once
 
-#include "Ewma.h"
-#include "utils.h"
+#include "utils/datatypes.h"
+#include "utils/Ewma.h"
 
 #define G_FORCE_TO_LAUNCH 3 //if acceleration exceeds this number the rocket will assume it has been launched
 #define MAX_APOGEE_ACCEL 2 //we can rule out apogee if acceleration is about this amount (Gs)
