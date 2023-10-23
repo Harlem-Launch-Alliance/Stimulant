@@ -7,7 +7,7 @@
 #ifndef UNIT_TEST
 #include "Adafruit_BMP3XX.h"  // BMP388 library
 #endif // UNIT_TEST
-#include "utils/datatypes.h"
+#include "../../utils/datatypes.h"
 
 double GNDLEVELPRESSURE_HPA;
 

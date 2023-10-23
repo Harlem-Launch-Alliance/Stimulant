@@ -20,6 +20,8 @@ constexpr int SPI0_SCK = 11; //SPI clock pin (used for built in SD card)
 constexpr int SPI0_MOSI = 12; //SPI MOSI pin
 constexpr int SPI0_MISO = 13; //SPI MISO pin
 constexpr int BUZZER_PIN = 33;
+constexpr int PYRO0_PIN = 34;
+constexpr int PYRO1_PIN = 35;
 
 
 #define XBeeSerial Serial1 //Hardware Serial Location of XBee

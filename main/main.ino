@@ -6,9 +6,9 @@
 
 #include "apogee.h"
 #include "attitude.h"
-#include "bmp_altimeter.h"
 #include "data.h"
-#include "gps.h"
+#include "sensors/altimeter/bmp3xx.h"
+#include "sensors/gps/adafruit_gps.h"
 #include "sensors/imu/imu.h"
 #include "utils/utils.h"
 
@@ -21,6 +21,8 @@ void setup()
   XBeeSerial.print("\n\n\n");
 
   pinMode(BUZZER_PIN, OUTPUT);    // Set buzzer pin as an output
+  pinMode(PYRO0_PIN, OUTPUT);     // Set pyro pins as an outputs
+  pinMode(PYRO1_PIN, OUTPUT);
   for(int i = 0; i < 5; i++)  // Play 5 beeps
   {
     tone(BUZZER_PIN, 1000);       // Send 1KHz sound signal...
@@ -152,6 +154,7 @@ flightPhase runDescending(uint32_t tick){//this runs at 20hz
   static gpsReading lastGps;
   static double lastAlt = getBMP().altitude + 5;//initialize so that landing detection isn't triggered accidentally
   static bool initialDump = false;
+  static bool deployedMain = false;
 
   if(!initialDump) {
     initialDump = true;
@@ -162,6 +165,16 @@ flightPhase runDescending(uint32_t tick){//this runs at 20hz
   bmpReading bmpSample = getBMP();
   bmpSample.state = 2; //this corresponds to DESCENDING
   recordData(bmpSample, false);
+
+  if (bmpSample.altitude < MAIN_ALTITUDE && !deployedMain) {
+    digitalWrite(PYRO0_PIN, HIGH);
+    delay(1000);
+    digitalWrite(PYRO0_PIN, LOW);
+    digitalWrite(PYRO1_PIN, HIGH);
+    delay(1000);
+    digitalWrite(PYRO1_PIN, LOW);
+    deployedMain = true;
+  }
 
   if(tick % 20 == 1){//still one time per second
     lastGps = getGPS();

@@ -5,8 +5,8 @@
 #pragma once
 
 #include "config/config.h"
-#include "ringQueue.h"
 #include "utils/datatypes.h"
+#include "utils/ringQueue.h"
 
 #include <SD.h>
 
@@ -55,7 +55,7 @@ void setupSD(String date){
   }
   else
     XBeeSerial.println("MicroSD card: successful");
-  String filestart = "Catalyst2-";
+  String filestart = "Stimulant-";
   filestart.concat(date);
   filestart.concat(".csv");
   filestart.toCharArray(filename, 50);

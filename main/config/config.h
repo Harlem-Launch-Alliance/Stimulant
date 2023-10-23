@@ -5,7 +5,7 @@
  * 
  * all hardware architectures should be conditionally included here
  ****************************************************************************/
-
+#pragma once
 
 #include <Arduino.h>
 
@@ -14,3 +14,5 @@
 #elif defined(CATALYST2)
 #include "config/catalyst2.h"
 #endif
+
+constexpr double MAIN_ALTITUDE = 300; //altitude to deploy main parachute at (meters)

@@ -10,7 +10,7 @@ constexpr uint32_t TICK_TIME_ASCENDING = 10000;
 constexpr uint32_t TICK_TIME_DESCENDING = 50000;
 constexpr uint32_t TICK_TIME_POST_FLIGHT = 1000000;
 
-constexpr uint32_t GPS_WAIT_TIME = 300; //number of seconds to wait for GPS to acquire signal before moving on
+constexpr uint32_t GPS_WAIT_TIME = 5; //number of seconds to wait for GPS to acquire signal before moving on
 
 constexpr uint32_t RING_QUEUE_LENGTH = 1000;//each 100 elements is 1 seconds of data at 100hz
 
@@ -26,6 +26,8 @@ constexpr int SPI1_SCK = 14;
 constexpr int SPI1_MOSI = 15;
 constexpr int SPI1_MISO = 16;
 constexpr int BUZZER_PIN = 33;
+constexpr int PYRO0_PIN = 19;
+constexpr int PYRO1_PIN = 20;
 
 #define GPSSerial Serial1 //Hardware Serial Location of GPS
 #define XBeeSerial Serial //Hardware Serial Location of XBee
