@@ -1,5 +1,5 @@
 /*****************************************************************************
- * This file is for all imu queries from the LSM6DSOX
+ * This file is for all imu queries for the LSM6DSOX
  * Calculations such as attitude determination should go in a separate file
  * 
  * NOTE: Due to the current implementation this library, each flight computer
@@ -29,12 +29,12 @@ imuReading imu::sample() {
     sox.getEvent(&accel, &gyro, &temp);
 
     // convert acceleration data from m/s^2 to Gs
-    // TODO: correct axis (Z is up, Y and X are arbitrary for now)
+    // TODO: axis mapping should be controlled in config files (Z is up, Y and X are arbitrary for now)
     imuSample.accel.x = accel.acceleration.x / 9.81;
     imuSample.accel.z = accel.acceleration.y / 9.81;
     imuSample.accel.y = accel.acceleration.z / 9.81;
 
-    // TODO: correct axis (Z is up, Y and X are arbitrary for now)
+    // TODO: axis mapping should be controlled in config files (Z is up, Y and X are arbitrary for now)
     imuSample.gyro.x = gyro.gyro.x;
     imuSample.gyro.z = gyro.gyro.y;
     imuSample.gyro.y = gyro.gyro.z;

@@ -16,6 +16,6 @@
 #endif
 
 constexpr double MAIN_ALTITUDE = 200; //altitude to deploy main parachute at (meters)
-constexpr double G_FORCE_TO_LAUNCH = 1.1; //if acceleration exceeds this number the rocket will assume it has been launched
+constexpr double G_FORCE_TO_LAUNCH = 2; //if acceleration exceeds this number the rocket will assume it has been launched
 constexpr double MAX_APOGEE_ACCEL = 1; //we can rule out apogee if acceleration is above this amount (Gs)
 //TODO: test then set gforce to 2

@@ -1,6 +1,6 @@
 /*************************************************************************************
                                  Harlem Launch Alliance
-                              Avionics Group 2021 - 2023
+                              Avionics Group 2021 - 2024
                                 Stimulant Flight Software
  *************************************************************************************/
 
@@ -190,8 +190,6 @@ flightPhase runDescending(uint32_t tick){//this runs at 20hz
   }
 
   altForVelocity = bmpSample.altitude;
-
-
 
   if(tick % 20 == 1){//still one time per second
     lastGps = getGPS();

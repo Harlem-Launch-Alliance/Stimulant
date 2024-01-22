@@ -1,5 +1,5 @@
 /*****************************************************************************
- * This file is for all imu queries from the GY521
+ * This file is for all imu queries for the GY521
  * Calculations such as attitude determination should go in a separate file
  ****************************************************************************/
 
