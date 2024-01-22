@@ -66,6 +66,9 @@ void setupSD(String date){
   }
   else {
     XBeeSerial.println("MicroSD card: error opening file");
+    XBeeSerial.print("Filename: ");
+    XBeeSerial.println(filename);
+    delay(5000);
   }
 }
 
@@ -111,7 +114,9 @@ void recordData(gpsReading sample, bool prelaunch){
  * 
  */
 void backupToSD(){
+  XBeeSerial.println("backing up...");
   File dataFile = SD.open(filename, FILE_WRITE);
+  char buffer[50];
   if(!dataFile){
     XBeeSerial.println("error opening datalog");
     return;
@@ -139,27 +144,45 @@ void backupToSD(){
         gpsQueue.dequeue();
       }
     }
-    dataFile.print(imuSample.time); dataFile.print(',');
-    if(altitude != 0)
-      dataFile.print(altitude, 1);
+    itoa(imuSample.time,buffer,10);
+    dataFile.print(buffer); dataFile.print(',');
+    if(altitude != 0) {
+      dtostrf(altitude, 6, 1, buffer);
+      dataFile.print(buffer);
+    }
     dataFile.print(',');
-    if(latitude != 0)
-      dataFile.print(latitude, 4);
+    if(latitude != 0) {
+      dtostrf(latitude, 6, 4, buffer);
+      dataFile.print(buffer);
+    }
     dataFile.print(',');
-    if(longitude != 0)
-      dataFile.print(longitude, 4);
+    if(longitude != 0) {
+      dtostrf(longitude, 6, 4, buffer);
+      dataFile.print(buffer);
+    }
     dataFile.print(',');
-    dataFile.print(imuSample.gyro.x); dataFile.print(',');
-    dataFile.print(imuSample.gyro.y); dataFile.print(',');
-    dataFile.print(imuSample.gyro.z); dataFile.print(',');
-    dataFile.print(imuSample.accel.x); dataFile.print(',');
-    dataFile.print(imuSample.accel.y); dataFile.print(',');
-    dataFile.print(imuSample.accel.z); dataFile.print(',');
-    dataFile.print(imuSample.attitude.x); dataFile.print(',');
-    dataFile.print(imuSample.attitude.y); dataFile.print(',');
-    dataFile.print(imuSample.attitude.z); dataFile.print(',');
-    if(altitude != 0)
-      dataFile.print(state);
+    dtostrf(imuSample.gyro.x, 8, 4, buffer);
+    dataFile.print(buffer); dataFile.print(',');
+    dtostrf(imuSample.gyro.y, 8, 4, buffer);
+    dataFile.print(buffer); dataFile.print(',');
+    dtostrf(imuSample.gyro.z, 8, 4, buffer);
+    dataFile.print(buffer); dataFile.print(',');
+    dtostrf(imuSample.accel.x, 8, 4, buffer);
+    dataFile.print(buffer); dataFile.print(',');
+    dtostrf(imuSample.accel.y, 8, 4, buffer);
+    dataFile.print(buffer); dataFile.print(',');
+    dtostrf(imuSample.accel.z, 8, 4, buffer);
+    dataFile.print(buffer); dataFile.print(',');
+    dtostrf(imuSample.attitude.x, 8, 4, buffer);
+    dataFile.print(buffer); dataFile.print(',');
+    dtostrf(imuSample.attitude.y, 8, 4, buffer);
+    dataFile.print(buffer); dataFile.print(',');
+    dtostrf(imuSample.attitude.z, 8, 4, buffer);
+    dataFile.print(buffer); dataFile.print(',');
+    if(altitude != 0) {
+      itoa(state,buffer,10);
+      dataFile.print(buffer);
+    }
     dataFile.println(',');
   }
   while(!bmpQueue.isEmpty()){
@@ -175,25 +198,34 @@ void backupToSD(){
         gpsQueue.dequeue();
       }
     }
-    dataFile.print(bmpSample.time); dataFile.print(',');
-    dataFile.print(bmpSample.altitude, 1); dataFile.print(',');
-    if(latitude != 0)
-      dataFile.print(latitude, 4);
+    itoa(bmpSample.time,buffer,10);
+    dataFile.print(buffer); dataFile.print(',');
+    dtostrf(bmpSample.altitude, 6, 1, buffer);
+    dataFile.print(buffer); dataFile.print(',');
+    if(latitude != 0) {
+      dtostrf(latitude, 6, 4, buffer);
+      dataFile.print(buffer);
+    }
     dataFile.print(',');
-    if(longitude != 0)
-      dataFile.print(longitude, 4);
-    dataFile.print(',');
-    dataFile.print(',');
-    dataFile.print(',');
-    dataFile.print(',');
-    dataFile.print(',');
-    dataFile.print(',');
-    dataFile.print(',');
-    dataFile.print(',');
+    if(longitude != 0) {
+      dtostrf(longitude, 6, 4, buffer);
+      dataFile.print(buffer);
+    }
     dataFile.print(',');
     dataFile.print(',');
-    dataFile.print(bmpSample.state);
+    dataFile.print(',');
+    dataFile.print(',');
+    dataFile.print(',');
+    dataFile.print(',');
+    dataFile.print(',');
+    dataFile.print(',');
+    dataFile.print(',');
+    dataFile.print(',');
+    dataFile.print(',');
+    itoa(bmpSample.state,buffer,10);
+    dataFile.print(buffer);
     dataFile.println(',');
   }
-  dataFile.close(); 
+  dataFile.close();
+  XBeeSerial.println("back up complete");
 }

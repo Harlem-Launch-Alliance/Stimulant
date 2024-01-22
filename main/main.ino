@@ -1,7 +1,7 @@
 /*************************************************************************************
                                  Harlem Launch Alliance
-                            Avionics Group 2021 - 2023
-                              Stimulant Flight Software
+                              Avionics Group 2021 - 2023
+                                Stimulant Flight Software
  *************************************************************************************/
 
 #include "apogee.h"
@@ -23,6 +23,9 @@ void setup()
   pinMode(BUZZER_PIN, OUTPUT);    // Set buzzer pin as an output
   pinMode(PYRO0_PIN, OUTPUT);     // Set pyro pins as an outputs
   pinMode(PYRO1_PIN, OUTPUT);
+  digitalWrite(PYRO0_PIN, LOW);   // Set pyro pins to low
+  digitalWrite(PYRO1_PIN, LOW);
+
   for(int i = 0; i < 5; i++)  // Play 5 beeps
   {
     tone(BUZZER_PIN, 1000);       // Send 1KHz sound signal...
@@ -31,12 +34,17 @@ void setup()
     noTone(BUZZER_PIN);           // Stop sound...
     delay(1000);              // ...for 1sec
   }
-  Wire.begin();               // initiate wire library and I2C
   setupBMP();
+  delay(2000);
+
   imu.setup();
+  delay(2000);
 
   String date = setupGPS();
+  delay(2000);
+
   setupSD(date);
+  delay(5000);
 }
 
 flightPhase runOnPad(uint32_t tick);
@@ -105,6 +113,7 @@ flightPhase runOnPad(uint32_t tick){
   recordData(imuSample, true);
 
   if(tick % 100 == 2 && lastGps.longitude == 0){//1 reading then use cached value
+    //TODO: if there's no GPS this could be a problem
     lastGps = getGPS();
     recordData(lastGps, true);
   }
@@ -166,7 +175,11 @@ flightPhase runDescending(uint32_t tick){//this runs at 20hz
   bmpSample.state = 2; //this corresponds to DESCENDING
   recordData(bmpSample, false);
 
-  if (bmpSample.altitude < MAIN_ALTITUDE && !deployedMain) {
+  //TODO: or vertical velocity above threshold (50m/s?)
+  static double altForVelocity = bmpSample.altitude;
+  double currentVelocity = (altForVelocity - bmpSample.altitude) * 20; //delta alt divided by dt (.05)
+
+  if ((bmpSample.altitude < MAIN_ALTITUDE || currentVelocity > 50) && !deployedMain) {
     digitalWrite(PYRO0_PIN, HIGH);
     delay(1000);
     digitalWrite(PYRO0_PIN, LOW);
@@ -175,6 +188,10 @@ flightPhase runDescending(uint32_t tick){//this runs at 20hz
     digitalWrite(PYRO1_PIN, LOW);
     deployedMain = true;
   }
+
+  altForVelocity = bmpSample.altitude;
+
+
 
   if(tick % 20 == 1){//still one time per second
     lastGps = getGPS();

@@ -31,13 +31,13 @@ imuReading imu::sample() {
     // convert acceleration data from m/s^2 to Gs
     // TODO: correct axis (Z is up, Y and X are arbitrary for now)
     imuSample.accel.x = accel.acceleration.x / 9.81;
-    imuSample.accel.y = accel.acceleration.y / 9.81;
-    imuSample.accel.z = accel.acceleration.z / 9.81;
+    imuSample.accel.z = accel.acceleration.y / 9.81;
+    imuSample.accel.y = accel.acceleration.z / 9.81;
 
     // TODO: correct axis (Z is up, Y and X are arbitrary for now)
     imuSample.gyro.x = gyro.gyro.x;
-    imuSample.gyro.y = gyro.gyro.y;
-    imuSample.gyro.z = gyro.gyro.z;
+    imuSample.gyro.z = gyro.gyro.y;
+    imuSample.gyro.y = gyro.gyro.z;
 
     (void) temp; //we can remove this if we decide to record temperature from the IMU
 

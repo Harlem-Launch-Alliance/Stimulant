@@ -15,19 +15,19 @@ constexpr uint32_t GPS_WAIT_TIME = 5; //number of seconds to wait for GPS to acq
 constexpr uint32_t RING_QUEUE_LENGTH = 1000;//each 100 elements is 1 seconds of data at 100hz
 
 // pin definitions
-constexpr int BMP_CS = 10; //SPI chipSelect of bmp altimeter
-constexpr int BUILTIN_SDCARD = 12; // SPI chipSelect of SD card
-constexpr int RADIO_CS = 11; //SPI chipSelect of radio module
-constexpr int IMU_CS = 9; //SPI chipSelect of IMU
-constexpr int SPI0_SCK = 4; //SPI clock pin
-constexpr int SPI0_MOSI = 5; //SPI MOSI pin
-constexpr int SPI0_MISO = 6; //SPI MISO pin
-constexpr int SPI1_SCK = 14;
-constexpr int SPI1_MOSI = 15;
-constexpr int SPI1_MISO = 16;
-constexpr int BUZZER_PIN = 33;
-constexpr int PYRO0_PIN = 19;
-constexpr int PYRO1_PIN = 20;
+constexpr int BMP_CS = 7; //SPI chipSelect of bmp altimeter
+constexpr int BUILTIN_SDCARD = 9; // SPI chipSelect of SD card
+constexpr int RADIO_CS = 8; //SPI chipSelect of radio module
+constexpr int IMU_CS = 6; //SPI chipSelect of IMU
+constexpr int SPI0_SCK = 2; //SPI clock pin
+constexpr int SPI0_MOSI = 3; //SPI MOSI pin
+constexpr int SPI0_MISO = 4; //SPI MISO pin
+constexpr int SPI1_SCK = 10;
+constexpr int SPI1_MOSI = 11;
+constexpr int SPI1_MISO = 12;
+constexpr int BUZZER_PIN = 21;
+constexpr int PYRO0_PIN = 14;
+constexpr int PYRO1_PIN = 15;
 
 #define GPSSerial Serial1 //Hardware Serial Location of GPS
 #define XBeeSerial Serial //Hardware Serial Location of XBee

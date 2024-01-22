@@ -53,7 +53,7 @@ void setupBMP()
 {
   XBeeSerial.print("Setting up BMP388... ");
   delay(3000);
-  if (!bmp.begin_SPI(BMP_CS)) {   // hardware I2C mode, can pass in address & alt Wire
+  if (!bmp.begin_SPI(BMP_CS, SPI1_SCK, SPI1_MISO, SPI1_MOSI)) {
     XBeeSerial.println("could not find a valid BMP388 sensor, check wiring!");
     return;
   }
