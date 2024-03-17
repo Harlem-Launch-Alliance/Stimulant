@@ -17,10 +17,15 @@ Attitude attitude;
 
 void setup()
 {
+  delay(500); // give sensors time to boot up
+
+  // set up radio
   XBeeSerial.begin(115200);      // xBee baudrate: 115200, 9600
   XBeeSerial.print("\n\n\n");
 
   pinMode(BUZZER_PIN, OUTPUT);    // Set buzzer pin as an output
+
+  //TODO: replace with pyro setup function
   pinMode(PYRO0_PIN, OUTPUT);     // Set pyro pins as an outputs
   pinMode(PYRO1_PIN, OUTPUT);
   digitalWrite(PYRO0_PIN, LOW);   // Set pyro pins to low
@@ -28,10 +33,10 @@ void setup()
 
   for(int i = 0; i < 5; i++)  // Play 5 beeps
   {
-    tone(BUZZER_PIN, 1000);       // Send 1KHz sound signal...
+    //tone(BUZZER_PIN, TONE_HZ);  // Play a tone...
     XBeeSerial.println("beep!");
     delay(1000);              // ...for 1 sec
-    noTone(BUZZER_PIN);           // Stop sound...
+    //noTone(BUZZER_PIN);           // Stop sound...
     delay(1000);              // ...for 1sec
   }
   setupBMP();

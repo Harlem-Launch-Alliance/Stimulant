@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../main/bmp_altimeter.h"
+#include "../main/sensors/altimeter/bmp3xx.h"
 
 class BmpAltimeterTest : public ::testing::Test {
  protected:

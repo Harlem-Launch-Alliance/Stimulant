@@ -23,6 +23,7 @@ constexpr int BUZZER_PIN = 33;
 constexpr int PYRO0_PIN = 34;
 constexpr int PYRO1_PIN = 35;
 
+constexpr int TONE_HZ = 1000; //frequency of buzzer tone
 
 #define XBeeSerial Serial1 //Hardware Serial Location of XBee
 #define GPSSerial Serial2 //Hardware Serial Location of GPS
