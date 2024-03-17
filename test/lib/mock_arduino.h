@@ -28,6 +28,14 @@ public:
         return true;
     }
 
+    bool begin_SPI(int chipSelect, int sck, int miso, int mosi) {
+        (void)chipSelect;
+        (void)sck;
+        (void)miso;
+        (void)mosi;
+        return true;
+    }
+
     void setTemperatureOversampling(int setting) {
         (void)setting;
     }
@@ -49,41 +57,25 @@ public:
 
 };
 
-class TwoWire 
+class MockTwoWire 
 {
 public:
-    uint8_t read() {
-        return 0b1000; // 8
-    }
+    uint8_t read();
 
-    void write(int message) {
-        (void)message;
-    }
+    void write(int message);
 
-    void beginTransmission(int address) {
-        (void)address;
-    }
+    void beginTransmission(int address);
 
-    void endTransmission(bool torf = false) {
-        (void)torf;
-    }
+    void endTransmission(bool torf);
 
-    void requestFrom(int address, int style, bool idk) {
-        (void)address;
-        (void)style;
-        (void)idk;
-    }
+    void requestFrom(int address, int style, bool idk);
 };
 
-TwoWire Wire;
+extern MockTwoWire Wire;
 
-unsigned long micros() {
-    static unsigned long micros = 1;
-    micros += 10;
-    return micros;
-}
+unsigned long micros();
 
-class Serial
+class MockSerial
 {
 public:
     void print(std::string s) {
@@ -99,8 +91,6 @@ public:
     }
 };
 
-Serial Serial1;
+extern MockSerial Serial1;
 
-void delay(int millis) {
-    (void)millis;
-}
+void delay(int millis);
