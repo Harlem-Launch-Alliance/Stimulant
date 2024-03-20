@@ -4,7 +4,7 @@
 /// @brief test setupIMU
 TEST(IMUTest, SetupTest)
 {
-    imu imu;
+    IMU imu;
 
     imu.setup();
 }
@@ -12,7 +12,7 @@ TEST(IMUTest, SetupTest)
 /// @brief test getIMU
 TEST(IMUTest, SampleIMUTest)
 {
-    imu imu;
+    IMU imu;
 
     imuReading sample = imu.sample();
 
