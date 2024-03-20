@@ -7,8 +7,10 @@
 //rates are magnitudes of rad/s
 //assuming roll == 0, pitchRate will be equivalent to y, and yawRate will be equivalent to x
 
-#include "Ewma.h" 
-#include "utils.h"
+#pragma once
+
+#include "utils/datatypes.h"
+#include "utils/Ewma.h" 
 
 /// @brief this object tracks attitude/orientation as well as gyroscope calibration values
 class Attitude {

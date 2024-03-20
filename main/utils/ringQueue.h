@@ -2,10 +2,9 @@
  * This file is for the RingQueue class and definitions
  * 
  ****************************************************************************/
-#include "settings.h"
+#pragma once
 
-#ifndef RINGQUEUE_H
-#define RINGQUEUE_H
+#include "config/config.h"
 
 /**
  * @brief A ring queue of constant size
@@ -16,7 +15,7 @@
  * 
  * @tparam T Datatype to be stored
  */
-template<typename T>
+template<class T>
 class RingQueue{
 public:
   RingQueue();
@@ -35,7 +34,7 @@ private:
  * 
  * @tparam T Datatype to be stored
  */
-template<typename T>
+template<class T>
 RingQueue<T>::RingQueue(){//each new queue is initialized with 0 data
   head = 0;
   length = 0;
@@ -48,7 +47,7 @@ RingQueue<T>::RingQueue(){//each new queue is initialized with 0 data
  * @return true RingQueue is empty
  * @return false RingQueue is NOT empty
  */
-template<typename T>
+template<class T>
 bool RingQueue<T>::isEmpty(){
   return length == 0;//if length is 0 it's empty otherwise it isn't
 }
@@ -59,7 +58,7 @@ bool RingQueue<T>::isEmpty(){
  * @tparam T Type of data stored
  * @param data Value of data to be queued
  */
-template<typename T>
+template<class T>
 void RingQueue<T>::enqueue(T data){
   if(length >= RING_QUEUE_LENGTH) //if the array is full just ignore
     return;
@@ -78,7 +77,7 @@ void RingQueue<T>::enqueue(T data){
  * @tparam T Type of data
  * @return T Data at front of queue
  */
-template<typename T>
+template<class T>
 T RingQueue<T>::peek(){//unintended behaviour if called when queue is empty
   return dataArray[head];
 }
@@ -88,12 +87,10 @@ T RingQueue<T>::peek(){//unintended behaviour if called when queue is empty
  * 
  * @tparam T Type of data stored
  */
-template<typename T>
+template<class T>
 void RingQueue<T>::dequeue(){
   if(length == 0)
     return;
   length--;
   head++;
 }
-
-#endif

@@ -1,22 +1,20 @@
 /*****************************************************************************
- * This file is for all imu queries
+ * This file is for all imu queries for the GY521
  * Calculations such as attitude determination should go in a separate file
  ****************************************************************************/
-#ifndef UNIT_TEST
-#include <Wire.h> //library allows communication with I2C / TWI devices
-#endif // UNIT_TEST
+
+#ifdef GY521
+
+#include "imu.h"
+#include "../../utils/utils.h"
+
 #include <math.h> //library includes mathematical functions
-#include "utils.h"
+#include <Wire.h> //library allows communication with I2C / TWI devices
 
 const uint8_t MPU=0x68;                  //I2C address of the MPU-6050
 const double tcal = -1600;           //Temperature correction
 
-/**
- * @brief Sample the IMU (Gyroscope and Accelerometer)
- * 
- * @return imuReading 
- */
-imuReading getIMU()
+imuReading imu::sample()
 {
   imuReading imuSample;
   imuSample.time = micros(); //current timestamp
@@ -56,8 +54,8 @@ imuReading getIMU()
  * 
  * Verify that the connection is operating properly by taking a sample.
  */
-void setupIMU(){ 
-  XBeeSerial.print("Setting up IMU... ");
+void imu::setup(){ 
+  XBeeSerial.print("Setting up GY521 IMU... ");
   
   Wire.beginTransmission(MPU);  //This is the I2C address of the MPU (b1101000/b1101001 for AC0 low/high datasheet sec. 9.2)
   Wire.write(0x6B);             //Accessing the register 6B - Power Management (Sec. 4.28)
@@ -75,7 +73,7 @@ void setupIMU(){
   Wire.endTransmission();
 
   delay(3000);                  // This delay allows time for the IMU setup to be completed before reading values.
-  imuReading sample = getIMU(); // Reads 1 sample of data from IMU.
+  imuReading sample = imu::sample(); // Reads 1 sample of data from IMU.
 
   if(sample.accel.x != 0 || sample.accel.y != 0 || sample.accel.z != 0)
     XBeeSerial.println("IMU setup successful.");
@@ -103,3 +101,5 @@ XBeeSerial.println(sample.gyro.z);
 delay(1000);
 
 }
+
+#endif // GY521

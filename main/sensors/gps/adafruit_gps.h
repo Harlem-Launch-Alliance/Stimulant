@@ -1,8 +1,11 @@
 // Test code for Ultimate GPS Using Hardware Serial.
 // Need to remove the GPS.lastNMEA() and see if it still works, still get compilation error
 
+#pragma once
+
+#include "../../utils/datatypes.h"
+
 #include <Adafruit_GPS.h>
-#include "utils.h"
 
 // what's the name of the hardware serial port?
 #define ERR_NO_GPS "flightData-noDate"
@@ -23,14 +26,14 @@ String setupGPS()
   unsigned int startTime = millis();
   // 9600 NMEA is the default baud rate for Adafruit MTK GPS's- some use 4800
   GPS.begin(9600);                   // 9600 is the default baud rate
-  GPS.sendCommand("$PMTK251,38400*27");             //set baud rate to 38400
-  GPSSerial.end();
-  delay(1000);
-  GPS.begin(38400);            // set serial to 38400
+  // GPS.sendCommand(PMTK_SET_BAUD_57600);             //set baud rate to 115200
+  // GPSSerial.end();
+  // delay(1000);
+  // GPS.begin(57600);            // set serial to 115200
   delay(1000);
   // uncomment this line to turn on RMC (recommended minimum) and GGA (fix data) including altitude
   GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
-  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ); // 1 Hz update rate
+  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_5HZ); // 5 Hz logging rate (update rate is independent of this)
 
   delay(1000);
 

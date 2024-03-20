@@ -1,38 +1,55 @@
 /*************************************************************************************
                                  Harlem Launch Alliance
-                            Recovery Systems Group 2021 - 2022
-                              Catalyst 2.1 Flight Computer
+                              Avionics Group 2021 - 2024
+                                Stimulant Flight Software
  *************************************************************************************/
 
 #include "apogee.h"
-#include "bmp_altimeter.h"
-#include "data.h"
-#include "gy521_imu.h"
 #include "attitude.h"
-#include "gps.h"
+#include "data.h"
+#include "sensors/altimeter/bmp3xx.h"
+#include "sensors/gps/adafruit_gps.h"
+#include "sensors/imu/imu.h"
+#include "utils/utils.h"
 
+imu imu;
 Attitude attitude;
 
 void setup()
 {
+  delay(500); // give sensors time to boot up
+
+  // set up radio
   XBeeSerial.begin(115200);      // xBee baudrate: 115200, 9600
   XBeeSerial.print("\n\n\n");
 
   pinMode(BUZZER_PIN, OUTPUT);    // Set buzzer pin as an output
+
+  //TODO: replace with pyro setup function
+  pinMode(PYRO0_PIN, OUTPUT);     // Set pyro pins as an outputs
+  pinMode(PYRO1_PIN, OUTPUT);
+  digitalWrite(PYRO0_PIN, LOW);   // Set pyro pins to low
+  digitalWrite(PYRO1_PIN, LOW);
+
   for(int i = 0; i < 5; i++)  // Play 5 beeps
   {
-    tone(BUZZER_PIN, 1000);       // Send 1KHz sound signal...
+    //tone(BUZZER_PIN, TONE_HZ);  // Play a tone...
     XBeeSerial.println("beep!");
     delay(1000);              // ...for 1 sec
-    noTone(BUZZER_PIN);           // Stop sound...
+    //noTone(BUZZER_PIN);           // Stop sound...
     delay(1000);              // ...for 1sec
   }
-  Wire.begin();               // initiate wire library and I2C
   setupBMP();
-  setupIMU();
+  delay(2000);
+
+  imu.setup();
+  delay(2000);
 
   String date = setupGPS();
+  delay(2000);
+
   setupSD(date);
+  delay(5000);
 }
 
 flightPhase runOnPad(uint32_t tick);
@@ -84,7 +101,7 @@ flightPhase runOnPad(uint32_t tick){
   static bmpReading lastBmp;
   static gpsReading lastGps;
   
-  imuReading imuSample = getIMU(); //sample IMU first to maximize consistency
+  imuReading imuSample = imu.sample(); //sample IMU first to maximize consistency
 
   bool hasLaunched = detectLaunch(imuSample.accel); //might need to calibrate accel data before feeding to this function
   if(tick % 5 == 0){
@@ -101,6 +118,7 @@ flightPhase runOnPad(uint32_t tick){
   recordData(imuSample, true);
 
   if(tick % 100 == 2 && lastGps.longitude == 0){//1 reading then use cached value
+    //TODO: if there's no GPS this could be a problem
     lastGps = getGPS();
     recordData(lastGps, true);
   }
@@ -126,7 +144,7 @@ flightPhase runAscending(uint32_t tick){ //this will run similarly to ONPAD exce
   static bmpReading lastBmp;
   static gpsReading lastGps;
   bool apogeeReached = false;
-  imuReading imuSample = getIMU(); //sample IMU first to maximize consistency
+  imuReading imuSample = imu.sample(); //sample IMU first to maximize consistency
   
   if(tick % 5 == 0){
     lastBmp = getBMP();
@@ -150,6 +168,7 @@ flightPhase runDescending(uint32_t tick){//this runs at 20hz
   static gpsReading lastGps;
   static double lastAlt = getBMP().altitude + 5;//initialize so that landing detection isn't triggered accidentally
   static bool initialDump = false;
+  static bool deployedMain = false;
 
   if(!initialDump) {
     initialDump = true;
@@ -160,6 +179,22 @@ flightPhase runDescending(uint32_t tick){//this runs at 20hz
   bmpReading bmpSample = getBMP();
   bmpSample.state = 2; //this corresponds to DESCENDING
   recordData(bmpSample, false);
+
+  //TODO: or vertical velocity above threshold (50m/s?)
+  static double altForVelocity = bmpSample.altitude;
+  double currentVelocity = (altForVelocity - bmpSample.altitude) * 20; //delta alt divided by dt (.05)
+
+  if ((bmpSample.altitude < MAIN_ALTITUDE || currentVelocity > 50) && !deployedMain) {
+    digitalWrite(PYRO0_PIN, HIGH);
+    delay(1000);
+    digitalWrite(PYRO0_PIN, LOW);
+    digitalWrite(PYRO1_PIN, HIGH);
+    delay(1000);
+    digitalWrite(PYRO1_PIN, LOW);
+    deployedMain = true;
+  }
+
+  altForVelocity = bmpSample.altitude;
 
   if(tick % 20 == 1){//still one time per second
     lastGps = getGPS();
