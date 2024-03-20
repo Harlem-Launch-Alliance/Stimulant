@@ -28,4 +28,4 @@ double toRad(double angle);
  * @param phase Flight phase
  * @return int Tick length in microseconds
  */
-int getTickTime(flightPhase phase);
+int getTickTime(FlightPhase phase);
