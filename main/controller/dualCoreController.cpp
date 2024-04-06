@@ -8,7 +8,6 @@
 
 #include "apogee.h"
 #include "controller.h"
-#include "data.h"
 #include "sensors/altimeter/bmp3xx.h"
 #include "sensors/gps/adafruit_gps.h"
 #include "utils/utils.h"
@@ -63,7 +62,7 @@ void RocketController::setup(){
     String date = setupGPS();
     delay(2000);
 
-    setupSD(date);
+    sd.setup(date);
     delay(5000);
 }
 
@@ -98,9 +97,9 @@ void RocketController::loop1() {
     static bool FinalBackup = false;
     delay(1000);
     if (state == ASCENDING || state == DESCENDING) {
-        backupToSD();
+        sd.backup();
     } else if (state == POST_FLIGHT && !FinalBackup) {
-        backupToSD();
+        sd.backup();
         FinalBackup = true;
     }
 }
@@ -117,19 +116,19 @@ FlightPhase RocketController::runOnPad(){
         lastBmp = getBMP();
         lastBmp.state = 0; //this corresponds to ONPAD
         detectApogee(imuSample.accel, lastBmp.altitude, hasLaunched); //need to run this prelaunch to get calibrations
-        recordData(lastBmp, true);
+        sd.record(lastBmp, true);
     }
 
     attitude.calibrateGyro(imuSample.gyro);
     attitude.updateAttitude(imuSample.gyro, false, imuSample.time);
 
     imuSample.attitude = attitude.getCurrentAttitude();
-    recordData(imuSample, true);
+    sd.record(imuSample, true);
 
     if(tick % 100 == 2 && lastGps.longitude == 0){//1 reading then use cached value
         //TODO: if there's no GPS this could be a problem
         lastGps = getGPS();
-        recordData(lastGps, true);
+        sd.record(lastGps, true);
     }
     if(tick % 50 == 1){//twice per second with a slight offset to avoid overlapping with bmp
         transmitData(lastBmp.altitude, lastGps, '0');
@@ -159,11 +158,11 @@ FlightPhase RocketController::runAscending() {
         lastBmp = getBMP();
         lastBmp.state = 1; //this corresponds to ASCENDING
         apogeeReached = detectApogee(imuSample.accel, lastBmp.altitude, true);
-        recordData(lastBmp, false);
+        sd.record(lastBmp, false);
     }
     attitude.updateAttitude(imuSample.gyro, true, imuSample.time);
     imuSample.attitude = attitude.getCurrentAttitude();
-    recordData(imuSample, false);
+    sd.record(imuSample, false);
 
     if(tick % 5 == 1){//20 times per second with a slight offset to avoid overlapping with bmp and gps
         transmitData(lastBmp.altitude, lastGps, '1');
@@ -181,13 +180,13 @@ FlightPhase RocketController::runDescending() {
 
     if(!initialDump) {
         initialDump = true;
-        backupToSD();
+        sd.backup();
     }
 
     //sample sensors
     bmpReading bmpSample = getBMP();
     bmpSample.state = 2; //this corresponds to DESCENDING
-    recordData(bmpSample, false);
+    sd.record(bmpSample, false);
 
     static double altForVelocity = bmpSample.altitude;
     double currentVelocity = (altForVelocity - bmpSample.altitude) * 20; //delta alt divided by dt (.05)
@@ -206,10 +205,10 @@ FlightPhase RocketController::runDescending() {
 
     if(tick % 20 == 1){//still one time per second
         lastGps = getGPS();
-        recordData(lastGps, false);
+        sd.record(lastGps, false);
     }
     if(tick % 100 == 2){//backup to SD every 5 seconds
-        backupToSD();
+        sd.backup();
     }
     transmitData(bmpSample.altitude, lastGps, '2');
 
@@ -237,6 +236,11 @@ void RocketController::setupPyros(){
     pinMode(PYRO1_PIN, OUTPUT);
     digitalWrite(PYRO0_PIN, LOW);   // Set pyro pins to low
     digitalWrite(PYRO1_PIN, LOW);
+
+    pinMode(E220_M0_PIN, OUTPUT);     // Set pyro pins as an outputs
+    pinMode(E220_M1_PIN, OUTPUT);
+    digitalWrite(E220_M0_PIN, LOW);   // Set pyro pins to low
+    digitalWrite(E220_M1_PIN, LOW);
 }
 
 #endif //DUAL_CORE

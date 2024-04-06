@@ -12,7 +12,11 @@ constexpr uint32_t TICK_TIME_POST_FLIGHT = 1000000;
 
 constexpr uint32_t GPS_WAIT_TIME = 900; //number of seconds to wait for GPS to acquire signal before moving on
 
-constexpr uint32_t RING_QUEUE_LENGTH = 1000;//each 100 elements is 1 seconds of data at 100hz
+//constexpr uint32_t RING_QUEUE_LENGTH = 1000;//each 100 elements is 1 seconds of data at 100hz
+
+constexpr uint32_t RING_QUEUE_LENGTH_IMU = 2000;
+constexpr uint32_t RING_QUEUE_LENGTH_ALTIMETER = 1000;
+constexpr uint32_t RING_QUEUE_LENGTH_GPS = 200;
 
 // pin definitions
 constexpr int BMP_CS = 7; //SPI chipSelect of bmp altimeter
@@ -28,6 +32,8 @@ constexpr int SPI1_MISO = 12;
 constexpr int BUZZER_PIN = 26;
 constexpr int PYRO0_PIN = 14;
 constexpr int PYRO1_PIN = 15;
+constexpr int E220_M0_PIN = 27;
+constexpr int E220_M1_PIN = 28;
 
 constexpr int TONE_HZ = 2500; //frequency of buzzer tone
 

@@ -15,7 +15,7 @@
  * 
  * @tparam T Datatype to be stored
  */
-template<class T>
+template<class T, int RING_QUEUE_LENGTH>
 class RingQueue{
 public:
   RingQueue();
@@ -34,8 +34,8 @@ private:
  * 
  * @tparam T Datatype to be stored
  */
-template<class T>
-RingQueue<T>::RingQueue(){//each new queue is initialized with 0 data
+template<class T, int RING_QUEUE_LENGTH>
+RingQueue<T, RING_QUEUE_LENGTH>::RingQueue(){//each new queue is initialized with 0 data
   head = 0;
   length = 0;
 }
@@ -47,8 +47,8 @@ RingQueue<T>::RingQueue(){//each new queue is initialized with 0 data
  * @return true RingQueue is empty
  * @return false RingQueue is NOT empty
  */
-template<class T>
-bool RingQueue<T>::isEmpty(){
+template<class T, int RING_QUEUE_LENGTH>
+bool RingQueue<T, RING_QUEUE_LENGTH>::isEmpty(){
   return length == 0;//if length is 0 it's empty otherwise it isn't
 }
 
@@ -58,8 +58,8 @@ bool RingQueue<T>::isEmpty(){
  * @tparam T Type of data stored
  * @param data Value of data to be queued
  */
-template<class T>
-void RingQueue<T>::enqueue(T data){
+template<class T, int RING_QUEUE_LENGTH>
+void RingQueue<T, RING_QUEUE_LENGTH>::enqueue(T data){
   if(length >= RING_QUEUE_LENGTH) //if the array is full just ignore
     return;
   int nextLocation = (head + length) % RING_QUEUE_LENGTH; 
@@ -77,8 +77,8 @@ void RingQueue<T>::enqueue(T data){
  * @tparam T Type of data
  * @return T Data at front of queue
  */
-template<class T>
-T RingQueue<T>::peek(){//unintended behaviour if called when queue is empty
+template<class T, int RING_QUEUE_LENGTH>
+T RingQueue<T, RING_QUEUE_LENGTH>::peek(){//unintended behaviour if called when queue is empty
   return dataArray[head];
 }
 
@@ -87,8 +87,8 @@ T RingQueue<T>::peek(){//unintended behaviour if called when queue is empty
  * 
  * @tparam T Type of data stored
  */
-template<class T>
-void RingQueue<T>::dequeue(){
+template<class T, int RING_QUEUE_LENGTH>
+void RingQueue<T, RING_QUEUE_LENGTH>::dequeue(){
   if(length == 0)
     return;
   length--;

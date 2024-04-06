@@ -8,7 +8,6 @@
 
 #include "apogee.h"
 #include "controller.h"
-#include "data.h"
 #include "sensors/altimeter/bmp3xx.h"
 #include "sensors/gps/adafruit_gps.h"
 #include "utils/utils.h"

@@ -8,6 +8,7 @@
 
 #include "calculations/attitude.h"
 #include "sensors/imu/imu.h"
+#include "data/data.h"
 #include "utils/datatypes.h"
 
 
@@ -47,6 +48,7 @@ class RocketController {
         uint32_t tick;
 
         IMU imu;
+        SDCard sd;
 
         // current attitude (orientation) of the rocket
         Attitude attitude;
