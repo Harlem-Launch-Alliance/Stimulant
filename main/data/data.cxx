@@ -26,13 +26,14 @@ void transmitData(double altitude, gpsReading gps, char phase)
 }
 
 SDCard::SDCard() {
-  mutex_init(&m_mutex);
+  //mutex_init(&m_mutex);
 }
 
 void SDCard::setup(String date){
-  mutex_enter_blocking(&m_mutex);
+  //mutex_enter_blocking(&m_mutex);
   if (!SD.begin(CS_SD)){
     XBeeSerial.println("MicroSD card: failed or not present");
+    //mutex_exit(&m_mutex);
     return;
   }
   else
@@ -52,40 +53,40 @@ void SDCard::setup(String date){
     XBeeSerial.println(filename);
     delay(5000);
   }
-  mutex_exit(&m_mutex);
+  //mutex_exit(&m_mutex);
 }
 
 void SDCard::record(imuReading sample, bool prelaunch){
-  mutex_enter_blocking(&m_mutex);
+  //mutex_enter_blocking(&m_mutex);
   imuQueue.enqueue(sample);
   if(prelaunch){
     while(!imuQueue.isEmpty() && imuQueue.peek().time < micros() - 2000000){
       imuQueue.dequeue();
     }
   }
-  mutex_exit(&m_mutex);
+  //mutex_exit(&m_mutex);
 }
 
 void SDCard::record(bmpReading sample, bool prelaunch){
-  mutex_enter_blocking(&m_mutex);
+  //mutex_enter_blocking(&m_mutex);
   bmpQueue.enqueue(sample);
   if(prelaunch){
     while(!bmpQueue.isEmpty() && bmpQueue.peek().time < micros() - 2000000){
       bmpQueue.dequeue();
     }
   }
-  mutex_exit(&m_mutex);
+  //mutex_exit(&m_mutex);
 }
 
 void SDCard::record(gpsReading sample, bool prelaunch){
-  mutex_enter_blocking(&m_mutex);
+  //mutex_enter_blocking(&m_mutex);
   gpsQueue.enqueue(sample);
   if(prelaunch){
     while(!gpsQueue.isEmpty() && gpsQueue.peek().time < micros() - 2000000){
       gpsQueue.dequeue();
     }
   }
-  mutex_exit(&m_mutex);
+  //mutex_exit(&m_mutex);
 }
 
 void SDCard::backup(){
@@ -96,14 +97,16 @@ void SDCard::backup(){
     XBeeSerial.println("error opening datalog");
     return;
   }
-  mutex_enter_blocking(&m_mutex);
+  //mutex_enter_blocking(&m_mutex);
+  XBeeSerial.println("backing up imu");
   while(!imuQueue.isEmpty()){
-    mutex_exit(&m_mutex);
+    XBeeSerial.println(".");
+    //mutex_exit(&m_mutex);
     double altitude = 0;
     double latitude = 0;
     double longitude = 0;
     int state = -1; //initialize with invalid state so that it's clear if something isn't working right
-    mutex_enter_blocking(&m_mutex);
+    //mutex_enter_blocking(&m_mutex);
     imuReading imuSample = imuQueue.peek();
     imuQueue.dequeue();
     if(!bmpQueue.isEmpty()){
@@ -122,7 +125,7 @@ void SDCard::backup(){
         gpsQueue.dequeue();
       }
     }
-    mutex_exit(&m_mutex);
+    //mutex_exit(&m_mutex);
     itoa(imuSample.time,buffer,10);
     dataFile.print(buffer); dataFile.print(',');
     if(altitude != 0) {
@@ -163,13 +166,13 @@ void SDCard::backup(){
       dataFile.print(buffer);
     }
     dataFile.println(',');
-    mutex_enter_blocking(&m_mutex);
+    //mutex_enter_blocking(&m_mutex);
   }
+  XBeeSerial.println("backing up bmp");
   while(!bmpQueue.isEmpty()){
-    mutex_exit(&m_mutex);
+    XBeeSerial.println(".");
     double latitude = 0;
     double longitude = 0;
-    mutex_enter_blocking(&m_mutex);
     bmpReading bmpSample = bmpQueue.peek();
     bmpQueue.dequeue();
     if(!gpsQueue.isEmpty()){
@@ -180,7 +183,7 @@ void SDCard::backup(){
         gpsQueue.dequeue();
       }
     }
-    mutex_exit(&m_mutex);
+    //mutex_exit(&m_mutex);
     itoa(bmpSample.time,buffer,10);
     dataFile.print(buffer); dataFile.print(',');
     dtostrf(bmpSample.altitude, 6, 1, buffer);
@@ -208,9 +211,9 @@ void SDCard::backup(){
     itoa(bmpSample.state,buffer,10);
     dataFile.print(buffer);
     dataFile.println(',');
-    mutex_enter_blocking(&m_mutex);
+    //mutex_enter_blocking(&m_mutex);
   }
-  mutex_exit(&m_mutex);
+  //mutex_exit(&m_mutex);
   dataFile.close();
   XBeeSerial.println("back up complete");
 }
