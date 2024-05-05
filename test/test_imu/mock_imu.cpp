@@ -4,7 +4,7 @@
 
 #include "../../main/sensors/imu/imu.h"
 
-imuReading imu::sample()
+imuReading IMU::sample()
 {
   imuReading imuSample;
   imuSample.time = 5; //current timestamp
@@ -19,4 +19,4 @@ imuReading imu::sample()
   return imuSample; //return gyro and accel data
 }
 
-void imu::setup() {}
+void IMU::setup() {}

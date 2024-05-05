@@ -18,7 +18,7 @@ Adafruit_LSM6DSOX sox;
  * 
  * @return imuReading 
  */
-imuReading imu::sample() {
+imuReading IMU::sample() {
     imuReading imuSample;
     imuSample.time = micros(); //current timestamp
 
@@ -44,7 +44,7 @@ imuReading imu::sample() {
     return imuSample; //return gyro and accel data
 }
 
-void imu::setup() {
+void IMU::setup() {
     XBeeSerial.print("Setting up IMU... ");
 
     if (!sox.begin_SPI(IMU_CS, SPI1_SCK, SPI1_MISO, SPI1_MOSI)) {
