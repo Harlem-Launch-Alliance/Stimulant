@@ -16,12 +16,12 @@ constexpr uint32_t RING_QUEUE_LENGTH = 1000;//each 100 elements is 1 seconds of 
 
 // pin definitions
 constexpr int BMP_CS = 7; //SPI chipSelect of bmp altimeter
-constexpr int BUILTIN_SDCARD = 9; // SPI chipSelect of SD card
+constexpr int BUILTIN_SDCARD = 2; // SPI chipSelect of SD card
 constexpr int RADIO_CS = 8; //SPI chipSelect of radio module
 constexpr int IMU_CS = 6; //SPI chipSelect of IMU
-constexpr int SPI0_SCK = 2; //SPI clock pin
-constexpr int SPI0_MOSI = 3; //SPI MOSI pin
-constexpr int SPI0_MISO = 4; //SPI MISO pin
+constexpr int SPI0_SCK = 18; //SPI clock pin
+constexpr int SPI0_MOSI = 19; //SPI MOSI pin
+constexpr int SPI0_MISO = 16; //SPI MISO pin
 constexpr int SPI1_SCK = 10;
 constexpr int SPI1_MOSI = 11;
 constexpr int SPI1_MISO = 12;

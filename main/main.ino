@@ -12,7 +12,7 @@
 #include "sensors/imu/imu.h"
 #include "utils/utils.h"
 
-imu imu;
+Imu imu;
 Attitude attitude;
 
 void setup()
@@ -33,11 +33,11 @@ void setup()
 
   for(int i = 0; i < 5; i++)  // Play 5 beeps
   {
-    //tone(BUZZER_PIN, TONE_HZ);  // Play a tone...
+    tone(BUZZER_PIN, TONE_HZ);  // Play a tone...
     XBeeSerial.println("beep!");
-    delay(1000);              // ...for 1 sec
-    //noTone(BUZZER_PIN);           // Stop sound...
-    delay(1000);              // ...for 1sec
+    delay(100);              // ...for 1 sec
+    noTone(BUZZER_PIN);           // Stop sound...
+    delay(100);              // ...for 1sec
   }
   setupBMP();
   delay(2000);
@@ -46,6 +46,10 @@ void setup()
   delay(2000);
 
   String date = setupGPS();
+  tone(BUZZER_PIN, TONE_HZ);  // Play a tone...
+  XBeeSerial.println("beep!");
+  delay(500);              // ...for 1 sec
+  noTone(BUZZER_PIN);           // Stop sound...
   delay(2000);
 
   setupSD(date);
@@ -173,6 +177,9 @@ flightPhase runDescending(uint32_t tick){//this runs at 20hz
   if(!initialDump) {
     initialDump = true;
     backupToSD();
+    digitalWrite(PYRO0_PIN, HIGH);
+    delay(1000);
+    digitalWrite(PYRO0_PIN, LOW);
   }
 
   //sample sensors
@@ -185,9 +192,6 @@ flightPhase runDescending(uint32_t tick){//this runs at 20hz
   double currentVelocity = (altForVelocity - bmpSample.altitude) * 20; //delta alt divided by dt (.05)
 
   if ((bmpSample.altitude < MAIN_ALTITUDE || currentVelocity > 50) && !deployedMain) {
-    digitalWrite(PYRO0_PIN, HIGH);
-    delay(1000);
-    digitalWrite(PYRO0_PIN, LOW);
     digitalWrite(PYRO1_PIN, HIGH);
     delay(1000);
     digitalWrite(PYRO1_PIN, LOW);

@@ -14,7 +14,7 @@
 const uint8_t MPU=0x68;                  //I2C address of the MPU-6050
 const double tcal = -1600;           //Temperature correction
 
-imuReading imu::sample()
+imuReading Imu::sample()
 {
   imuReading imuSample;
   imuSample.time = micros(); //current timestamp
@@ -54,7 +54,7 @@ imuReading imu::sample()
  * 
  * Verify that the connection is operating properly by taking a sample.
  */
-void imu::setup(){ 
+void Imu::setup(){ 
   XBeeSerial.print("Setting up GY521 IMU... ");
   
   Wire.beginTransmission(MPU);  //This is the I2C address of the MPU (b1101000/b1101001 for AC0 low/high datasheet sec. 9.2)

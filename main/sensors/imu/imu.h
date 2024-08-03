@@ -8,7 +8,7 @@
 #include "../../utils/datatypes.h"
 
 // Interface for IMU functions
-class imu
+class Imu
 {
     public:
     /**
