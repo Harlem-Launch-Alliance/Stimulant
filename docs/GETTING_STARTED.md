@@ -1,35 +1,28 @@
 # Getting Started
-
 This is the definitive guide to contributing any software to this repository. It is possible that you will be able to skip some of these steps or do them in a different order, so don't worry if this document doesn't 100% line up with your system/environment.
 
 ### Please read all steps even if you intend to skip them
 
-This document is a work in progress. Please contact the current [avionics team lead](https://www.hla.nyc/club-leadership.html) if you have any feedback.
+This document is a work in progress. Please contact the current [avionics team lead](https://hla.nyc/leadership) if you have any feedback.
 
 ## Development Environment
-
 Some 3rd party software is required to make and validate changes. You will need to download all of the following software:
 
 ### Arduino IDE
-
 This IDE is required even if you plan on using a different one, since it also comes with the Arduino compiler. [download](https://www.arduino.cc/en/software)
 
 ### Teensyduino
-
 This add-on allows the Arduino IDE and tooling to be compatible with our Teensy microcontroller. [download](https://www.pjrc.com/teensy/td_download.html)
 
 ### VSCode
-
 VSCode is an IDE (integrated development environment) that provides tools to ease your development experience. [download](https://code.visualstudio.com/download)
 
 There are other IDEs to choose from, but this documentation will be specific to VSCode.
 
 ### PlatformIO and Python3
-
 Once you have VSCode installed, install [Python3](https://www.python.org/downloads/) and the `PlatformIO` extension. [This youtube tutorial](https://www.youtube.com/watch?v=JmvMvIphMnY) is very useful for getting familiarized with PlatformIO.
 
 ### Git
-
 Not to be confused with `GitHub`, `Git` is the protocol that we use to collaborate on our software. Your computer may already come with Git.
 
 To check, open VSCode and open `view -> terminal`. Type `git` and hit enter.
@@ -43,13 +36,11 @@ If you aren't sure of what version to download, the version all the way at the t
 That's it for downloads! Time for some configuration.
 
 ## GitHub
-
 In order to contribute, you will need to have a GitHub account. Your account does not have to be linked to an HLA email.
 
 Once you have created an account, message the current avionics team lead to get your account added to the HLA GitHub organization. **You will not be able to easily contribute until you are added.**
 
 ## Time to code!
-
 To make contributing as beginner friendly as possible, there is a specific workflow all members will need to go through.
 
 For your first time contributing, you'll need to download the code onto your computer.
