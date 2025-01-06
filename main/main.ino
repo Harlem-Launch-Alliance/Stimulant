@@ -12,7 +12,7 @@
 #include "sensors/imu/imu.h"
 #include "utils/utils.h"
 
-imu imu;
+IMU imu;
 Attitude attitude;
 
 void setup()
