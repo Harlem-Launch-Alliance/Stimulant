@@ -53,7 +53,9 @@ The following hardware is currently supported:
 3. Integrate the flight computer with rocket (try to keep IMU aligned with axis of rotation)
 4. Place rocket on launch rail.
 5. Power on flight computer
-    * **VERIFY BEFOREHAND**: 1) Make sure rocket is upright on the launch pad. 2) Make sure Pyros have been disconnected 
+    * **VERIFY**: Do NOT power on flight computer until EITHER of the following have been verified:
+         * The rocket is upright on the launch pad.
+         * The Pyros have been disconnected. (Necessary only if rocket is not on the launch pad) 
     * **CAUTION**: Once powered on, any sudden movements may trigger launch detection
 6. Wait at least 5 minutes between powering on and launching to allow for proper sensor calibration
 7. Launch!
