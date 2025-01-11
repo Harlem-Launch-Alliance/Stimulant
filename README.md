@@ -48,12 +48,16 @@ The following hardware is currently supported:
 - break out groups of functions into their own files. Long files are difficult to read. Ideally `main.ino` would only have `void setup()` and `void loop()`
 
 ## Instructions for use:
-1. Connect all sensors and power source
-2. Integrate flight computer with rocket (try to keep IMU aligned with axis of rotation)
-3. Put rocket on launch rail
-4. Power on flight computer
+1. Connect all sensors and power source.
+2. If using pyros, verify that the the power supply is OFF and then attach them.
+3. Integrate the flight computer with rocket (try to keep IMU aligned with axis of rotation)
+4. Place rocket on launch rail.
+5. Power on flight computer
+    * **VERIFY**: Do NOT power on flight computer until EITHER of the following have been verified:
+         * The rocket is upright on the launch pad.
+         * The Pyros have been disconnected. (Necessary only if rocket is not on the launch pad) 
     * **CAUTION**: Once powered on, any sudden movements may trigger launch detection
-5. Wait at least 5 minutes between powering on and launching to allow for proper sensor calibration
-6. Launch!
+6. Wait at least 5 minutes between powering on and launching to allow for proper sensor calibration
+7. Launch!
 
 Note: Due to the use of the `micros()` function, the rocket MUST be launched within 60 minutes of powering on. If you do not launch within that period you must restart the flight computer by turning it off and then on again.
