@@ -22,17 +22,17 @@ imuReading imu::sample() {
     imuReading imuSample;
     imuSample.time = micros(); //current timestamp
 
-    sensors_event_t accelg;
+    sensors_event_t accel_ms2;
     sensors_event_t gyroRad;
     sensors_event_t tempC;
 
-    sox.getEvent(&accelg, &gyroRad, &tempC);
+    sox.getEvent(&accel_ms2, &gyroRad, &tempC);
 
     // convert acceleration data from m/s^2 to Gs
     // TODO: axis mapping should be controlled in config files (Z is up, Y and X are arbitrary for now)
-    imuSample.accelg.x = accelg.acceleration.x / 9.81;
-    imuSample.accelg.z = accelg.acceleration.y / 9.81;
-    imuSample.accelg.y = accelg.acceleration.z / 9.81;
+    imuSample.accel_ms2.x = accel_ms2.acceleration.x / 9.81;
+    imuSample.accel_ms2.z = accel_ms2.acceleration.y / 9.81;
+    imuSample.accel_ms2.y = accel_ms2.acceleration.z / 9.81;
 
     // TODO: axis mapping should be controlled in config files (Z is up, Y and X are arbitrary for now)
     imuSample.gyroRad.x = gyroRad.gyro.x;

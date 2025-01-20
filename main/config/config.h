@@ -19,6 +19,6 @@
 #include "config/catalyst2.h"
 #endif
 
-constexpr double MAIN_ALTITUDEm = 200; //altitude to deploy main parachute at (meters)
+constexpr double MAIN_ALTITUDE_M = 200; //altitude to deploy main parachute at (meters)
 constexpr double G_FORCE_TO_LAUNCH = 2; //if acceleration exceeds this number the rocket will assume it has been launched
-constexpr double MAX_APOGEE_ACCELg = 1; //we can rule out apogee if acceleration is above this amount (Gs)
+constexpr double MAX_APOGEE_ACCEL_G = 1; //we can rule out apogee if acceleration is above this amount (Gs)
