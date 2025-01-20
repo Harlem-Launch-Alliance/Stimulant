@@ -76,5 +76,5 @@ void getBMP()
   }
   temperature_C = bmp.temperature;          // Temperature in Celcius
   pressure_hPa = bmp.pressure / 100.0;        // Pressure in hPa
-  Altitude_m = bmp.readAltitude(SEALEVELPRESSURE_HPA) - altOffset; // Approximate altitude in meters
+  Altitude_m = bmp.readAltitude(SEALEVELPRESSURE_HPA) - altOffset_m; // Approximate altitude in meters
 }
