@@ -14,7 +14,7 @@
 
 #define SEALEVELPRESSURE_HPA (1013.25)
 
-double Altitude, temperature, pressure, altOffset = 0;
+double Altitude_m, temperature_C, pressure_hPa, altOffset_m = 0;
 
 Adafruit_BMP3XX bmp;
 
@@ -28,23 +28,23 @@ void setup() {
   for(int i = 0; i < 100; i++)
   {
     getBMP();
-    total += Altitude;
+    total += Altitude+m;
   }
-  altOffset = total/100.0;
+  altOffset_m = total/100.0;
 }
 
 void loop() {
   getBMP();
   Serial.print("Temperature = ");
-  Serial.print(temperature);
+  Serial.print(temperature_C);
   Serial.println(" *C");
 
   Serial.print("Offset = ");
-  Serial.print(altOffset);
+  Serial.print(altOffset_m);
   Serial.println(" m");
 
   Serial.print("Altitude = ");
-  Serial.print(Altitude);
+  Serial.print(Altitude_m);
   Serial.println(" m");
 
   delay(100);
@@ -74,7 +74,7 @@ void getBMP()
     Serial.println("Failed to perform BMP388 reading.");
     return;
   }
-  temperature = bmp.temperature;          // Temperature in Celcius
-  pressure = bmp.pressure / 100.0;        // Pressure in hPa
-  Altitude = bmp.readAltitude(SEALEVELPRESSURE_HPA) - altOffset; // Approximate altitude in meters
+  temperature_C = bmp.temperature;          // Temperature in Celcius
+  pressure_hPa = bmp.pressure / 100.0;        // Pressure in hPa
+  Altitude_m = bmp.readAltitude(SEALEVELPRESSURE_HPA) - altOffset; // Approximate altitude in meters
 }
