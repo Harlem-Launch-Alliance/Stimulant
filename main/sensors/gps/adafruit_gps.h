@@ -1,11 +1,13 @@
 // Test code for Ultimate GPS Using Hardware Serial.
 // Need to remove the GPS.lastNMEA() and see if it still works, still get compilation error
 
+#pragma once
+
+#include "../../utils/datatypes.h"
+
 #include <Adafruit_GPS.h>
-#include "utils.h"
 
 // what's the name of the hardware serial port?
-#define GPSSerial Serial2
 #define ERR_NO_GPS "flightData-noDate"
 
 // Connect to the GPS on the hardware port
@@ -20,18 +22,18 @@ Adafruit_GPS GPS(&GPSSerial);
  */
 String setupGPS()
 {
-  Serial1.println("Setting up GPS...");
+  XBeeSerial.println("Setting up GPS...");
   unsigned int startTime = millis();
   // 9600 NMEA is the default baud rate for Adafruit MTK GPS's- some use 4800
   GPS.begin(9600);                   // 9600 is the default baud rate
-  GPS.sendCommand("$PMTK251,38400*27");             //set baud rate to 38400
-  GPSSerial.end();
-  delay(1000);
-  GPS.begin(38400);            // set serial to 38400
+  // GPS.sendCommand(PMTK_SET_BAUD_57600);             //set baud rate to 115200
+  // GPSSerial.end();
+  // delay(1000);
+  // GPS.begin(57600);            // set serial to 115200
   delay(1000);
   // uncomment this line to turn on RMC (recommended minimum) and GGA (fix data) including altitude
   GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
-  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ); // 1 Hz update rate
+  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_5HZ); // 5 Hz logging rate (update rate is independent of this)
 
   delay(1000);
 
@@ -55,29 +57,29 @@ String setupGPS()
       timer = millis() + 10000;
       int minutes = (timer - startTime)/60000;
       int secs = ((timer - startTime) / 1000) % 60;
-      Serial1.print("Acquiring GPS signal... Time elapsed: ");
-      Serial1.print(minutes);//minutes
-      Serial1.print(":");
+      XBeeSerial.print("Acquiring GPS signal... Time elapsed: ");
+      XBeeSerial.print(minutes);//minutes
+      XBeeSerial.print(":");
       if(secs < 10)
-        Serial1.print("0");
-      Serial1.println(secs);//seconds
+        XBeeSerial.print("0");
+      XBeeSerial.println(secs);//seconds
     }
     if(millis() - startTime > GPS_WAIT_TIME * 1000){
-      Serial1.println("CAUTION!!! GPS timeout: Progressing with no GPS signal");
+      XBeeSerial.println("CAUTION!!! GPS timeout: Progressing with no GPS signal");
       return ERR_NO_GPS;
     }
   }
-  Serial1.println("GPS signal acquired");
+  XBeeSerial.println("GPS signal acquired");
   uint8_t hour = GPS.hour;
   uint8_t minute = GPS.minute;
   uint8_t year = GPS.year;
   uint8_t month = GPS.month;
   uint8_t day = GPS.day;
   uint8_t yearPrefix = 20;
-  
-  String date = String(yearPrefix).concat(year).concat('-').concat(month).concat('-').concat(day).concat("--").concat(hour).concat('-').concat(minute);
-  Serial1.print("Date: ");
-  Serial1.println(date);
+
+  String date = String(yearPrefix) + String(year) + '-' + String(month) + '-' + String(day) + "--"+ String(hour) + '-' + String(minute);
+  XBeeSerial.print("Date: ");
+  XBeeSerial.println(date);
   return date;
 }
 

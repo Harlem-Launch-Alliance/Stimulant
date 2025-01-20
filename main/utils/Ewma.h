@@ -10,37 +10,35 @@
 * t : time 
 */ 
 
-#ifndef EWMA_H_
-#define EWMA_H_
+#pragma once
 
 class Ewma{
-public:
-	
-	double output = 0; //current output EWMA(t)
-	double alpha = 0; //smoothing factor
-
-	
-	Ewma(double alpha) { // constructs an Ewma filter with smoothing factor a
-		this->alpha = alpha;
-		} 
+public:	
+	/// @brief constructs an Ewma filter
+	/// @param newAlpha smoothing factor from [0,1] (higher alpha value causes less smoothing of datapoints)
+	Ewma(double newAlpha) {
+		alpha = newAlpha;
+	} 
 
 	void reset(){
-		this->hasInitial = false; 
+		hasInitial = false; 
 	}
 
-	double filter(double input){
+	void filter(const double input){
 		if (hasInitial) {
 			output = alpha * (input - output) + output;
 		} else {
 			output = input;
 			hasInitial = true;
 		}
+	}
+
+	double getOutput() {
 		return output;
 	}
 
 private:
-	bool hasInitial = false;
-
+	double alpha; //smoothing factor
+	bool hasInitial;
+	double output; //current output EWMA(t)
 };
-
-#endif

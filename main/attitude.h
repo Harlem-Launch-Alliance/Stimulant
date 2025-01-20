@@ -7,8 +7,24 @@
 //rates are magnitudes of rad/s
 //assuming roll == 0, pitchRate will be equivalent to y, and yawRate will be equivalent to x
 
-#include "Ewma.h" 
-#include "utils.h"
+#pragma once
+
+#include "utils/datatypes.h"
+#include "utils/Ewma.h" 
+
+/// @brief this object tracks attitude/orientation as well as gyroscope calibration values
+class Attitude {
+public:
+  Attitude() = default;
+  void calibrateGyro(const Directional& rawGyro);
+  void updateAttitude(Directional gyro, const bool hasLaunched, const uint32_t sampleTime);
+  Directional getCurrentAttitude();
+private:
+  Directional m_attitude, m_zeroRateOffsets;
+  uint32_t m_lastSampleTime;
+  double getRate(const double roll, const double parallel, const double perpendicular);
+  void getCalibratedGyro(Directional& gyro);
+};
 
 //returns calculated pitchRate or yawRate
 /**
@@ -22,58 +38,46 @@
  * @param perpendicular raw rate in perpendicular direction (Y)
  * @return double actual rate in cardinal X direction
  */
-double getRate(double roll, double parallel, double perpendicular){//if getting rateX, parallel should be x
+double Attitude::getRate(const double roll, const double parallel, const double perpendicular)
+{ //if getting rateX, parallel should be x
   return parallel * cos(roll) + perpendicular * sin(roll);
 }
 
 /**
  * @brief Filter raw data through an EWMA to compute "Zero Rate Offset" for each axis
  * 
- * @param gyro One sample of the gyroscope
- * @param hasLaunched has the rocket launched yet
- * @return Directional current calculated zero rate offsets
+ * @param rawGyro One sample of the gyroscope
  */
-Directional calibrateGyro(Directional gyro, bool hasLaunched){//returns gyro offsets
+void Attitude::calibrateGyro(const Directional& rawGyro)
+{
+  static Directional lastSavedOffsets;
+  static int16_t tickCounter;
   static Ewma xFilter(.002);
   static Ewma yFilter(.002);
   static Ewma zFilter(.002);
-  static Directional lastSave;//0-5 second old data
-  static Directional oldSave;//5-10 second old data
-  static uint16_t counter = 0;
 
-  if(hasLaunched){//once launch occurs we lock in the offsets (and return early to skip the math)
-    //in order to offset the delay between launch and launch detection, we use the data from 5-10 seconds prior
-    return oldSave;
+  xFilter.filter(rawGyro.x);
+  yFilter.filter(rawGyro.y);
+  zFilter.filter(rawGyro.z);
+
+  tickCounter = (tickCounter + 1) % 500;
+  //every 500 ticks (2-5 seconds), we save the last state and transfer the previous state to the go queue
+  if(tickCounter == 0){
+    m_zeroRateOffsets = lastSavedOffsets;
+    lastSavedOffsets = Directional(xFilter.getOutput(), yFilter.getOutput(), zFilter.getOutput());
   }
-
-  Directional current;
-
-  current.x = xFilter.filter(gyro.x);
-  current.y = yFilter.filter(gyro.y);
-  current.z = zFilter.filter(gyro.z);
-
-  counter = (counter + 1) % 500;
-  //every 500 ticks (5 seconds), we save the last state and transfer the previous state to the go queue
-  if(counter == 0){
-    oldSave = lastSave;
-    lastSave = current;
-  }
-  return oldSave;
 }
 
 /**
- * @brief Given raw gyro data and zero rate offsets, determine actual rotation rates
+ * @brief normalize raw gyro data using zero rate offsets
  * 
- * @param gyro raw gyro sample
- * @param offsets vector of zero rate offsets
- * @return Directional actual rotation rates
+ * @param[in, out] gyro raw gyro sample
  */
-Directional getRealGyro(Directional gyro, Directional offsets){
-  Directional realGyro;
-  realGyro.x = gyro.x - offsets.x;
-  realGyro.y = gyro.y - offsets.y;
-  realGyro.z = gyro.z - offsets.z;
-  return realGyro;
+void Attitude::getCalibratedGyro(Directional& gyro)
+{
+  gyro.x = gyro.x - m_zeroRateOffsets.x;
+  gyro.y = gyro.y - m_zeroRateOffsets.y;
+  gyro.z = gyro.z - m_zeroRateOffsets.z;
 }
 
 /**
@@ -81,38 +85,46 @@ Directional getRealGyro(Directional gyro, Directional offsets){
  * 
  * @note In order to minimize error, we should assume that attitude is 0,0,0 at launch. However, 
  *  we don't actually know exactly when launch occurs. We can assume with almost 100% 
- *  certianty that launch is detected less than 5 seconds after it has actually occured, so 
- *  as a substitute, we can start recording attitude changes 5 seconds before detected 
- *  launch. In order to achieve this, we can record changes in 5 second increments (chunks) 
+ *  certainty that launch is detected less than 500 ticks (2-5 seconds) after it has actually occured, so 
+ *  as a substitute, we can start recording attitude changes 500 ticks before detected 
+ *  launch. In order to achieve this, we can record changes in 500 tick increments (chunks) 
  *  prior to launch. Once launch is detected we will 'lock in' those chunks and continue 
  *  recording changes forever.
  * 
- * @param gyro Calibrated gyro sample
+ * @param gyro raw gyro sample
  * @param hasLaunched has the rocket launched
- * @return Directional current attitude vector (Euler angles)
  */
-Directional getAttitude(Directional gyro, bool hasLaunched){//only calibrated gyro data should go in here
-  const int hz = 100; //number of readings per second
+void Attitude::updateAttitude(Directional gyro, const bool hasLaunched, uint32_t sampleTime)
+{
   static Directional oldChanges; //5-10 seconds ago
   static Directional lastChanges; //0-5 seconds ago
-  static uint16_t counter = 0;
-  Directional currentAttitude;
+  static uint16_t tickCounter = 0;
 
-  counter = (counter + 1) % 500;
+  getCalibratedGyro(gyro);
+  const uint32_t timeDiff = sampleTime - m_lastSampleTime;
+  m_lastSampleTime = sampleTime;
+  const double timeDiffSeconds = timeDiff / 1000000;
 
-  lastChanges.z += gyro.z/hz;
-  currentAttitude.z = oldChanges.z + lastChanges.z; //z must be set first so we can calculate x and y
-  lastChanges.x += getRate(currentAttitude.z/* -gyro.z/2 */, gyro.x, gyro.y)/hz; //TODO: test whether or not -gyro.z/2 makes a difference
-  lastChanges.y += getRate(currentAttitude.z/* -gyro.z/2 */, gyro.y, gyro.x)/hz;
-  currentAttitude.x = oldChanges.x + lastChanges.x;
-  currentAttitude.y = oldChanges.y + lastChanges.y;
+  tickCounter = (tickCounter + 1) % 500;
 
-  if(counter == 0 && !hasLaunched){//every 5 seconds we dump all data that's more than 5 seconds old (prior to launch)
+  lastChanges.z += gyro.z * timeDiffSeconds;
+  m_attitude.z = oldChanges.z + lastChanges.z; //z must be set first so we can calculate x and y
+  lastChanges.x += getRate(m_attitude.z/* -gyro.z/2 */, gyro.x, gyro.y) * timeDiffSeconds; //TODO: test whether or not -gyro.z/2 makes a difference
+  lastChanges.y += getRate(m_attitude.z/* -gyro.z/2 */, gyro.y, gyro.x) * timeDiffSeconds;
+  m_attitude.x = oldChanges.x + lastChanges.x;
+  m_attitude.y = oldChanges.y + lastChanges.y;
+
+  // every 5 seconds we delete all data that's more than 5 seconds old (prior to launch)
+  // this minimizes accumalation of error before launch
+  if(tickCounter == 0 && !hasLaunched){
     oldChanges = lastChanges;
     lastChanges.x = 0;
     lastChanges.y = 0;
     lastChanges.z = 0;
   }
+}
 
-  return currentAttitude;
+Directional Attitude::getCurrentAttitude()
+{
+  return m_attitude;
 }

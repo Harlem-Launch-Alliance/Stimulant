@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
-#include "../main/utils.h"
+#include "../main/utils/utils.h"
 
 /// @brief test conversion of degrees to radians
 TEST(utils, degToRad)
 {
     double degrees = 60;
     double radians = toRad(degrees);
-    EXPECT_NEAR(0.0000001, 1.04719755, radians);
+    EXPECT_NEAR(0.0000001, 1.04719755, radians); // 60 degrees is about 1.047 radians
 }
 
 int main(int argc, char **argv)

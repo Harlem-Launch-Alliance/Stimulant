@@ -3,13 +3,13 @@ This is the definitive guide to contributing any software to this repository. It
 
 ### Please read all steps even if you intend to skip them
 
-This document is a work in progress. Please contact the current avionics team lead if you have any feedback.
+This document is a work in progress. Please contact the current [avionics team lead](https://hla.nyc/leadership) if you have any feedback.
 
 ## Development Environment
 Some 3rd party software is required to make and validate changes. You will need to download all of the following software:
 
 ### Arduino IDE
-This IDE is required even if you plan on using a different one, since it also comes with all of the necessary libraries. [download](https://www.arduino.cc/en/software)
+This IDE is required even if you plan on using a different one, since it also comes with the Arduino compiler. [download](https://www.arduino.cc/en/software)
 
 ### Teensyduino
 This add-on allows the Arduino IDE and tooling to be compatible with our Teensy microcontroller. [download](https://www.pjrc.com/teensy/td_download.html)
@@ -17,13 +17,13 @@ This add-on allows the Arduino IDE and tooling to be compatible with our Teensy 
 ### VSCode
 VSCode is an IDE (integrated development environment) that provides tools to ease your development experience. [download](https://code.visualstudio.com/download)
 
-There are many other IDEs to choose from, but this documentation will be specific to VSCode.
+There are other IDEs to choose from, but this documentation will be specific to VSCode.
 
 ### PlatformIO and Python3
-Once you have VSCode installed, install Python3 and the `PlatformIO` extension. [This youtube tutorial](https://www.youtube.com/watch?v=JmvMvIphMnY) is very useful for getting familiarized with PlatformIO.
+Once you have VSCode installed, install [Python3](https://www.python.org/downloads/) and the `PlatformIO` extension. [This youtube tutorial](https://www.youtube.com/watch?v=JmvMvIphMnY) is very useful for getting familiarized with PlatformIO.
 
 ### Git
-Not to be confused with `GitHub`, `Git` is the protocol that we use to collaborate on our software. Your computer may already come with Git. 
+Not to be confused with `GitHub`, `Git` is the protocol that we use to collaborate on our software. Your computer may already come with Git.
 
 To check, open VSCode and open `view -> terminal`. Type `git` and hit enter.
 
@@ -31,7 +31,7 @@ If you receive an error along the lines of `command not found`, you will need to
 
 If you aren't sure of what version to download, the version all the way at the top will most likely be compatible with your device.
 
-***You must restart VSCode after installing git for it to work***
+**_You must restart VSCode after installing git for it to work_**
 
 That's it for downloads! Time for some configuration.
 
@@ -44,20 +44,21 @@ Once you have created an account, message the current avionics team lead to get 
 To make contributing as beginner friendly as possible, there is a specific workflow all members will need to go through.
 
 For your first time contributing, you'll need to download the code onto your computer.
+
 1. Open VSCode and then open `view -> terminal`.
 1. Enter `cd ~/Documents`. This will move you to your Documents folder
 1. Enter `mkdir git`. This will make a folder named `git`
 1. Enter `cd git`
-1. Enter `git clone https://github.com/Harlem-Launch-Alliance/Catalyst-2`
+1. Enter `git clone https://github.com/Harlem-Launch-Alliance/Stimulant`
 
 Now you are ready to write some code. This is the workflow you will follow every time you want to contribute. You will need to be a member of the HLA GitHub organization to complete these steps.
 
 1. Choose a task from the `issues` tab on GitHub. If you're not sure what issue to choose or you want to contribute something else, feel free to contact the avionics team lead for guidance.
-1. Navigate to your local repository *in terminal* `cd ~/Documents/git/Catalyst-2`
+1. Navigate to your local repository _in terminal_ `cd ~/Documents/git/Stimulant`
 1. Make a new branch with a relevant name `git checkout -b name_of_branch main`
 1. Publish your branch `git push -u origin name_of_branch`
-    - You may need to verify your Github credentials here
-1. Open the `Catalyst-2` folder in your IDE
+   - You may need to verify your Github credentials here
+1. Open the `Stimulant` folder in your IDE
 1. Make your changes! (Please test your changes before submitting them for review)
 1. After saving your changes. Use `git commit -m "message relevant to your changes" -a` to commit your changes to your branch
 1. Repeat the previous 2 steps as needed until you are satisfied with your changes.

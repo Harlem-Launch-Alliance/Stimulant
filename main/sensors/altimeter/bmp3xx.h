@@ -2,12 +2,13 @@
  * This file is for all barometric altimeter queries
  * 
  ****************************************************************************/
+#pragma once
+
 #ifndef UNIT_TEST
 #include "Adafruit_BMP3XX.h"  // BMP388 library
 #endif // UNIT_TEST
-#include "utils.h"
+#include "../../utils/datatypes.h"
 
-#define BMP_CS 10
 double GNDLEVELPRESSURE_HPA;
 
 Adafruit_BMP3XX bmp; //initialize sensor
@@ -23,7 +24,7 @@ bmpReading getBMP()
 {
   bmpReading sample;
   if (!bmp.performReading()) {
-    Serial1.println("Failed to perform BMP388 reading.");
+    XBeeSerial.println("Failed to perform BMP388 reading.");
     return sample;
   }
   //sample.temp = bmp.temperature;          // Temperature in Celcius
@@ -50,10 +51,10 @@ void setGroundLevelPressure() { //Reads bmp data and sets ground lvl pressure
  */
 void setupBMP()
 {
-  Serial1.print("Setting up BMP388... ");
+  XBeeSerial.print("Setting up BMP388... ");
   delay(3000);
-  if (!bmp.begin_SPI(BMP_CS)) {   // hardware I2C mode, can pass in address & alt Wire
-    Serial1.println("could not find a valid BMP388 sensor, check wiring!");
+  if (!bmp.begin_SPI(BMP_CS, SPI1_SCK, SPI1_MISO, SPI1_MOSI)) {
+    XBeeSerial.println("could not find a valid BMP388 sensor, check wiring!");
     return;
   }
 
@@ -66,9 +67,9 @@ void setupBMP()
     getBMP();
   bmpReading sample = getBMP();
   if(sample.altitude != 0)
-    Serial1.println("BMP setup successful.");
+    XBeeSerial.println("BMP setup successful.");
   else
-    Serial1.println("BMP setup failed, check wiring or pin settings.");
+    XBeeSerial.println("BMP setup failed, check wiring or pin settings.");
   delay(2000);
   setGroundLevelPressure();
 }
