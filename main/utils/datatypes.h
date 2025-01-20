@@ -64,4 +64,4 @@ struct gpsReading
  * @note These phases are used to seperate the computers priorities into states
  * 
  */
-enum flightPhase {ONPAD, ASCENDING, DESCENDING, POST_FLIGHT};
+enum FlightPhase {ONPAD, ASCENDING, DESCENDING, POST_FLIGHT};

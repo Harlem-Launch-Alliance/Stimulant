@@ -2,28 +2,12 @@
  * This file is for saving and transmitting data
  * currently using an SD card and Xbee respectively
  ****************************************************************************/
-#pragma once
-
-#include "config/config.h"
-#include "utils/datatypes.h"
-#include "utils/ringQueue.h"
+#include "data.h"
 
 #include <SD.h>
 
 const int CS_SD = BUILTIN_SDCARD;
 
-char filename[50];
-RingQueue<imuReading> imuQueue;
-RingQueue<bmpReading> bmpQueue;
-RingQueue<gpsReading> gpsQueue;
-
-/**
- * @brief Transmit telemtry to ground station via radio
- * 
- * @param altitude Current altitude
- * @param gps Current GPS location
- * @param phase Current phase of flight (On pad, ascending, etc.)
- */
 void transmitData(double altitude, gpsReading gps, char phase)
 {
   //phase packet
@@ -41,16 +25,15 @@ void transmitData(double altitude, gpsReading gps, char phase)
   XBeeSerial.println(gps.longitude, 4);
 }
 
-/**
- * @brief Establish connection to SD card
- * 
- * Attempt to write data to SD card to verify connection
- * 
- * @param date Current date/time
- */
-void setupSD(String date){
+SDCard::SDCard() {
+  //mutex_init(&m_mutex);
+}
+
+void SDCard::setup(String date){
+  //mutex_enter_blocking(&m_mutex);
   if (!SD.begin(CS_SD)){
     XBeeSerial.println("MicroSD card: failed or not present");
+    //mutex_exit(&m_mutex);
     return;
   }
   else
@@ -70,50 +53,43 @@ void setupSD(String date){
     XBeeSerial.println(filename);
     delay(5000);
   }
+  //mutex_exit(&m_mutex);
 }
 
-/**
- * @defgroup cacheData Cache Data
- * 
- * @note If the rocket has not yet launched, all data that is more than 2 seconds old will be trimmed to ensure that there is space in the cache for flight data.
- * 
- * @param sample Data sample to be cached
- * @param prelaunch Current status of rocket (launched or not)
- * @{
- */
-void recordData(imuReading sample, bool prelaunch){
+void SDCard::record(imuReading sample, bool prelaunch){
+  //mutex_enter_blocking(&m_mutex);
   imuQueue.enqueue(sample);
   if(prelaunch){
     while(!imuQueue.isEmpty() && imuQueue.peek().time < micros() - 2000000){
       imuQueue.dequeue();
     }
   }
+  //mutex_exit(&m_mutex);
 }
 
-void recordData(bmpReading sample, bool prelaunch){
+void SDCard::record(bmpReading sample, bool prelaunch){
+  //mutex_enter_blocking(&m_mutex);
   bmpQueue.enqueue(sample);
   if(prelaunch){
     while(!bmpQueue.isEmpty() && bmpQueue.peek().time < micros() - 2000000){
       bmpQueue.dequeue();
     }
   }
+  //mutex_exit(&m_mutex);
 }
 
-void recordData(gpsReading sample, bool prelaunch){
+void SDCard::record(gpsReading sample, bool prelaunch){
+  //mutex_enter_blocking(&m_mutex);
   gpsQueue.enqueue(sample);
   if(prelaunch){
     while(!gpsQueue.isEmpty() && gpsQueue.peek().time < micros() - 2000000){
       gpsQueue.dequeue();
     }
   }
+  //mutex_exit(&m_mutex);
 }
-/**@}*/
 
-/**
- * @brief write all data from cache to SD card
- * 
- */
-void backupToSD(){
+void SDCard::backup(){
   XBeeSerial.println("backing up...");
   File dataFile = SD.open(filename, FILE_WRITE);
   char buffer[50];
@@ -121,11 +97,16 @@ void backupToSD(){
     XBeeSerial.println("error opening datalog");
     return;
   }
+  //mutex_enter_blocking(&m_mutex);
+  XBeeSerial.println("backing up imu");
   while(!imuQueue.isEmpty()){
+    XBeeSerial.println(".");
+    //mutex_exit(&m_mutex);
     double altitude = 0;
     double latitude = 0;
     double longitude = 0;
     int state = -1; //initialize with invalid state so that it's clear if something isn't working right
+    //mutex_enter_blocking(&m_mutex);
     imuReading imuSample = imuQueue.peek();
     imuQueue.dequeue();
     if(!bmpQueue.isEmpty()){
@@ -144,6 +125,7 @@ void backupToSD(){
         gpsQueue.dequeue();
       }
     }
+    //mutex_exit(&m_mutex);
     itoa(imuSample.time,buffer,10);
     dataFile.print(buffer); dataFile.print(',');
     if(altitude != 0) {
@@ -184,8 +166,11 @@ void backupToSD(){
       dataFile.print(buffer);
     }
     dataFile.println(',');
+    //mutex_enter_blocking(&m_mutex);
   }
+  XBeeSerial.println("backing up bmp");
   while(!bmpQueue.isEmpty()){
+    XBeeSerial.println(".");
     double latitude = 0;
     double longitude = 0;
     bmpReading bmpSample = bmpQueue.peek();
@@ -198,6 +183,7 @@ void backupToSD(){
         gpsQueue.dequeue();
       }
     }
+    //mutex_exit(&m_mutex);
     itoa(bmpSample.time,buffer,10);
     dataFile.print(buffer); dataFile.print(',');
     dtostrf(bmpSample.altitude, 6, 1, buffer);
@@ -225,7 +211,9 @@ void backupToSD(){
     itoa(bmpSample.state,buffer,10);
     dataFile.print(buffer);
     dataFile.println(',');
+    //mutex_enter_blocking(&m_mutex);
   }
+  //mutex_exit(&m_mutex);
   dataFile.close();
   XBeeSerial.println("back up complete");
 }
