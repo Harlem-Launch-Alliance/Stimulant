@@ -52,8 +52,8 @@ public:
         (void)setting;
     }
 
-    double pressure;
-    double temperature;
+    double pressurekPa;
+    double temperatureC;
 
 };
 
