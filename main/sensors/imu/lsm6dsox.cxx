@@ -22,24 +22,24 @@ imuReading imu::sample() {
     imuReading imuSample;
     imuSample.time = micros(); //current timestamp
 
-    sensors_event_t accel;
-    sensors_event_t gyro;
-    sensors_event_t temp;
+    sensors_event_t accelg;
+    sensors_event_t gyroRad;
+    sensors_event_t tempC;
 
-    sox.getEvent(&accel, &gyro, &temp);
+    sox.getEvent(&accelg, &gyroRad, &tempC);
 
     // convert acceleration data from m/s^2 to Gs
     // TODO: axis mapping should be controlled in config files (Z is up, Y and X are arbitrary for now)
-    imuSample.accel.x = accel.acceleration.x / 9.81;
-    imuSample.accel.z = accel.acceleration.y / 9.81;
-    imuSample.accel.y = accel.acceleration.z / 9.81;
+    imuSample.accelg.x = accelg.acceleration.x / 9.81;
+    imuSample.accelg.z = accelg.acceleration.y / 9.81;
+    imuSample.accelg.y = accelg.acceleration.z / 9.81;
 
     // TODO: axis mapping should be controlled in config files (Z is up, Y and X are arbitrary for now)
-    imuSample.gyro.x = gyro.gyro.x;
-    imuSample.gyro.z = gyro.gyro.y;
-    imuSample.gyro.y = gyro.gyro.z;
+    imuSample.gyroRad.x = gyroRad.gyro.x;
+    imuSample.gyroRad.z = gyroRad.gyro.y;
+    imuSample.gyroRad.y = gyroRad.gyro.z;
 
-    (void) temp; //we can remove this if we decide to record temperature from the IMU
+    (void) tempC; //we can remove this if we decide to record temperature from the IMU
 
     return imuSample; //return gyro and accel data
 }
