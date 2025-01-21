@@ -184,7 +184,7 @@ flightPhase runDescending(uint32_t tick){//this runs at 20hz
   static double altForVelocity = bmpSample.altitude;
   double currentVelocity = (altForVelocity - bmpSample.altitude) * 20; //delta alt divided by dt (.05)
 
-  if ((bmpSample.altitude < MAIN_ALTITUDE || currentVelocity > 50) && !deployedMain) {
+  if ((bmpSample.altitude < MAIN_ALTITUDE_M || currentVelocity > 50) && !deployedMain) {
     digitalWrite(PYRO0_PIN, HIGH);
     delay(1000);
     digitalWrite(PYRO0_PIN, LOW);
