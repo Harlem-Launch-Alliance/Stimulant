@@ -13,8 +13,8 @@ class Adafruit_BMP3XX
 {
 public:
     bool performReading() {
-        pressurekPa = 100;
-        temperatureC = 1;
+        pressure = 100;
+        temperature = 1;
         return true;
     }
 
@@ -52,8 +52,8 @@ public:
         (void)setting;
     }
 
-    double pressurekPa;
-    double temperatureC;
+    double pressure;
+    double temperature;
 
 };
 
