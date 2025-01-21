@@ -25,10 +25,10 @@ bool detectLaunch(Directional accel){//accel in Gs
 
   //group all accels into one
   //accel may need calibration. If that is the case, it should happen externally and only calibrated data should enter this function
-  double totalAccel = sqrt(pow(accel.x, 2) + pow(accel.y, 2) + pow(accel.z, 2)); //this should be 1G when stationary
-  accelFilter.filter(totalAccel);
-  double filteredAccel = accelFilter.getOutput();
-  if(filteredAccel > G_FORCE_TO_LAUNCH)
+  double totalAccelg = sqrt(pow(accel.x, 2) + pow(accel.y, 2) + pow(accel.z, 2)); //this should be 1G when stationary
+  accelFilter.filter(totalAccelg);
+  double filteredAccelg = accelFilter.getOutput();
+  if(filteredAccelg > G_FORCE_TO_LAUNCH)
     hasLaunched = true;
   return hasLaunched;
 }
@@ -43,7 +43,7 @@ bool detectLaunch(Directional accel){//accel in Gs
  * @return false rocket is not accelerating substantially
  */
 bool isAccelerating(Directional accel){//determine if we are accelerating at more than 2 Gs
-  return sqrt(pow(accel.x, 2) + pow(accel.y, 2) + pow(accel.z, 2)) > MAX_APOGEE_ACCEL;
+  return sqrt(pow(accel.x, 2) + pow(accel.y, 2) + pow(accel.z, 2)) > MAX_APOGEE_ACCEL_G;
 }
 
 /**

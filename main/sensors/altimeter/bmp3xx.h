@@ -35,12 +35,12 @@ bmpReading getBMP()
 }
 
 void setGroundLevelPressure() { //Reads bmp data and sets ground lvl pressure
-  double pressurePreFlight;
+  double pressurePreFlight_hPa;
   double pressureSum = 0;  //Sum of 100 pressure readings
   for(int i = 0; i<100; i++){
     bmp.performReading();
-    pressurePreFlight = bmp.pressure / 100.0; //sample pressure in hPa
-    pressureSum += pressurePreFlight;
+    pressurePreFlight_hPa = bmp.pressure / 100.0; //sample pressure in hPa
+    pressureSum += pressurePreFlight_hPa;
   }
   GNDLEVELPRESSURE_HPA = pressureSum / 100.0; //sets average ground lvl pressure
 }
