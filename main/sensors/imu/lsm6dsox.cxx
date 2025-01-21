@@ -30,9 +30,9 @@ imuReading imu::sample() {
 
     // convert acceleration data from m/s^2 to Gs
     // TODO: axis mapping should be controlled in config files (Z is up, Y and X are arbitrary for now)
-    imuSample.accel_ms2.x = accel_ms2.acceleration.x / 9.81;
-    imuSample.accel_ms2.z = accel_ms2.acceleration.y / 9.81;
-    imuSample.accel_ms2.y = accel_ms2.acceleration.z / 9.81;
+    imuSample.accel_g.x = accel_ms2.acceleration.x / 9.81;
+    imuSample.accel_g.z = accel_ms2.acceleration.y / 9.81;
+    imuSample.accel_g.y = accel_ms2.acceleration.z / 9.81;
 
     // TODO: axis mapping should be controlled in config files (Z is up, Y and X are arbitrary for now)
     imuSample.gyroRad.x = gyroRad.gyro.x;
