@@ -64,7 +64,7 @@ void imu::setup(){
   
   Wire.beginTransmission(MPU); //I2C address of the MPU
   Wire.write(0x1B);            //Accessing the register 1B - Gyroscope Configuration (Sec. 4.4) 
-  Wire.write(0b00010000);      //Setting the gyro scale to +/- 250 deg/s 
+  Wire.write(0b00010000);      //Setting the gyro scale to +/- 1000 deg/s 
   Wire.endTransmission(); 
   
   Wire.beginTransmission(MPU);  //I2C address of the MPU
