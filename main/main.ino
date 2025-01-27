@@ -207,7 +207,8 @@ flightPhase runDescending(uint32_t tick){//this runs at 20hz
 
   if(tick % 100 == 3){//every 5 seconds check if we are still descending
     if(lastAlt - bmpSample.altitude < 1){//if altitude hasn't changed more than 1 meter in 5 seconds, we're on the ground
-      return POST_FLIGHT;
+      XBeeSerial.println("The Rocket Has Landed Safely!");
+        return POST_FLIGHT;
     }
     lastAlt = bmpSample.altitude;
   }
