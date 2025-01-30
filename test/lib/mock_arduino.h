@@ -3,11 +3,11 @@
 #include <string>
 #include <cstdint>
 
-#define PI 3.1415926535897932384626433832795
-#define BMP3_NO_OVERSAMPLING 1
-#define BMP3_OVERSAMPLING_2X 1
-#define BMP3_IIR_FILTER_COEFF_3 1
-#define BMP3_ODR_100_HZ 1
+static constexpr double  PI = 3.1415926535897932384626433832795
+static constexpr double  BMP3_NO_OVERSAMPLING = 1
+static constexpr double  BMP3_OVERSAMPLING_2X = 1
+static constexpr double  BMP3_IIR_FILTER_COEFF_3 = 1
+static constexpr double  BMP3_ODR_100_HZ = 1
 
 class Adafruit_BMP3XX
 {
