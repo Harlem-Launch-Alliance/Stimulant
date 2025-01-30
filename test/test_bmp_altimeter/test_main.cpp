@@ -1,10 +1,10 @@
 #include <gtest/gtest.h>
 
 #define XBeeSerial Serial1
-#define BMP_CS 10
-#define SPI1_SCK 11
-#define SPI1_MOSI 12
-#define SPI1_MISO 13
+static constexpr float BMP_CS = 10
+static constexpr float SPI1_SCK = 11
+static constexpr float SPI1_MOSI = 12
+static constexpr float SPI1_MISO = 13
 
 #include "../main/sensors/altimeter/bmp3xx.h"
 
